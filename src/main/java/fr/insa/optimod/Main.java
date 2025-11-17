@@ -1,4 +1,4 @@
-package org.example;
+package fr.insa.optimod;
 
 public class Main {
     public static void main(String[] args) {
