@@ -13,3 +13,4 @@ public class Main {
         Carte carte = controleur.initialiserCarte("C:\\Users\\robin\\IdeaProjects\\optimod-lyon\\src\\main\\ressources\\xml\\petitPlan.xml");
     }
 }
+
