@@ -1,11 +1,11 @@
 package fr.insa.optimod.modele;
 import java.util.ArrayList;
 
-public class Tournee {
+public class DemandeDeLivraions {
     protected Entrepot entrepot;
     protected ArrayList<Livraison> listeLivraisons;
 
-    public Tournee(Entrepot entrepot, ArrayList<Livraison> listeLivraisons) {
+    public DemandeDeLivraions(Entrepot entrepot, ArrayList<Livraison> listeLivraisons) {
         this.entrepot = entrepot;
         this.listeLivraisons = listeLivraisons;
     }
