@@ -1,20 +1,21 @@
 package fr.insa.optimod.modele;
 
 public class Noeud {
-    protected Integer id;
+    protected Long id;
     protected Double longitude;
     protected Double latitude;
 
-    public Noeud(Double longitude, Integer id, Double latitude) {
-        this.longitude = longitude;
+    public Noeud(Long id, Double longitude, Double latitude) {
         this.id = id;
+        this.longitude = longitude;
         this.latitude = latitude;
     }
+
     public Double getLongitude() {
         return longitude;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
