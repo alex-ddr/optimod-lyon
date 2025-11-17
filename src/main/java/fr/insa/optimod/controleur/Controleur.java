@@ -5,6 +5,8 @@ import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
@@ -64,7 +66,7 @@ public class Controleur {
 
     public DemandeDeLivraions initialiserDemandeDeLivraions(String fichierDemande) {
         DemandeDeLivraions demande = null;
-        /*
+
         try {
             File xmlFile = new File(fichierDemande);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -75,40 +77,43 @@ public class Controleur {
             Entrepot entrepot = null;
             ArrayList<Livraison> listeLivraison = new ArrayList<>();
 
-            NodeList Noeuds = doc.getElementsByTagName("entrepot");
+            NodeList entrepot1 = doc.getElementsByTagName("entrepot");
 
-            for (int i = 0; i < Noeuds.getLength(); i++) {
-                Element e = (Element) Noeuds.item(i);
+            Element e = (Element) entrepot1.item(0);
+            Long adresse = Long.parseLong(e.getAttribute("adresse"));
 
-                long id = Long.parseLong(e.getAttribute("id"));
-                double lat = Double.parseDouble(e.getAttribute("latitude"));
-                double lon = Double.parseDouble(e.getAttribute("longitude"));
+            String depart = e.getAttribute("heureDepart");
 
-                listeNoeuds.add(new Noeud(id, lon, lat));
-            }
+            DateTimeFormatter f = DateTimeFormatter.ofPattern("H:m:s");
+            LocalTime heureDepart = LocalTime.parse(depart, f);
 
-            NodeList Troncons = doc.getElementsByTagName("troncon");
+            System.out.println("Heure départ = " + heureDepart);
 
-            for (int i = 0; i < Troncons.getLength(); i++) {
-                Element e = (Element) Troncons.item(i);
 
-                Long origine = Long.parseLong(e.getAttribute("origine"));
-                Long destination = Long.parseLong(e.getAttribute("destination"));
-                Double longueur = Double.parseDouble(e.getAttribute("longueur"));
-                String nomRue = e.getAttribute("nomRue");
+            entrepot = new Entrepot(heureDepart, adresse);
 
-                listeTroncons.add(new Troncon(destination, origine, longueur, nomRue));
+            NodeList Livraisons = doc.getElementsByTagName("livraison");
+
+            for (int i = 0; i < Livraisons.getLength(); i++) {
+                e = (Element) Livraisons.item(i);
+
+                Long adresseEnlevement = Long.parseLong(e.getAttribute("adresseEnlevement"));
+                Long adresseLivraison = Long.parseLong(e.getAttribute("adresseLivraison"));
+                Long dureeEnlevement = Long.parseLong(e.getAttribute("dureeEnlevement"));
+                Long dureeLivraison = Long.parseLong(e.getAttribute("dureeLivraison"));
+
+                listeLivraison.add(new Livraison(adresseEnlevement,adresseLivraison, dureeLivraison, dureeEnlevement));
             }
 
             // Affichage test
-            System.out.println("Noeuds lus : " + listeNoeuds.size());
-            System.out.println("Tronçons lus : " + listeTroncons.size());
-            carte = new Carte(listeNoeuds, listeTroncons);
+            System.out.println("Livraisons lus : " + listeLivraison.size());
+
+             demande = new DemandeDeLivraions(entrepot, listeLivraison);
         } catch (Exception e) {
             e.printStackTrace();
-            return carte;
+            return demande;
         }
-        */
+
 
 
         return demande;
