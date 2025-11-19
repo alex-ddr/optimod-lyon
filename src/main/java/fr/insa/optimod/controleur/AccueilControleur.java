@@ -1,5 +1,6 @@
 package fr.insa.optimod.controleur;
 
+import fr.insa.optimod.modele.Carte;
 import fr.insa.optimod.vue.Interface;
 import javafx.fxml.FXML;
 import javafx.scene.input.DragEvent;
@@ -34,7 +35,7 @@ public class AccueilControleur {
     private void clicZoneCarte(MouseEvent event) {
         System.out.println("Le fichier plan va être choisi");
         File fichierPlan = explorateur.showOpenDialog(null);
-        System.out.println("Le fichier plan " + fichierPlan.getAbsolutePath());
+        traiterFichierPlan(fichierPlan);
     }
 
     @FXML
@@ -43,7 +44,7 @@ public class AccueilControleur {
         Dragboard db = event.getDragboard();
         if (db.hasFiles() && db.getFiles().size() == 1)
         {
-            event.acceptTransferModes(TransferMode.COPY);
+            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
         } else {
             event.acceptTransferModes(TransferMode.NONE);
         }
@@ -56,11 +57,17 @@ public class AccueilControleur {
         Dragboard db = event.getDragboard();
         if (db.hasFiles())
         {
-            File fichierPlan = db.getFiles().getFirst();
-            System.out.println("Le fichier plan " + fichierPlan.getAbsolutePath());
+            traiterFichierPlan(db.getFiles().getFirst());
         }
         event.consume();
 
+    }
+
+    private void traiterFichierPlan(File fichierPlan) {
+        System.out.println("Le fichier plan " + fichierPlan.getAbsolutePath());
+        Carte carte = controleurMetier.initialiserCarte(fichierPlan.getAbsolutePath());
+        System.out.print(carte.getListeNoeuds());
+        System.out.println(carte.getListeTroncon());
     }
 
 }
