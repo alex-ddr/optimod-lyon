@@ -16,7 +16,7 @@ public class Main {
         System.out.println(f.exists());
         Carte carte = controleur.initialiserCarte("C:\\Users\\robin\\IdeaProjects\\optimod-lyon\\src\\main\\ressources\\xml\\petitPlan.xml");
 
-        ArrayList<Noeud> listeNoeuds = carte.getListeNoeuds();
+        // ArrayList<Noeud> listeNoeuds = carte.getListeNoeuds();
         /*
         for(Noeud noeud : listeNoeuds){
             System.out.println(noeud.getId());
