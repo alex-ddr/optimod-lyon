@@ -8,7 +8,7 @@ public class PointLivraison {
         private Double g;         // coût réel
         private Double h;         // heuristique
         private PointLivraison parent;
-        //private Integer etat;
+        //private Long etat;
         //private Boolean DejaVu;
 
         public PointLivraison(Noeud n, Double g, Double h, PointLivraison parent) {

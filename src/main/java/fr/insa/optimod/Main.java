@@ -12,9 +12,9 @@ public class Main {
 
     public static void main(String[] args) {
         Controleur controleur = new Controleur();
-        File f = new File("src\\main\\resources\\xml\\petitPlan.xml");
+        File f = new File("/xml/petitPlan.xml");
         System.out.println(f.exists());
-        Carte carte = controleur.initialiserCarte("src\\main\\resources\\xml\\petitPlan.xml");
+        Carte carte = controleur.initialiserCarte("/xml/petitPlan.xml");
 
         ArrayList<Noeud> listeNoeuds = carte.getListeNoeuds();
 
@@ -23,7 +23,7 @@ public class Main {
             System.out.println(noeud.getLatitude());
         }
         */
-        DemandeDeLivraions demande = controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandePetit2.xml");
+        DemandeDeLivraions demande = controleur.initialiserDemandeDeLivraions("/xml/demandeMoyen5.xml");
 
         ArrayList<Livraison> listeLivraions = demande.getListeLivraisons();
 
@@ -45,11 +45,11 @@ public class Main {
             d = d.getParent();
         }
         */
-        HashMap<Integer, ArrayList<PointLivraison> > tournee = controleur.preparerPlanTournee(carte, demande);
+        HashMap<Long, ArrayList<PointLivraison> > tournee = controleur.preparerPlanTournee(carte, demande);
 
-        for (Map.Entry<Integer, ArrayList<PointLivraison>> entry : tournee.entrySet()) {
+        for (Map.Entry<Long, ArrayList<PointLivraison>> entry : tournee.entrySet()) {
 
-            int idDepart = entry.getKey();
+            Long idDepart = entry.getKey();
             ArrayList<PointLivraison> liste = entry.getValue();
 
             System.out.println("Tournee pour le point " + idDepart + " :");

@@ -34,8 +34,8 @@ public class Controleur {
 
     public PointLivraison astar(Carte carte, Noeud adresseDebut, Noeud adresseFin) {
         PriorityQueue<PointLivraison> livrable = new PriorityQueue<>(Comparator.comparingDouble(PointLivraison::obtenirCout));
-        HashMap<Integer, Double> score = new HashMap<>();
-        HashSet<Integer> fait = new HashSet<>();
+        HashMap<Long, Double> score = new HashMap<>();
+        HashSet<Long> fait = new HashSet<>();
         PointLivraison debut = new PointLivraison(adresseDebut, 0.0, heuristique(adresseDebut, adresseFin, carte), null);
 
         livrable.add(debut);
@@ -46,7 +46,7 @@ public class Controleur {
 
             //adjacense.put(courant.getNoeud(), courant.getNoeud().getAdjacense());
 
-            if (courant.getNoeud().getId() == adresseFin.getId())
+            if (courant.getNoeud().getId().equals(adresseFin.getId()))
                 return courant; //demande
 
            /* if (courant.getDejaVu())
@@ -55,9 +55,9 @@ public class Controleur {
             fait.add(courant.getNoeud().getId());
 
             for (Troncon t : courant.getNoeud().getAdjacense()) {
-                int voisin;
+                Long voisin;
 
-                if (t.getDestination() == courant.getNoeud().getId()) {
+                if (t.getDestination().equals(courant.getNoeud().getId())) {
                     voisin = t.getOrigine();
                 }
 
@@ -89,10 +89,10 @@ public class Controleur {
         return null;
     }
 
-    public HashMap<Integer, ArrayList<PointLivraison> > preparerPlanTournee(Carte carte, DemandeDeLivraions demande)
+    public HashMap<Long, ArrayList<PointLivraison> > preparerPlanTournee(Carte carte, DemandeDeLivraions demande)
     {
         this.ajouterAdjacense(carte);
-        HashMap<Integer, ArrayList<PointLivraison> > tournee = new HashMap<>();
+        HashMap<Long, ArrayList<PointLivraison> > tournee = new HashMap<>();
         for (Livraison livraison : demande.getListeLivraisons()) {
 
             ArrayList<PointLivraison> courtCheminL = new ArrayList<>();
@@ -143,7 +143,7 @@ public class Controleur {
             for (int i = 0; i < Noeuds.getLength(); i++) {
                 Element e = (Element) Noeuds.item(i);
 
-                int id = Integer.parseInt(e.getAttribute("id"));
+                Long id = Long.parseLong(e.getAttribute("id"));
                 Double lat = Double.parseDouble(e.getAttribute("latitude"));
                 Double lon = Double.parseDouble(e.getAttribute("longitude"));
 
@@ -155,8 +155,8 @@ public class Controleur {
             for (int i = 0; i < Troncons.getLength(); i++) {
                 Element e = (Element) Troncons.item(i);
 
-                int origine = Integer.parseInt(e.getAttribute("origine"));
-                int destination = Integer.parseInt(e.getAttribute("destination"));
+                Long origine = Long.parseLong(e.getAttribute("origine"));
+                Long destination = Long.parseLong(e.getAttribute("destination"));
                 Double longueur = Double.parseDouble(e.getAttribute("longueur"));
                 String nomRue = e.getAttribute("nomRue");
 
@@ -193,7 +193,7 @@ public class Controleur {
             NodeList entrepot1 = doc.getElementsByTagName("entrepot");
 
             Element e = (Element) entrepot1.item(0);
-            int adresse = Integer.parseInt(e.getAttribute("adresse"));
+            Long adresse = Long.parseLong(e.getAttribute("adresse"));
 
             String depart = e.getAttribute("heureDepart");
 
@@ -210,10 +210,10 @@ public class Controleur {
             for (int i = 0; i < Livraisons.getLength(); i++) {
                 e = (Element) Livraisons.item(i);
 
-                int adresseEnlevement = Integer.parseInt(e.getAttribute("adresseEnlevement"));
-                int adresseLivraison = Integer.parseInt(e.getAttribute("adresseLivraison"));
-                int dureeEnlevement = Integer.parseInt(e.getAttribute("dureeEnlevement"));
-                int dureeLivraison = Integer.parseInt(e.getAttribute("dureeLivraison"));
+                Long adresseEnlevement = Long.parseLong(e.getAttribute("adresseEnlevement"));
+                Long adresseLivraison = Long.parseLong(e.getAttribute("adresseLivraison"));
+                Long dureeEnlevement = Long.parseLong(e.getAttribute("dureeEnlevement"));
+                Long dureeLivraison = Long.parseLong(e.getAttribute("dureeLivraison"));
 
                 listeLivraison.add(new Livraison(adresseEnlevement, adresseLivraison, dureeLivraison, dureeEnlevement));
             }

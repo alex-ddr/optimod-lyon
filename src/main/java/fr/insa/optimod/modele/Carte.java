@@ -9,10 +9,10 @@ public class Carte {
         this.listeTroncon = listeTroncon;
     }
 
-    public Noeud obtenirNoeud(int id) {
+    public Noeud obtenirNoeud(Long id) {
 
         for (Noeud n : listeNoeuds) {
-            if (n.getId() == id) {
+            if (n.getId().equals(id)) {
                 return n;
             }
         }
