@@ -1,6 +1,7 @@
 package fr.insa.optimod.vue;
 
 import fr.insa.optimod.controleur.AccueilControleur;
+import fr.insa.optimod.controleur.CarteControleur;
 import fr.insa.optimod.controleur.Controleur;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -49,18 +50,20 @@ public class Interface extends Application {
         fenetrePrincipale.setScene(scene);
     }
 
-//    public void afficherCarte() throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/carte.fxml"));
-//
-//        Parent carte = loader.load();
-//
-//        CarteControleur carteControleur = loader.getController();
-//
-//        carteControleur.setInterface(this);
-//        carteControleur.setControleurMetier(this.controleurMetier);
-//
-//        Scene scene = new Scene(carte, 1920, 1080);
-//
-//        fenetrePrincipale.setScene(scene);
-//    }
+    public void afficherCarte() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/carte.fxml"));
+
+        Parent carte = loader.load();
+
+        CarteControleur carteControleur = loader.getController();
+
+        carteControleur.setInterface(this);
+        carteControleur.setControleurMetier(this.controleurMetier);
+
+        carteControleur.afficherCarte();
+
+        Scene scene = new Scene(carte, 1920, 1080);
+
+        fenetrePrincipale.setScene(scene);
+    }
 }
