@@ -12,9 +12,9 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         Controleur controleur = new Controleur();
-        File f = new File("..\\..\\..\\..\\ressources\\xml\\petitPlan.xml");
+        File f = new File("src\\main\\ressources");
         System.out.println(f.exists());
-        Carte carte = controleur.initialiserCarte("C:\\Users\\robin\\IdeaProjects\\optimod-lyon\\src\\main\\ressources\\xml\\petitPlan.xml");
+        Carte carte = controleur.initialiserCarte("src\\main\\ressources\\xml\\petitPlan.xml");
 
         ArrayList<Noeud> listeNoeuds = carte.getListeNoeuds();
         /*

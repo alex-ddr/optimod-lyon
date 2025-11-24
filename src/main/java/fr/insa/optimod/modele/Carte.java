@@ -17,7 +17,7 @@ public class Carte {
         Noeuds = noeuds;
     }
 
-   /* public Noeud obtenirNoeud(Long id) {
+   public Noeud obtenirNoeud(Long id) {
 
         for (Noeud n : listeNoeuds) {
             if (n.getId().equals(id)) {
@@ -25,14 +25,14 @@ public class Carte {
             }
         }
         return null;
-    }*/
-
+    }
+/*
     public Noeud obtenirNoeud(Long id) {
 
         Noeud noeud = Noeuds.get(id);
         return noeud;
     }
-
+*/
     public ArrayList<Noeud> getListeNoeuds() {
         return listeNoeuds;
     }
