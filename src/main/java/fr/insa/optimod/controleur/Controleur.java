@@ -7,124 +7,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
 
 
 public class Controleur {
 
-
-    protected Double heuristique(Noeud na, Noeud nb, Carte carte) {
-
-        double dx = na.getLongitude() - nb.getLongitude();
-        double dy = na.getLatitude() - nb.getLatitude();
-
-        return Math.sqrt(dx*dx + dy*dy);
-    }
-
-    public void ajouterAdjacense(Carte carte)
-    {
-        for(Troncon troncon: carte.getListeTroncon())
-        {
-            carte.obtenirNoeud(troncon.getOrigine()).ajouterTroncon(troncon);
-            carte.obtenirNoeud(troncon.getDestination()).ajouterTroncon(troncon);
-        }
-        return;
-
-    }
-
-    public PointLivraison astar(Carte carte, Noeud adresseDebut, Noeud adresseFin) {
-        PriorityQueue<PointLivraison> livrable = new PriorityQueue<>(Comparator.comparingDouble(PointLivraison::obtenirCout));
-        HashMap<Long, Double> score = new HashMap<>();
-        HashSet<Long> fait = new HashSet<>();
-        PointLivraison debut = new PointLivraison(adresseDebut, 0.0, heuristique(adresseDebut, adresseFin, carte), null);
-
-        livrable.add(debut);
-        score.put(adresseDebut.getId(), 0.0);
-
-        while (!livrable.isEmpty()) {
-            PointLivraison courant = livrable.poll();
-
-            //adjacense.put(courant.getNoeud(), courant.getNoeud().getAdjacense());
-
-            if (courant.getNoeud().getId().equals(adresseFin.getId()))
-                return courant; //demande
-
-           /* if (courant.getDejaVu())
-                continue;
-            */
-            fait.add(courant.getNoeud().getId());
-
-            for (Troncon t : courant.getNoeud().getAdjacense()) {
-                Long voisin;
-
-                if (t.getDestination().equals(courant.getNoeud().getId())) {
-                    voisin = t.getOrigine();
-                }
-
-                else {
-                    voisin = t.getDestination();
-                }
-
-                Noeud noeudVoisin = carte.obtenirNoeud(voisin);
-                Double tentative = courant.getG() + t.getLongueur();
-
-                if (fait.contains(voisin))
-                    continue;
-
-                if (!score.containsKey(voisin) || tentative < score.get(voisin)) {
-
-                    Double h = heuristique(noeudVoisin, adresseFin, carte);
-
-                    PointLivraison suivant = new PointLivraison(noeudVoisin, tentative, h, courant);
-
-                    score.put(voisin, tentative);
-                    livrable.add(suivant);
-                }
-
-            }
-
-
-        }
-
-        return null;
-    }
-
-    public HashMap<Long, ArrayList<PointLivraison> > preparerPlanTournee(Carte carte, DemandeDeLivraions demande)
-    {
-        this.ajouterAdjacense(carte);
-        HashMap<Long, ArrayList<PointLivraison> > tournee = new HashMap<>();
-        for (Livraison livraison : demande.getListeLivraisons()) {
-
-            ArrayList<PointLivraison> courtCheminL = new ArrayList<>();
-            ArrayList<PointLivraison> courtCheminE = new ArrayList<>();
-
-            Noeud L = carte.obtenirNoeud(livraison.getAdresseLivraison());
-            Noeud E= carte.obtenirNoeud(livraison.getAdresseEnlevement());
-
-            courtCheminL.add(astar(carte, L, E));
-            courtCheminE.add(astar(carte, E, L));
-
-
-            for (Livraison livraison2 : demande.getListeLivraisons()) {
-                if (livraison!=livraison2) {
-
-                courtCheminL.add(astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseEnlevement())));
-                courtCheminL.add(astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseLivraison())));
-
-                courtCheminE.add(astar(carte, E, carte.obtenirNoeud(livraison2.getAdresseEnlevement())));
-                courtCheminE.add(astar(carte, E, carte.obtenirNoeud(livraison2.getAdresseLivraison())));
-
-                }
-
-
-
-            }
-            tournee.put(L.getId(), courtCheminL);
-            tournee.put(E.getId(), courtCheminE);
-            }
-
-        return tournee;
-    }
 
     public Carte initialiserCarte(String fichierPlan) {
     Carte carte = null;
@@ -143,9 +30,9 @@ public class Controleur {
             for (int i = 0; i < Noeuds.getLength(); i++) {
                 Element e = (Element) Noeuds.item(i);
 
-                Long id = Long.parseLong(e.getAttribute("id"));
-                Double lat = Double.parseDouble(e.getAttribute("latitude"));
-                Double lon = Double.parseDouble(e.getAttribute("longitude"));
+                long id = Long.parseLong(e.getAttribute("id"));
+                double lat = Double.parseDouble(e.getAttribute("latitude"));
+                double lon = Double.parseDouble(e.getAttribute("longitude"));
 
                 listeNoeuds.add(new Noeud(id, lon, lat));
             }
@@ -215,17 +102,18 @@ public class Controleur {
                 Long dureeEnlevement = Long.parseLong(e.getAttribute("dureeEnlevement"));
                 Long dureeLivraison = Long.parseLong(e.getAttribute("dureeLivraison"));
 
-                listeLivraison.add(new Livraison(adresseEnlevement, adresseLivraison, dureeLivraison, dureeEnlevement));
+                listeLivraison.add(new Livraison(adresseEnlevement,adresseLivraison, dureeLivraison, dureeEnlevement));
             }
 
             // Affichage test
             System.out.println("Livraisons lus : " + listeLivraison.size());
 
-            demande = new DemandeDeLivraions(entrepot, listeLivraison);
+             demande = new DemandeDeLivraions(entrepot, listeLivraison);
         } catch (Exception e) {
             e.printStackTrace();
             return demande;
         }
+
 
 
         return demande;
