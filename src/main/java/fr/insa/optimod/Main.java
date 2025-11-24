@@ -33,8 +33,8 @@ public class Main {
         */
 
         controleur.ajouterAdjacense(carte);
-        PointLivraison d = controleur.astar(carte, carte.obtenirNoeud(1679901320l), carte.obtenirNoeud(208769457l));
-        PointLivraison d1 = controleur.astar(carte, carte.obtenirNoeud(208769457l), carte.obtenirNoeud(1679901320l));
+        PointLivraison d = controleur.astar(carte, carte.obtenirNoeud(21992645), carte.obtenirNoeud(55444215));
+        PointLivraison d1 = controleur.astar(carte, carte.obtenirNoeud(26155372), carte.obtenirNoeud(1036842078));
 
 
         System.out.println(d.getG());
@@ -45,9 +45,9 @@ public class Main {
             d = d.getParent();
         }
         */
-        HashMap<int, ArrayList<PointLivraison> > tournee = controleur.preparerPlanTournee(carte, demande);
+        HashMap<Integer, ArrayList<PointLivraison> > tournee = controleur.preparerPlanTournee(carte, demande);
 
-        for (Map.Entry<int, ArrayList<PointLivraison>> entry : tournee.entrySet()) {
+        for (Map.Entry<Integer, ArrayList<PointLivraison>> entry : tournee.entrySet()) {
 
             int idDepart = entry.getKey();
             ArrayList<PointLivraison> liste = entry.getValue();

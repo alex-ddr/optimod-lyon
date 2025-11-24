@@ -12,7 +12,7 @@ public class Carte {
     public Noeud obtenirNoeud(int id) {
 
         for (Noeud n : listeNoeuds) {
-            if (n.getId().equals(id)) {
+            if (n.getId() == id) {
                 return n;
             }
         }
