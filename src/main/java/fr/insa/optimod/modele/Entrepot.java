@@ -2,16 +2,16 @@ package fr.insa.optimod.modele;
 import java.time.LocalTime;
 
 public class Entrepot {
-    protected Long adresse;
+    protected int adresse;
     protected LocalTime heureDepart;
 
 
-    public Entrepot(LocalTime heureDepart, Long adresse) {
+    public Entrepot(LocalTime heureDepart, int adresse) {
         this.heureDepart = heureDepart;
         this.adresse = adresse;
     }
 
-    public Long getAdresss() {
+    public int getAdresss() {
         return adresse;
     }
 

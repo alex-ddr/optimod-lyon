@@ -45,11 +45,11 @@ public class Main {
             d = d.getParent();
         }
         */
-        HashMap<Long, ArrayList<PointLivraison> > tournee = controleur.preparerPlanTournee(carte, demande);
+        HashMap<int, ArrayList<PointLivraison> > tournee = controleur.preparerPlanTournee(carte, demande);
 
-        for (Map.Entry<Long, ArrayList<PointLivraison>> entry : tournee.entrySet()) {
+        for (Map.Entry<int, ArrayList<PointLivraison>> entry : tournee.entrySet()) {
 
-            Long idDepart = entry.getKey();
+            int idDepart = entry.getKey();
             ArrayList<PointLivraison> liste = entry.getValue();
 
             System.out.println("Tournee pour le point " + idDepart + " :");

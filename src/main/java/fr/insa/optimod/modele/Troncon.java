@@ -1,24 +1,24 @@
 package fr.insa.optimod.modele;
 
 public class Troncon {
-    protected Long destination;
-    protected Long origine;
+    protected int destination;
+    protected int origine;
     protected Double longueur;
     protected String nomRue;
 
 
-    public Troncon(Long destination, Long origine, Double longueur, String nomRue) {
+    public Troncon(int destination, int origine, Double longueur, String nomRue) {
         this.destination = destination;
         this.origine = origine;
         this.longueur = longueur;
         this.nomRue = nomRue;
     }
 
-    public Long getDestination() {
+    public int getDestination() {
         return destination;
     }
 
-    public Long getOrigine() {
+    public int getOrigine() {
         return origine;
     }
 
