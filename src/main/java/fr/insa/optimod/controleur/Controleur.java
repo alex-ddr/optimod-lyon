@@ -34,8 +34,8 @@ public class Controleur {
 
     public PointLivraison astar(Carte carte, Noeud adresseDebut, Noeud adresseFin) {
         PriorityQueue<PointLivraison> livrable = new PriorityQueue<>(Comparator.comparingDouble(PointLivraison::obtenirCout));
-        HashMap<Long, Double> score = new HashMap<>();
-        HashSet<Long> fait = new HashSet<>();
+        HashMap<int, Double> score = new HashMap<>();
+        HashSet<int> fait = new HashSet<>();
         PointLivraison debut = new PointLivraison(adresseDebut, 0.0, heuristique(adresseDebut, adresseFin, carte), null);
 
         livrable.add(debut);
@@ -55,7 +55,7 @@ public class Controleur {
             fait.add(courant.getNoeud().getId());
 
             for (Troncon t : courant.getNoeud().getAdjacense()) {
-                Long voisin;
+                int voisin;
 
                 if (t.getDestination().equals(courant.getNoeud().getId())) {
                     voisin = t.getOrigine();
@@ -89,10 +89,10 @@ public class Controleur {
         return null;
     }
 
-    public HashMap<Long, ArrayList<PointLivraison> > preparerPlanTournee(Carte carte, DemandeDeLivraions demande)
+    public HashMap<int, ArrayList<PointLivraison> > preparerPlanTournee(Carte carte, DemandeDeLivraions demande)
     {
         this.ajouterAdjacense(carte);
-        HashMap<Long, ArrayList<PointLivraison> > tournee = new HashMap<>();
+        HashMap<int, ArrayList<PointLivraison> > tournee = new HashMap<>();
         for (Livraison livraison : demande.getListeLivraisons()) {
 
             ArrayList<PointLivraison> courtCheminL = new ArrayList<>();
@@ -143,7 +143,7 @@ public class Controleur {
             for (int i = 0; i < Noeuds.getLength(); i++) {
                 Element e = (Element) Noeuds.item(i);
 
-                Long id = Long.parseLong(e.getAttribute("id"));
+                int id = int.parseLong(e.getAttribute("id"));
                 Double lat = Double.parseDouble(e.getAttribute("latitude"));
                 Double lon = Double.parseDouble(e.getAttribute("longitude"));
 
@@ -155,8 +155,8 @@ public class Controleur {
             for (int i = 0; i < Troncons.getLength(); i++) {
                 Element e = (Element) Troncons.item(i);
 
-                Long origine = Long.parseLong(e.getAttribute("origine"));
-                Long destination = Long.parseLong(e.getAttribute("destination"));
+                int origine = int.parseLong(e.getAttribute("origine"));
+                int destination = int.parseLong(e.getAttribute("destination"));
                 Double longueur = Double.parseDouble(e.getAttribute("longueur"));
                 String nomRue = e.getAttribute("nomRue");
 
@@ -193,7 +193,7 @@ public class Controleur {
             NodeList entrepot1 = doc.getElementsByTagName("entrepot");
 
             Element e = (Element) entrepot1.item(0);
-            Long adresse = Long.parseLong(e.getAttribute("adresse"));
+            int adresse = int.parseLong(e.getAttribute("adresse"));
 
             String depart = e.getAttribute("heureDepart");
 
@@ -210,10 +210,10 @@ public class Controleur {
             for (int i = 0; i < Livraisons.getLength(); i++) {
                 e = (Element) Livraisons.item(i);
 
-                Long adresseEnlevement = Long.parseLong(e.getAttribute("adresseEnlevement"));
-                Long adresseLivraison = Long.parseLong(e.getAttribute("adresseLivraison"));
-                Long dureeEnlevement = Long.parseLong(e.getAttribute("dureeEnlevement"));
-                Long dureeLivraison = Long.parseLong(e.getAttribute("dureeLivraison"));
+                int adresseEnlevement = int.parseLong(e.getAttribute("adresseEnlevement"));
+                int adresseLivraison = int.parseLong(e.getAttribute("adresseLivraison"));
+                int dureeEnlevement = int.parseLong(e.getAttribute("dureeEnlevement"));
+                int dureeLivraison = int.parseLong(e.getAttribute("dureeLivraison"));
 
                 listeLivraison.add(new Livraison(adresseEnlevement, adresseLivraison, dureeLivraison, dureeEnlevement));
             }

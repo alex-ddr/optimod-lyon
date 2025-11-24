@@ -3,12 +3,12 @@ package fr.insa.optimod.modele;
 import java.util.ArrayList;
 
 public class Noeud {
-    protected Long id;
+    protected int id;
     protected Double longitude;
     protected Double latitude;
     protected ArrayList<Troncon> adjacense;
 
-    public Noeud(Long id, Double longitude, Double latitude) {
+    public Noeud(int id, Double longitude, Double latitude) {
         this.id = id;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -24,7 +24,7 @@ public class Noeud {
         return longitude;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
