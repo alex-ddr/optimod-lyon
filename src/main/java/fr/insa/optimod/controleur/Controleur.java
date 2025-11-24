@@ -49,9 +49,7 @@ public class Controleur {
             if (courant.getNoeud().getId().equals(adresseFin.getId()))
                 return courant; //demande
 
-           /* if (courant.getDejaVu())
-                continue;
-            */
+
             fait.add(courant.getNoeud().getId());
 
             for (Troncon t : courant.getNoeud().getAdjacense()) {

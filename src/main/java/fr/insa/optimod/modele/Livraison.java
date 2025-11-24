@@ -1,31 +1,31 @@
 package fr.insa.optimod.modele;
 
 public class Livraison {
-    protected Long adresseEnlevement;
-    protected Long adresseLivraison;
-    protected Long dureeEnlevement;
-    protected Long dureeLivraison;
+    protected Integer adresseEnlevement;
+    protected Integer adresseLivraison;
+    protected Integer dureeEnlevement;
+    protected Integer dureeLivraison;
 
-    public Livraison(Long adresseEnlevement, Long adresseLivraison, Long dureeLivraison, Long dureeEnlevement) {
+    public Livraison(Integer adresseEnlevement, Integer adresseLivraison, Integer dureeLivraison, Integer dureeEnlevement) {
         this.adresseEnlevement = adresseEnlevement;
         this.adresseLivraison = adresseLivraison;
         this.dureeLivraison = dureeLivraison;
         this.dureeEnlevement = dureeEnlevement;
     }
 
-    public Long getAdresseEnlevement() {
+    public Integer getAdresseEnlevement() {
         return adresseEnlevement;
     }
 
-    public Long getAdresseLivraison() {
+    public Integer getAdresseLivraison() {
         return adresseLivraison;
     }
 
-    public Long getDureeEnlevement() {
+    public Integer getDureeEnlevement() {
         return dureeEnlevement;
     }
 
-    public Long getDureeLivraison() {
+    public Integer getDureeLivraison() {
         return dureeLivraison;
     }
 }
