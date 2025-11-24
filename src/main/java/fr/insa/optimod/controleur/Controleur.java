@@ -87,7 +87,7 @@ public class Controleur {
         return null;
     }
 
-    public HashMap<Long, ArrayList<PointLivraison> > preparerPlanTournee(Carte carte, DemandeDeLivraions demande)
+    public HashMap<Long, ArrayList<PointLivraison>> preparerPlanTournee(Carte carte, DemandeDeLivraions demande)
     {
         this.ajouterAdjacense(carte);
         HashMap<Long, ArrayList<PointLivraison> > tournee = new HashMap<>();
@@ -124,8 +124,13 @@ public class Controleur {
         return tournee;
     }
 
-    public Carte initialiserCarte(String fichierPlan) {
     Carte carte = null;
+
+    public Carte getCarte() {
+        return carte;
+    }
+
+    public void initialiserCarte(String fichierPlan) {
         try {
             File xmlFile = new File(fichierPlan);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -134,6 +139,7 @@ public class Controleur {
             doc.getDocumentElement().normalize();
 
             ArrayList<Noeud> listeNoeuds = new ArrayList<>();
+            HashMap<Long, Noeud> mapNoeuds = new HashMap<>();
             ArrayList<Troncon> listeTroncons = new ArrayList<>();
 
             NodeList Noeuds = doc.getElementsByTagName("noeud");
@@ -146,6 +152,7 @@ public class Controleur {
                 Double lon = Double.parseDouble(e.getAttribute("longitude"));
 
                 listeNoeuds.add(new Noeud(id, lon, lat));
+                mapNoeuds.put(id, new Noeud(id, lon, lat));
             }
 
             NodeList Troncons = doc.getElementsByTagName("troncon");
@@ -164,12 +171,10 @@ public class Controleur {
             // Affichage test
             System.out.println("Noeuds lus : " + listeNoeuds.size());
             System.out.println("Tronçons lus : " + listeTroncons.size());
-        carte = new Carte(listeNoeuds, listeTroncons);
+        carte = new Carte(listeNoeuds, listeTroncons, mapNoeuds);
         } catch (Exception e) {
             e.printStackTrace();
-            return carte;
         }
-    return carte;
     }
 
 
