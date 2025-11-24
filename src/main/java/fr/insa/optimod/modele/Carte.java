@@ -5,14 +5,14 @@ import java.util.HashMap;
 public class Carte {
     protected ArrayList<Noeud> listeNoeuds;
     protected ArrayList<Troncon> listeTroncon;
-    protected HashMap<Long, Double> Noeuds;
+    protected HashMap<Long, Noeud> Noeuds;
 
     public Carte(ArrayList<Noeud> listeNoeuds, ArrayList<Troncon> listeTroncon) {
         this.listeNoeuds = listeNoeuds;
         this.listeTroncon = listeTroncon;
     }
 
-    public Carte(ArrayList<Troncon> listeTroncon, HashMap<Long, Double> noeuds) {
+    public Carte(ArrayList<Troncon> listeTroncon, HashMap<Long, Noeud> noeuds) {
         this.listeTroncon = listeTroncon;
         Noeuds = noeuds;
     }
@@ -26,13 +26,13 @@ public class Carte {
         }
         return null;
     }
-/*
-    public Noeud obtenirNoeud(Long id) {
+
+    public Noeud obtenirNoeud1(Long id) {
 
         Noeud noeud = Noeuds.get(id);
         return noeud;
     }
-*/
+
     public ArrayList<Noeud> getListeNoeuds() {
         return listeNoeuds;
     }
