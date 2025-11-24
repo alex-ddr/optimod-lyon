@@ -7,14 +7,52 @@ import fr.insa.optimod.modele.Livraison;
 import fr.insa.optimod.modele.Noeud;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Controleur controleur = new Controleur();
-        File f = new File("C:\\Users\\robin\\IdeaProjects\\optimod-lyon\\src\\main\\resources\\xml\\petitPlan.xml");
+        
+        String cheminRessourceCarte = "xml/petitPlan.xml";
+        String cheminRessouceDemande = "xml/demandePetit1.xml";
+        URL urlCarte = Main.class.getClassLoader().getResource(cheminRessourceCarte);
+        URL urlDemande = Main.class.getClassLoader().getResource(cheminRessouceDemande);
+
+        if (urlCarte == null) {
+            System.err.println("Fichier non trouvé : " + cheminRessourceCarte);
+            return;
+        }
+        // Convertir l'URL en chemin de fichier
+        String cheminAbsoluCarte = null;
+        try {
+            cheminAbsoluCarte = Paths.get(urlCarte.toURI()).toString();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Chemin absolu Carte : " + cheminAbsoluCarte);
+
+        if (urlDemande == null) {
+            System.err.println("Fichier non trouvé : " + cheminRessouceDemande);
+            return;
+        }
+        // Convertir l'URL en chemin de fichier
+        String cheminAbsoluDemande = null;
+        try {
+            cheminAbsoluDemande = Paths.get(urlDemande.toURI()).toString();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Chemin absolu Demande : " + cheminAbsoluDemande);
+
+
+        File f = new File(cheminAbsoluCarte);
         System.out.println(f.exists());
-        Carte carte = controleur.initialiserCarte("C:\\Users\\robin\\IdeaProjects\\optimod-lyon\\src\\main\\resources\\xml\\petitPlan.xml");
+        Carte carte = controleur.initialiserCarte(cheminAbsoluCarte);
 
         ArrayList<Noeud> listeNoeuds = carte.getListeNoeuds();
         /*
@@ -23,7 +61,7 @@ public class Main {
             System.out.println(noeud.getLatitude());
         }
         */
-        DemandeDeLivraions demande = controleur.initialiserDemandeDeLivraions("C:\\Users\\robin\\IdeaProjects\\optimod-lyon\\src\\main\\resources\\xml\\demandePetit1.xml");
+        DemandeDeLivraions demande = controleur.initialiserDemandeDeLivraions(cheminAbsoluDemande);
 
         ArrayList<Livraison> listeLivraions = demande.getListeLivraisons();
 
