@@ -12,27 +12,27 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         Controleur controleur = new Controleur();
-        File f = new File("C:\\Users\\robin\\IdeaProjects\\optimod-lyon\\src\\main\\resources\\xml\\petitPlan.xml");
+        File f = new File("src\\main\\resources\\xml\\petitPlan.xml");
         System.out.println(f.exists());
-        Carte carte = controleur.initialiserCarte("C:\\Users\\robin\\IdeaProjects\\optimod-lyon\\src\\main\\resources\\xml\\petitPlan.xml");
+        Carte carte = controleur.initialiserCarte("src\\main\\resources\\xml\\petitPlan.xml");
 
         ArrayList<Noeud> listeNoeuds = carte.getListeNoeuds();
-        /*
-        for(Noeud noeud : listeNoeuds){
-            System.out.println(noeud.getId());
-            System.out.println(noeud.getLatitude());
-        }
-        */
-        DemandeDeLivraions demande = controleur.initialiserDemandeDeLivraions("C:\\Users\\robin\\IdeaProjects\\optimod-lyon\\src\\main\\resources\\xml\\demandePetit1.xml");
+
+        /*for(Noeud noeud : listeNoeuds){
+            System.out.println(noeud.getId() + "  " + noeud.getLongitude()+ "  " + noeud.getLatitude());
+        }*/
+
+        DemandeDeLivraions demande = controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandePetit2.xml");
 
         ArrayList<Livraison> listeLivraions = demande.getListeLivraisons();
 
+        /*
         for(Livraison livraison : listeLivraions){
             System.out.println(livraison.getDureeLivraison());
         }
+        */
 
-
-
+        controleur.preparerPlanTournee(carte, demande);
 
 
 
