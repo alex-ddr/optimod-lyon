@@ -77,7 +77,7 @@ public class AccueilControleur {
     }
 
     @FXML
-    private void afficherCarte(MouseEvent event){
+    private void afficherCarte(){
         System.out.println("Le fichier plan " + fichierPlan.getAbsolutePath());
         controleurMetier.initialiserCarte(fichierPlan.getAbsolutePath());
 //        Carte carte = controleurMetier.getCarte();
