@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: FBE6DD;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.optimod.controleur.AccueilControleur">
+<VBox alignment="TOP_CENTER" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: FBE6DD;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.optimod.controleur.AccueilControleur">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
          <VBox.margin>
@@ -47,7 +47,8 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Rectangle>
-                        <SVGPath content="M75.75 151.5C85.6976 151.5 95.5479 149.541 104.738 145.734C113.929 141.927 122.279 136.347 129.313 129.313C136.347 122.279 141.927 113.929 145.734 104.738C149.541 95.5479 151.5 85.6976 151.5 75.75C151.5 65.8024 149.541 55.9521 145.734 46.7617C141.927 37.5713 136.347 29.2207 129.313 22.1867C122.279 15.1526 113.929 9.57292 104.738 5.76612C95.5479 1.95933 85.6976 -1.48231e-07 75.75 0C55.6599 2.99367e-07 36.3925 7.98078 22.1867 22.1867C7.98078 36.3925 0 55.6599 0 75.75C0 95.8401 7.98078 115.107 22.1867 129.313C36.3925 143.519 55.6599 151.5 75.75 151.5ZM73.7973 106.387L115.881 55.8867L102.953 45.1133L66.761 88.5349L48.0339 69.7994L36.1328 81.7006L61.3828 106.951L67.8973 113.465L73.7973 106.387Z" fill="#92d282" fillRule="EVEN_ODD" />
+                        <SVGPath fx:id="svgValid" content="M75.75 151.5C85.6976 151.5 95.5479 149.541 104.738 145.734C113.929 141.927 122.279 136.347 129.313 129.313C136.347 122.279 141.927 113.929 145.734 104.738C149.541 95.5479 151.5 85.6976 151.5 75.75C151.5 65.8024 149.541 55.9521 145.734 46.7617C141.927 37.5713 136.347 29.2207 129.313 22.1867C122.279 15.1526 113.929 9.57292 104.738 5.76612C95.5479 1.95933 85.6976 -1.48231e-07 75.75 0C55.6599 2.99367e-07 36.3925 7.98078 22.1867 22.1867C7.98078 36.3925 0 55.6599 0 75.75C0 95.8401 7.98078 115.107 22.1867 129.313C36.3925 143.519 55.6599 151.5 75.75 151.5ZM73.7973 106.387L115.881 55.8867L102.953 45.1133L66.761 88.5349L48.0339 69.7994L36.1328 81.7006L61.3828 106.951L67.8973 113.465L73.7973 106.387Z" fill="#92d282" fillRule="EVEN_ODD" />
+                        <SVGPath fx:id="svgWrong" content="M128.438 21.9375C99.1875 -7.3125 51.1875 -7.3125 21.9375 21.9375C-7.3125 51.1875 -7.3125 99.1875 21.9375 128.438C51.1875 157.688 98.4375 157.688 127.688 128.438C156.938 99.1875 157.688 51.1875 128.438 21.9375ZM96.1875 106.688L75.1875 85.6875L54.1875 106.688L43.6875 96.1875L64.6875 75.1875L43.6875 54.1875L54.1875 43.6875L75.1875 64.6875L96.1875 43.6875L106.688 54.1875L85.6875 75.1875L106.688 96.1875L96.1875 106.688Z" fill="#e15a4d" fillRule="EVEN_ODD" />
                      </children>
                   </StackPane>
                </children>
@@ -56,7 +57,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button alignment="CENTER" mnemonicParsing="false" style="-fx-background-color: E15A4D; -fx-background-radius: 30;" text="Obtenir Tournée" textAlignment="CENTER" textFill="WHITE">
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#afficherCarte" style="-fx-background-color: E15A4D; -fx-background-radius: 30;" text="Obtenir Tournée" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Inter Bold" size="36.0" />
                </font>
