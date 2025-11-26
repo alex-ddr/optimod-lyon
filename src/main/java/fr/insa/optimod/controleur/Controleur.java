@@ -89,11 +89,6 @@ public class Controleur {
 
 
 
-
-
-
-
-
     public HashMap<Long, HashMap<Long, PointLivraison> > preparerPlanTournee(Carte carte, DemandeDeLivraions demande)
     {
         this.ajouterAdjacense(carte);
@@ -184,8 +179,6 @@ public class Controleur {
 
                 }
 
-
-
             }
             tournee.put(L.getId(), courtCheminL);
             tournee.put(E.getId(), courtCheminE);
@@ -220,6 +213,8 @@ public class Controleur {
 
         return null;
     }
+
+
 
     public Carte initialiserCarte(String fichierPlan) {
     Carte carte = null;
@@ -261,7 +256,8 @@ public class Controleur {
             // Affichage test
             System.out.println("Noeuds lus : " + listeNoeuds.size());
             System.out.println("Tronçons lus : " + listeTroncons.size());
-        carte = new Carte(listeNoeuds, listeTroncons);
+            HashMap<Long, Noeud> mapNoeuds= new HashMap<>();
+        carte = new  Carte(listeNoeuds, listeTroncons, mapNoeuds, 0.0, 0.0, 0.0, 0.0);
         } catch (Exception e) {
             e.printStackTrace();
             return carte;
