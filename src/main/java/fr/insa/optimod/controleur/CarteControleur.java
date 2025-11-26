@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
 
 public class CarteControleur {
 
@@ -40,6 +41,15 @@ public class CarteControleur {
     private void initialize() {
         System.out.println("initialize CarteControleur");
         gc = canvasCarte.getGraphicsContext2D();
+    }
+
+    @FXML
+    private void retourAccueil() {
+        try {
+            interfaceUtilisateur.afficherAccueil();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void afficherCarte() {

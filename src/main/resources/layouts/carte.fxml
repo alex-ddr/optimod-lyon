@@ -21,7 +21,7 @@
                   <Cursor fx:constant="MOVE" />
                </cursor>
             </Canvas>
-            <Button mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="Annuler" StackPane.alignment="TOP_LEFT">
+            <Button mnemonicParsing="false" onAction="#retourAccueil" style="-fx-background-color: #ffffff;" text="Annuler" StackPane.alignment="TOP_LEFT">
                <font>
                   <Font size="24.0" />
                </font>
