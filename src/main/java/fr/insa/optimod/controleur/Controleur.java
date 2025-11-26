@@ -13,6 +13,7 @@ import java.util.*;
 public class Controleur {
 
     Carte carte = null;
+    String tourneeStr = "";
 
 
     protected Double heuristique(Noeud na, Noeud nb, Carte carte) {
@@ -92,7 +93,9 @@ public class Controleur {
 
 
 
-
+    public String getTourneeStr() {
+        return tourneeStr;
+    }
 
 
 
@@ -210,12 +213,15 @@ public class Controleur {
             courant = courant.getParent();
         }
 
+        tourneeStr = "";
 
         System.out.println("Chemin TSP :");
+        tourneeStr += "Chemin TSP :\n";
 
         for (PointLivraison p : chemin) {
             if (p != null) {
                 System.out.println(" - " + p.getNoeud().getId());
+                tourneeStr += " - " + p.getNoeud().getId() + "\n";
             }
         }
         System.out.println((l.getParent()));

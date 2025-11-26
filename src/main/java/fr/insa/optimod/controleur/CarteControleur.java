@@ -1,6 +1,7 @@
 package fr.insa.optimod.controleur;
 
 import fr.insa.optimod.modele.Carte;
+import fr.insa.optimod.modele.DemandeDeLivraions;
 import fr.insa.optimod.modele.Noeud;
 import fr.insa.optimod.modele.Troncon;
 import fr.insa.optimod.vue.Interface;
@@ -119,6 +120,8 @@ public class CarteControleur {
     private void traiterFichierPoints(File fichierPoints) {
         System.out.println("Le fichier des points " + fichierPoints.getAbsolutePath());
 //        controleurMetier.initialiserPoints(fichierPoints.getAbsolutePath());
+        DemandeDeLivraions demande = controleurMetier.initialiserDemandeDeLivraions(fichierPoints.getAbsolutePath());
+        controleurMetier.preparerPlanTournee(carte, demande);
 
         try {
             interfaceUtilisateur.afficherPoints();

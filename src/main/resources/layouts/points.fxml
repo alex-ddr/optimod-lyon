@@ -44,7 +44,7 @@
                   <SVGPath content="M42 30V38C42 39.0609 41.5786 40.0783 40.8284 40.8284C40.0783 41.5786 39.0609 42 38 42H10C8.93913 42 7.92172 41.5786 7.17157 40.8284C6.42143 40.0783 6 39.0609 6 38V30M14 20L24 30M24 30L34 20M24 30V6" fill="#de595000" stroke="#e05b4f" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" />
                </children>
             </HBox>
-            <TextArea fx:id="textePoints" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
+            <TextArea fx:id="textePoints" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
          </children>
          <padding>
             <Insets left="48.0" right="48.0" />
