@@ -87,30 +87,100 @@ public class Controleur {
         return null;
     }
 
-    public HashMap<Long, ArrayList<PointLivraison>> preparerPlanTournee(Carte carte, DemandeDeLivraions demande)
+
+
+
+
+
+
+
+    public HashMap<Long, HashMap<Long, PointLivraison> > preparerPlanTournee(Carte carte, DemandeDeLivraions demande)
     {
         this.ajouterAdjacense(carte);
-        HashMap<Long, ArrayList<PointLivraison> > tournee = new HashMap<>();
+        List<Long> listeIds = new ArrayList<>();
+        //ArrayList<Livraison> listeLivraions = demande.getListeLivraisons();
+        listeIds.add(demande.getEntrepot().getAdresss());
+        for(Livraison livraison : demande.getListeLivraisons()){
+            listeIds.add(livraison.getAdresseEnlevement());
+            listeIds.add(livraison.getAdresseLivraison());
+        }
+
+        System.out.println("listeIds : " + listeIds.size());
+
+        HashMap<Long,Integer> mapIdAIndex = new HashMap<>();
+        HashMap<Integer,Long> mapIndexAId = new HashMap<>();
+
+        for (int k = 0; k < listeIds.size(); k++) {
+            mapIdAIndex.put(listeIds.get(k), k);
+            mapIndexAId.put(k, listeIds.get(k));
+        }
+        long s = (1L << (listeIds.size() - 1)) - 1L;
+        double[][] cout = new double[listeIds.size()][listeIds.size()];
+        HashMap<Long, HashMap<Long,PointLivraison> > tournee = new HashMap<>();
+
+
+        HashMap<Long, PointLivraison> courtCheminEntrepot = new HashMap<>();
+        PointLivraison astarEntrepotL, astarEntrepotE;
+        Noeud entrepot = carte.obtenirNoeud(demande.getEntrepot().getAdresss());
+        for (Livraison livraison2 : demande.getListeLivraisons()) {
+
+
+                Integer ent = mapIdAIndex.get(entrepot.getId());
+                Integer liv = mapIdAIndex.get(livraison2.getAdresseLivraison());
+                Integer enl = mapIdAIndex.get(livraison2.getAdresseEnlevement());
+
+                astarEntrepotL = astar(carte, entrepot, carte.obtenirNoeud(livraison2.getAdresseLivraison()));
+                astarEntrepotE = astar(carte, entrepot, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));
+
+                cout[ent][liv] = astarEntrepotL.getG();
+                cout[ent][enl] = astarEntrepotE.getG();
+
+                courtCheminEntrepot.put(livraison2.getAdresseLivraison(), astarEntrepotL);
+                courtCheminEntrepot.put(livraison2.getAdresseEnlevement(), astarEntrepotE);
+
+
+
+
+        }
+        tournee.put(entrepot.getId(), courtCheminEntrepot);
+
         for (Livraison livraison : demande.getListeLivraisons()) {
 
-            ArrayList<PointLivraison> courtCheminL = new ArrayList<>();
-            ArrayList<PointLivraison> courtCheminE = new ArrayList<>();
+            HashMap<Long, PointLivraison> courtCheminL = new HashMap<>();
+            HashMap<Long, PointLivraison> courtCheminE = new HashMap<>();
 
             Noeud L = carte.obtenirNoeud(livraison.getAdresseLivraison());
             Noeud E= carte.obtenirNoeud(livraison.getAdresseEnlevement());
-
-            courtCheminL.add(astar(carte, L, E));
-            courtCheminE.add(astar(carte, E, L));
+            Integer idL = mapIdAIndex.get(L.getId());
+            Integer idE = mapIdAIndex.get(E.getId());
+            PointLivraison astarL =  astar(carte, L, E), astarE;
+            cout[idL][idE] = astarL.getG();
+            cout[idE][idL] = cout[idL][idE];
+            //courtCheminE.put(livraison.getAdresseLivraison(), new ArrayList<>());
+            courtCheminL.put(E.getId(), astarL);
+            courtCheminE.put(L.getId(), astarL);
 
 
             for (Livraison livraison2 : demande.getListeLivraisons()) {
                 if (livraison!=livraison2) {
 
-                courtCheminL.add(astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseEnlevement())));
-                courtCheminL.add(astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseLivraison())));
+                Integer liv = mapIdAIndex.get(livraison2.getAdresseLivraison());
+                Integer enl = mapIdAIndex.get(livraison2.getAdresseEnlevement());
 
-                courtCheminE.add(astar(carte, E, carte.obtenirNoeud(livraison2.getAdresseEnlevement())));
-                courtCheminE.add(astar(carte, E, carte.obtenirNoeud(livraison2.getAdresseLivraison())));
+                astarL = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseLivraison()));
+                astarE = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));
+
+                cout[idL][liv] = astarL.getG();
+                cout[idE][liv] = astarL.getG();
+
+                cout[idL][enl] = astarE.getG();
+                cout[idE][enl] = astarE.getG();
+
+                courtCheminL.put(livraison2.getAdresseEnlevement(), astarE);
+                courtCheminL.put(livraison2.getAdresseLivraison(), astarL);
+
+                courtCheminE.put(livraison2.getAdresseEnlevement(), astarE);
+                courtCheminE.put(livraison2.getAdresseLivraison(), astarL);
 
                 }
 
@@ -121,16 +191,38 @@ public class Controleur {
             tournee.put(E.getId(), courtCheminE);
             }
 
-        return tournee;
+        TSP tsp = new TSP();
+
+
+        PointLivraison l = tsp.computeD(0, s, listeIds.size(), cout, carte, mapIndexAId);
+        //System.out.println(l.getG());
+        //System.out.println(l.getParent().getNoeud().getId());
+
+        ArrayList<PointLivraison> chemin = new ArrayList<>();
+
+        PointLivraison courant = l;
+
+        while (courant != null) {
+            chemin.add(courant);
+            //System.out.println(courant.getNoeud().getId());
+            courant = courant.getParent();
+        }
+
+
+        System.out.println("Chemin TSP :");
+
+        for (PointLivraison p : chemin) {
+            if (p != null) {
+                System.out.println(" - " + p.getNoeud().getId());
+            }
+        }
+        System.out.println((l.getParent()));
+
+        return null;
     }
 
+    public Carte initialiserCarte(String fichierPlan) {
     Carte carte = null;
-
-    public Carte getCarte() {
-        return carte;
-    }
-
-    public void initialiserCarte(String fichierPlan) {
         try {
             File xmlFile = new File(fichierPlan);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -139,12 +231,7 @@ public class Controleur {
             doc.getDocumentElement().normalize();
 
             ArrayList<Noeud> listeNoeuds = new ArrayList<>();
-            HashMap<Long, Noeud> mapNoeuds = new HashMap<>();
             ArrayList<Troncon> listeTroncons = new ArrayList<>();
-            Double minLat = null;
-            Double minLong = null;
-            Double maxLat = null;
-            Double maxLong = null;
 
             NodeList Noeuds = doc.getElementsByTagName("noeud");
 
@@ -156,21 +243,6 @@ public class Controleur {
                 Double lon = Double.parseDouble(e.getAttribute("longitude"));
 
                 listeNoeuds.add(new Noeud(id, lon, lat));
-                mapNoeuds.put(id, new Noeud(id, lon, lat));
-                System.out.println(id + " " + lon + " " + lat);
-                if (minLat == null || lat < minLat) {
-                    minLat = lat.doubleValue();
-                }
-                if (maxLat == null || lat > maxLat) {
-                    maxLat = lat.doubleValue();
-                }
-                if (minLong == null || lon < minLong) {
-                    minLong = lon.doubleValue();
-                }
-                if (maxLong == null || lon > maxLong) {
-                    maxLong = lon.doubleValue();
-                }
-
             }
 
             NodeList Troncons = doc.getElementsByTagName("troncon");
@@ -189,12 +261,12 @@ public class Controleur {
             // Affichage test
             System.out.println("Noeuds lus : " + listeNoeuds.size());
             System.out.println("Tronçons lus : " + listeTroncons.size());
-            System.out.println("MinLat : " + minLat + " MaxLat : " + maxLat);
-            System.out.println("MinLong : " + minLong + " MaxLong : " + maxLong);
-        carte = new Carte(listeNoeuds, listeTroncons, mapNoeuds, minLat, minLong, maxLat, maxLong);
+        carte = new Carte(listeNoeuds, listeTroncons);
         } catch (Exception e) {
             e.printStackTrace();
+            return carte;
         }
+    return carte;
     }
 
 
