@@ -12,6 +12,8 @@ import java.util.*;
 
 public class Controleur {
 
+    Carte carte = null;
+
 
     protected Double heuristique(Noeud na, Noeud nb, Carte carte) {
 
@@ -86,6 +88,11 @@ public class Controleur {
 
         return null;
     }
+
+
+
+
+
 
 
 
@@ -179,6 +186,8 @@ public class Controleur {
 
                 }
 
+
+
             }
             tournee.put(L.getId(), courtCheminL);
             tournee.put(E.getId(), courtCheminE);
@@ -214,10 +223,11 @@ public class Controleur {
         return null;
     }
 
+    public Carte getCarte() {
+        return carte;
+    }
 
-
-    public Carte initialiserCarte(String fichierPlan) {
-    Carte carte = null;
+    public void initialiserCarte(String fichierPlan) {
         try {
             File xmlFile = new File(fichierPlan);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -226,7 +236,12 @@ public class Controleur {
             doc.getDocumentElement().normalize();
 
             ArrayList<Noeud> listeNoeuds = new ArrayList<>();
+            HashMap<Long, Noeud> mapNoeuds = new HashMap<>();
             ArrayList<Troncon> listeTroncons = new ArrayList<>();
+            Double minLat = null;
+            Double minLong = null;
+            Double maxLat = null;
+            Double maxLong = null;
 
             NodeList Noeuds = doc.getElementsByTagName("noeud");
 
@@ -238,6 +253,21 @@ public class Controleur {
                 Double lon = Double.parseDouble(e.getAttribute("longitude"));
 
                 listeNoeuds.add(new Noeud(id, lon, lat));
+                mapNoeuds.put(id, new Noeud(id, lon, lat));
+                System.out.println(id + " " + lon + " " + lat);
+                if (minLat == null || lat < minLat) {
+                    minLat = lat.doubleValue();
+                }
+                if (maxLat == null || lat > maxLat) {
+                    maxLat = lat.doubleValue();
+                }
+                if (minLong == null || lon < minLong) {
+                    minLong = lon.doubleValue();
+                }
+                if (maxLong == null || lon > maxLong) {
+                    maxLong = lon.doubleValue();
+                }
+
             }
 
             NodeList Troncons = doc.getElementsByTagName("troncon");
@@ -256,8 +286,9 @@ public class Controleur {
             // Affichage test
             System.out.println("Noeuds lus : " + listeNoeuds.size());
             System.out.println("Tronçons lus : " + listeTroncons.size());
-            HashMap<Long, Noeud> mapNoeuds= new HashMap<>();
-        carte = new  Carte(listeNoeuds, listeTroncons, mapNoeuds, 0.0, 0.0, 0.0, 0.0);
+            System.out.println("MinLat : " + minLat + " MaxLat : " + maxLat);
+            System.out.println("MinLong : " + minLong + " MaxLong : " + maxLong);
+        carte = new Carte(listeNoeuds, listeTroncons, mapNoeuds, minLat, minLong, maxLat, maxLong);
         } catch (Exception e) {
             e.printStackTrace();
             return carte;
