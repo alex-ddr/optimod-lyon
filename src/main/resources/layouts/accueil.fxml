@@ -13,7 +13,7 @@
 
 <VBox alignment="TOP_CENTER" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: FBE6DD;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.optimod.controleur.AccueilControleur">
    <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
+      <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
          <VBox.margin>
             <Insets />
          </VBox.margin>
