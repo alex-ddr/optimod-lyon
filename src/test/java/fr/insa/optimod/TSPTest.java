@@ -1,5 +1,7 @@
-package fr.insa.optimod.modele;
+package fr.insa.optimod;
 
+import fr.insa.optimod.modele.PointLivraison;
+import fr.insa.optimod.modele.TSP;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -9,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TSPTest {
 
-    // ====== Stub minimal pour tester ======
-    // Si tu as déjà Carte / Noeud dans ton code, enlève ces classes
 
     static class Noeud {
         private final long id;
@@ -29,9 +29,7 @@ public class TSPTest {
     // ===============================================
     @Test
     public void testTspPickupDeliveryOptimal() {
-        // 0 = dépôt
-        // 1 = pickup1, 2 = livraison1
-        // 3 = pickup2, 4 = livraison2
+
         int n = 5;
 
         double[][] cout = {
@@ -43,7 +41,7 @@ public class TSPTest {
                 {  8,   7,   2,   1,   0 }  // 4 ->
         };
 
-        // IDs fictifs (ici = mêmes que les indices)
+
         HashMap<Integer, Long> mapIndexAId = new HashMap<>();
         for (int i = 0; i < n; i++) {
             mapIndexAId.put(i, (long) i);
@@ -51,7 +49,7 @@ public class TSPTest {
 
         Carte carte = new Carte();
 
-        // s = {1,2,3,4}
+
         long s = (1L << (n - 1)) - 1L;
 
         // ===== 1. Résultat de ton DP =====
@@ -72,28 +70,21 @@ public class TSPTest {
         }
         System.out.println(" -> 0");
 
-        // On accepte un tout petit delta dû aux doubles :
+
         assertEquals(bfCost, dpCost, 1e-6,
                 "Le coût DP n'est pas égal au coût optimal brut-force");
     }
 
-    // ==========================
-    //    BRUTE FORCE ADAPTÉ
-    // ==========================
+
 
     static class BruteForceResult {
         double cost;
-        int[] chemin; // permutation de 1..n-1
+        int[] chemin;
     }
 
-    /**
-     * Brute force avec ta convention :
-     * - 0 = dépôt
-     * - indices pairs (2,4,6,...) = livraisons
-     * - pickup associé = indice impair juste avant (1,3,5,...)
-     */
+
     static BruteForceResult bruteForceTSP(int n, double[][] cout) {
-        int[] perm = new int[n - 1]; // on permute 1..n-1
+        int[] perm = new int[n - 1];
         for (int i = 0; i < n - 1; i++) {
             perm[i] = i + 1;
         }
@@ -116,7 +107,7 @@ public class TSPTest {
                 return;
             }
 
-            // coût : 0 -> perm[0] -> ... -> perm[last] -> 0
+
             double total = 0.0;
             int prev = 0;
             for (int idx : perm) {
@@ -145,22 +136,18 @@ public class TSPTest {
         arr[j] = tmp;
     }
 
-    /**
-     * Contrainte pickup-before-delivery :
-     * - j pair (j%2==0) et j!=0 => livraison
-     * - pickup associé = j-1
-     */
+
     private static boolean respecteContraintesPickupDelivery(int[] perm) {
         int max = Arrays.stream(perm).max().orElse(0) + 1;
         boolean[] pickupVu = new boolean[max];
 
         for (int j : perm) {
             if (j != 0 && j % 2 == 0) {
-                int p = j - 1; // pickup associé
+                int p = j - 1;
                 if (p < 0 || p >= pickupVu.length) return false;
-                if (!pickupVu[p]) return false; // livraison avant pickup -> interdit
+                if (!pickupVu[p]) return false;
             } else {
-                // j impair => pickup
+              
                 if (j >= 0 && j < pickupVu.length) {
                     pickupVu[j] = true;
                 }
