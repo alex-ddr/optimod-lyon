@@ -3,6 +3,7 @@ package fr.insa.optimod.vue;
 import fr.insa.optimod.controleur.AccueilControleur;
 import fr.insa.optimod.controleur.CarteControleur;
 import fr.insa.optimod.controleur.Controleur;
+import fr.insa.optimod.controleur.PointsControleur;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -63,6 +64,23 @@ public class Interface extends Application {
         carteControleur.afficherCarte();
 
         Scene scene = new Scene(carte, 1920, 1080);
+
+        fenetrePrincipale.setScene(scene);
+    }
+
+    public void afficherPoints() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/points.fxml"));
+
+        Parent points = loader.load();
+
+        PointsControleur pointsController = loader.getController();
+
+        pointsController.setInterface(this);
+        pointsController.setControleurMetier(this.controleurMetier);
+
+        pointsController.afficherCarte();
+
+        Scene scene = new Scene(points, 1920, 1080);
 
         fenetrePrincipale.setScene(scene);
     }

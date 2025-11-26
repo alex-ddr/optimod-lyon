@@ -7,18 +7,17 @@ import fr.insa.optimod.vue.Interface;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.IOException;
 
-public class CarteControleur {
+public class PointsControleur {
 
     Carte carte = null;
 
@@ -29,6 +28,9 @@ public class CarteControleur {
 
     @FXML
     private Canvas canvasCarte;
+
+    @FXML
+    private TextArea textePoints;
 
     private GraphicsContext gc;
 
@@ -47,9 +49,9 @@ public class CarteControleur {
     }
 
     @FXML
-    private void retourAccueil() {
+    private void retourCarte() {
         try {
-            interfaceUtilisateur.afficherAccueil();
+            interfaceUtilisateur.afficherCarte();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,48 +84,6 @@ public class CarteControleur {
                 int rayon = 5;
                 gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
             }
-        }
-    }
-
-    @FXML
-    private void clicZonePoints(MouseEvent event) {
-        System.out.println("Le fichier des points va être choisi");
-        File fichierPoints = explorateur.showOpenDialog(null);
-        traiterFichierPoints(fichierPoints);
-    }
-
-    @FXML
-    void fichierAuDessusPoints(DragEvent event)
-    {
-        Dragboard db = event.getDragboard();
-        if (db.hasFiles() && db.getFiles().size() == 1)
-        {
-            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-        } else {
-            event.acceptTransferModes(TransferMode.NONE);
-        }
-        event.consume();
-    }
-
-    @FXML
-    void ficherLachePoints(DragEvent event)
-    {
-        Dragboard db = event.getDragboard();
-        if (db.hasFiles())
-        {
-            traiterFichierPoints(db.getFiles().getFirst());
-        }
-        event.consume();
-    }
-
-    private void traiterFichierPoints(File fichierPoints) {
-        System.out.println("Le fichier des points " + fichierPoints.getAbsolutePath());
-//        controleurMetier.initialiserPoints(fichierPoints.getAbsolutePath());
-
-        try {
-            interfaceUtilisateur.afficherPoints();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
