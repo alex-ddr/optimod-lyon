@@ -16,6 +16,8 @@ public class AccueilControleur {
     private Interface interfaceUtilisateur;
     private Controleur controleurMetier;
 
+
+
     private FileChooser explorateur = new FileChooser();
 
     public void setInterface(Interface interfaceUtilisateur) {
@@ -65,9 +67,16 @@ public class AccueilControleur {
 
     private void traiterFichierPlan(File fichierPlan) {
         System.out.println("Le fichier plan " + fichierPlan.getAbsolutePath());
-        Carte carte = controleurMetier.initialiserCarte(fichierPlan.getAbsolutePath());
-        System.out.print(carte.getListeNoeuds());
-        System.out.println(carte.getListeTroncon());
+        controleurMetier.initialiserCarte(fichierPlan.getAbsolutePath());
+//        Carte carte = controleurMetier.getCarte();
+//        System.out.print(carte.getListeNoeuds());
+//        System.out.println(carte.getListeTroncon());
+
+        try {
+            interfaceUtilisateur.afficherCarte();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
