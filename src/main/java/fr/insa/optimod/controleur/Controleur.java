@@ -74,7 +74,7 @@ public class Controleur {
                 if (!score.containsKey(voisin) || tentative < score.get(voisin)) {
 
                     Double h = heuristique(noeudVoisin, adresseFin, carte);
-
+                    courant.setSuivant(t);
                     PointLivraison suivant = new PointLivraison(noeudVoisin, tentative, h, courant);
 
                     score.put(voisin, tentative);
@@ -291,9 +291,7 @@ public class Controleur {
         carte = new Carte(listeNoeuds, listeTroncons, mapNoeuds, minLat, minLong, maxLat, maxLong);
         } catch (Exception e) {
             e.printStackTrace();
-            return carte;
         }
-    return carte;
     }
 
 

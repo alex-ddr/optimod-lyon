@@ -8,6 +8,7 @@ public class PointLivraison {
         private Double g;         // coût réel
         private Double h;         // heuristique
         private PointLivraison parent;
+        private Troncon suivant;
         //private Integer etat;
         //private Boolean DejaVu;
 
@@ -23,37 +24,53 @@ public class PointLivraison {
             return g + h;
         }
 
-    public Noeud getNoeud() {
-        return noeud;
-    }
+        public Noeud getNoeud() {
+            return noeud;
+        }
 
-    public Double getG() {
-        return g;
-    }
+        public Double getG() {
+            return g;
+        }
 
-    public double getH() {
-        return h;
-    }
+        public double getH() {
+            return h;
+        }
 
-    public PointLivraison getParent() {
-        return parent;
-    }
+        public PointLivraison getParent() {
+            return parent;
+        }
 
-    public void setNoeud(Noeud noeud) {
-        this.noeud = noeud;
-    }
+        public void setNoeud(Noeud noeud) {
+            this.noeud = noeud;
+        }
 
-    public void setG(double g) {
-        this.g = g;
-    }
+        public void setG(double g) {
+            this.g = g;
+        }
 
-    public void setH(double h) {
-        this.h = h;
-    }
+        public void setH(double h) {
+            this.h = h;
+        }
 
-    public void setParent(PointLivraison parent) {
-        this.parent = parent;
-    }
+        public void setParent(PointLivraison parent) {
+            this.parent = parent;
+        }
+
+        public Troncon getSuivant() {
+            return suivant;
+        }
+
+        public void setG(Double g) {
+            this.g = g;
+        }
+
+        public void setSuivant(Troncon suivant) {
+            this.suivant = suivant;
+        }
+
+        public void setH(Double h) {
+            this.h = h;
+        }
 }
 
 

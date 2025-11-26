@@ -14,9 +14,9 @@ public class Main {
         Controleur controleur = new Controleur();
         File f = new File("src\\main\\resources\\xml\\petitPlan.xml");
         System.out.println(f.exists());
-        Carte carte = controleur.initialiserCarte("src\\main\\resources\\xml\\petitPlan.xml");
+        controleur.initialiserCarte("src\\main\\resources\\xml\\petitPlan.xml");
 
-        ArrayList<Noeud> listeNoeuds = carte.getListeNoeuds();
+        ArrayList<Noeud> listeNoeuds = controleur.getCarte().getListeNoeuds();
 
         /*for(Noeud noeud : listeNoeuds){
             System.out.println(noeud.getId() + "  " + noeud.getLongitude()+ "  " + noeud.getLatitude());
@@ -32,7 +32,7 @@ public class Main {
         }
         */
 
-        controleur.preparerPlanTournee(carte, demande);
+        controleur.preparerPlanTournee(controleur.getCarte(), demande);
 
 
 
