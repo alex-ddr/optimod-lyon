@@ -7,8 +7,12 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
+import org.w3c.dom.Document;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
 public class AccueilControleur {
@@ -16,7 +20,8 @@ public class AccueilControleur {
     private Interface interfaceUtilisateur;
     private Controleur controleurMetier;
 
-
+    @FXML
+    private SVGPath svgValid;
 
     private FileChooser explorateur = new FileChooser();
 
@@ -30,6 +35,7 @@ public class AccueilControleur {
 
     @FXML
     private void initialize() {
+        svgValid.setVisible(false);
         System.out.println("initialize AccueilControleur");
     }
 
@@ -60,12 +66,13 @@ public class AccueilControleur {
         if (db.hasFiles())
         {
             traiterFichierPlan(db.getFiles().getFirst());
+            svgValid.setVisible(true);
         }
         event.consume();
 
     }
 
-    private void traiterFichierPlan(File fichierPlan) {
+    private void afficherCarte(File fichierPlan){
         System.out.println("Le fichier plan " + fichierPlan.getAbsolutePath());
         controleurMetier.initialiserCarte(fichierPlan.getAbsolutePath());
 //        Carte carte = controleurMetier.getCarte();
@@ -76,6 +83,22 @@ public class AccueilControleur {
             interfaceUtilisateur.afficherCarte();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void traiterFichierPlan(File fichierPlan) {
+
+    }
+
+    public static boolean isValidXML(File file) {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(file); // Si parse OK = XML valide
+            return true;
+        } catch (Exception e) {
+            return false; // Parse error = pas un XML valide
         }
     }
 
