@@ -16,6 +16,8 @@ public class AccueilControleur {
     private Interface interfaceUtilisateur;
     private Controleur controleurMetier;
 
+
+
     private FileChooser explorateur = new FileChooser();
 
     public void setInterface(Interface interfaceUtilisateur) {

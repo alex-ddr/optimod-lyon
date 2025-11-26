@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
 
 public class CarteControleur {
 
@@ -42,6 +43,15 @@ public class CarteControleur {
         gc = canvasCarte.getGraphicsContext2D();
     }
 
+    @FXML
+    private void retourAccueil() {
+        try {
+            interfaceUtilisateur.afficherAccueil();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void afficherCarte() {
         carte = controleurMetier.getCarte();
         if (carte != null) {
@@ -51,30 +61,19 @@ public class CarteControleur {
             gc.fillRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());
             for (Troncon troncon : carte.getListeTroncon()) {
                 Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());
-                double x1 = (dep.getLongitude() - 4.8568360) * gc.getCanvas().getWidth() / 0.022354;
-                double y1 = (dep.getLatitude() - 45.74700) * gc.getCanvas().getHeight() / 0.01578;
+                double x1 = (dep.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
+                double y1 = (dep.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
                 Noeud arr = carte.getMapNoeuds().get(troncon.getDestination());
-                double x2 = (arr.getLongitude() - 4.8568360) * gc.getCanvas().getWidth() / 0.022354;
-                double y2 = (arr.getLatitude() - 45.74700) * gc.getCanvas().getHeight() / 0.01578;
+                double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
+                double y2 = (arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
                 gc.setStroke(Color.BLACK);
                 gc.setLineWidth(2);
                 gc.strokeLine(x1, y1, x2, y2);
             }
             for (Noeud noeud : carte.getListeNoeuds()) {
-                double x = (noeud.getLongitude() - 4.8568360) * gc.getCanvas().getWidth() / 0.022354;
-                double y = (noeud.getLatitude() - 45.74700) * gc.getCanvas().getHeight() / 0.01578;
-                // min -> 45.74706
-                // max -> 45.762775
-
-                // min -> 45.74700
-                // max -> 45.762780
-
-                // min -> 4.8568363
-                // max -> 4.879188
-
-                // min -> 4.8568360
-                // max -> 4.879190
+                double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
+                double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
                 gc.setFill(Color.RED);
                 int rayon = 5;
