@@ -12,9 +12,10 @@ public class Main {
     public static void main(String[] args) {
 
 
-        //Application.launch(Interface.class, args);
+        Application.launch(Interface.class, args);
 
 
+/*
 
 
 
@@ -27,9 +28,11 @@ public class Main {
         ArrayList<Noeud> listeNoeuds = controleur.getCarte().getListeNoeuds();
 
 
+*/
 /*for(Noeud noeud : listeNoeuds){
             System.out.println(noeud.getId() + "  " + noeud.getLongitude()+ "  " + noeud.getLatitude());
-        }*/
+        }*//*
+
 
 
         controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandePetit2.xml");
@@ -38,16 +41,19 @@ public class Main {
        // ArrayList<Livraison> listeLivraions = demande.getListeLivraisons();
 
 
+*/
 /*
         for(Livraison livraison : listeLivraions){
             System.out.println(livraison.getDureeLivraison());
         }
-        */
+        *//*
+
 
 
         controleur.preparerPlanTournee(controleur.getCarte(), demande);
 
 
+*/
 
 
     }
