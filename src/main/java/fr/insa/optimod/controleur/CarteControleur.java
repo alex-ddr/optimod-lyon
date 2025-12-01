@@ -75,14 +75,6 @@ public class CarteControleur {
                 gc.setLineWidth(2);
                 gc.strokeLine(x1, y1, x2, y2);
             }
-            for (Noeud noeud : carte.getListeNoeuds()) {
-                double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-                double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
-
-                gc.setFill(Color.RED);
-                int rayon = 5;
-                gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
-            }
         }
     }
 
@@ -120,7 +112,8 @@ public class CarteControleur {
     private void traiterFichierPoints(File fichierPoints) {
         System.out.println("Le fichier des points " + fichierPoints.getAbsolutePath());
 //        controleurMetier.initialiserPoints(fichierPoints.getAbsolutePath());
-        DemandeDeLivraions demande = controleurMetier.initialiserDemandeDeLivraions(fichierPoints.getAbsolutePath());
+        controleurMetier.initialiserDemandeDeLivraions(fichierPoints.getAbsolutePath());
+        DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();
         controleurMetier.preparerPlanTournee(carte, demande);
 
         try {
