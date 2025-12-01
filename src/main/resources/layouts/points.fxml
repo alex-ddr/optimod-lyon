@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
@@ -23,18 +22,17 @@
                   <Cursor fx:constant="MOVE" />
                </cursor>
             </Canvas>
-            <StackPane maxHeight="90.0" maxWidth="90.0" minHeight="90.0" minWidth="90.0" onMouseClicked="#retourCarte" prefHeight="90.0" prefWidth="90.0" StackPane.alignment="TOP_LEFT">
-               <children>
-                  <Circle fill="WHITE" radius="45.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0, 0, 4);" />
-                  <SVGPath content="M45.9167 26.5833C47.2514 26.5833 48.3333 27.6653 48.3333 29C48.3333 30.3347 47.2514 31.4167 45.9167 31.4167L19.3333 31.4167L30.9092 42.9925C31.8568 43.9401 31.8568 45.4765 30.9092 46.4242C29.9616 47.3718 28.4251 47.3718 27.4775 46.4242L12.1747 31.1213C11.0031 29.9497 11.0031 28.0503 12.1747 26.8787L27.4775 11.5758C28.4251 10.6282 29.9616 10.6282 30.9092 11.5758C31.8568 12.5235 31.8568 14.0599 30.9092 15.0075L19.3333 26.5833L45.9167 26.5833Z" fill="#e15a4d" />
-               </children>
+            <Button mnemonicParsing="false" onAction="#retourCarte" style="-fx-background-color: #ffffff;" text="Annuler" StackPane.alignment="TOP_LEFT">
+               <font>
+                  <Font size="24.0" />
+               </font>
                <StackPane.margin>
-                  <Insets left="30.0" top="30.0" />
+                  <Insets left="40.0" top="40.0" />
                </StackPane.margin>
-            </StackPane>
+            </Button>
          </children>
       </StackPane>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="837.0" style="-fx-background-color: #FFFFFF; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 20, 0, -11, 0);">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="837.0" style="-fx-background-color: #FFFFFF;">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="36.0">
                <children>
@@ -47,16 +45,12 @@
                </children>
             </HBox>
             <TextArea fx:id="textePoints" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#afficherCarte" style="-fx-background-color: E15A4D; -fx-background-radius: 30;" text="Obtenir Tournée" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="Inter Bold" size="36.0" />
-               </font>
-            </Button>
          </children>
          <padding>
             <Insets left="48.0" right="48.0" />
          </padding>
       </VBox>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e15a4d" height="1080.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="41.0" />
    </children>
 </HBox>
