@@ -210,13 +210,15 @@ public class Controleur {
 
         PointLivraison courant = l;
         PointLivraison t = l;
+        PointLivraison prochain = courant.getParent();
+
         while (courant != null) {
             tspListe.add(courant);
             courant = courant.getParent();
 
         }
 
-        PointLivraison prochain = courant.getParent();
+
         PointLivraison astar;
         chemin.add(courant);
 
