@@ -3,59 +3,53 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.optimod.controleur.CarteControleur">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #FBE6DD;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.optimod.controleur.CarteControleur">
    <children>
-      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #FBE6DD;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane prefHeight="150.0" prefWidth="200.0">
          <children>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <Canvas fx:id="canvasCarte" height="1080.0" width="1045.0">
+               <cursor>
+                  <Cursor fx:constant="MOVE" />
+               </cursor>
+            </Canvas>
+            <StackPane maxHeight="74.0" maxWidth="74.0" minHeight="74.0" minWidth="74.0" onMouseClicked="#retourAccueil" prefHeight="74.0" prefWidth="74.0" StackPane.alignment="TOP_LEFT">
                <children>
-                  <Canvas fx:id="canvasCarte" height="1080.0" width="1080.0">
-                     <cursor>
-                        <Cursor fx:constant="MOVE" />
-                     </cursor>
-                  </Canvas>
-                  <Button mnemonicParsing="false" onAction="#retourAccueil" style="-fx-background-color: #ffffff;" text="Annuler" StackPane.alignment="TOP_LEFT">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <StackPane.margin>
-                        <Insets left="40.0" top="40.0" />
-                     </StackPane.margin>
-                  </Button>
+                  <Circle fill="WHITE" radius="37.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0, 0, 4);" />
+                  <SVGPath content="M36.5359 21.1523C37.5979 21.1523 38.4589 22.0133 38.4589 23.0753C38.4589 24.1373 37.5979 24.9982 36.5359 24.9982L15.3836 24.9982L24.5945 34.2091C25.3485 34.9631 25.3485 36.1856 24.5945 36.9397C23.8404 37.6937 22.6179 37.6937 21.8639 36.9397L10.1208 25.1966C8.94926 24.025 8.94926 22.1255 10.1208 20.954L21.8639 9.21088C22.6179 8.45685 23.8404 8.45685 24.5945 9.21088C25.3485 9.96491 25.3485 11.1874 24.5945 11.9415L15.3836 21.1523L36.5359 21.1523Z" fill="#e15a4d" />
                </children>
+               <StackPane.margin>
+                  <Insets left="25.0" top="25.0" />
+               </StackPane.margin>
             </StackPane>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="837.0" style="-fx-background-color: #FFFFFF;">
-               <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="36.0">
-                     <children>
-                        <Text fill="#591811" strokeType="OUTSIDE" strokeWidth="0.0" text="Importer le .xml des points">
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                        </Text>
-                        <SVGPath content="M42 30V38C42 39.0609 41.5786 40.0783 40.8284 40.8284C40.0783 41.5786 39.0609 42 38 42H10C8.93913 42 7.92172 41.5786 7.17157 40.8284C6.42143 40.0783 6 39.0609 6 38V30M14 20L24 30M24 30L34 20M24 30V6" fill="#de595000" stroke="#e05b4f" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" />
-                     </children>
-                  </HBox>
-                  <Rectangle arcHeight="54.0" arcWidth="54.0" fill="#f6f6f6" height="240.0" onDragDropped="#ficherLachePoints" onDragOver="#fichierAuDessusPoints" onMouseClicked="#clicZonePoints" stroke="BLACK" strokeType="OUTSIDE" style="-fx-stroke-dash-array: 10;" width="500.0">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Rectangle>
-               </children>
-            </VBox>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e15a4d" height="1080.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="41.0" />
          </children>
-      </HBox>
+      </StackPane>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="837.0" style="-fx-background-color: #FFFFFF; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 20, 0, -11, 0);">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="36.0">
+               <children>
+                  <Text fill="#591811" strokeType="OUTSIDE" strokeWidth="0.0" text="Importer le .xml des points">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <SVGPath content="M42 30V38C42 39.0609 41.5786 40.0783 40.8284 40.8284C40.0783 41.5786 39.0609 42 38 42H10C8.93913 42 7.92172 41.5786 7.17157 40.8284C6.42143 40.0783 6 39.0609 6 38V30M14 20L24 30M24 30L34 20M24 30V6" fill="#de595000" stroke="#e05b4f" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" />
+               </children>
+            </HBox>
+            <Rectangle arcHeight="54.0" arcWidth="54.0" fill="#f6f6f6" height="240.0" onDragDropped="#ficherLachePoints" onDragOver="#fichierAuDessusPoints" onMouseClicked="#clicZonePoints" stroke="BLACK" strokeType="OUTSIDE" style="-fx-stroke-dash-array: 10;" width="500.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Rectangle>
+         </children>
+      </VBox>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e15a4d" height="1080.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="41.0" />
    </children>
-</AnchorPane>
+</HBox>
