@@ -160,7 +160,7 @@ public class Controleur {
             Integer idL = mapIdAIndex.get(L.getId());
             Integer idE = mapIdAIndex.get(E.getId());
             PointLivraison astarL =  astar(carte, L, E), astarE;
-            cout[idL][idE] = astarL.getG();
+            cout[idL][idE] = astarL.getG() + livraison.getDureeLivraison();
             cout[idE][idL] = cout[idL][idE];
             //courtCheminE.put(livraison.getAdresseLivraison(), new ArrayList<>());
             courtCheminL.put(E.getId(), astarL);
@@ -210,17 +210,19 @@ public class Controleur {
 
         PointLivraison courant = l;
         PointLivraison t = l;
-        while (courant != null) {
-            tspListe.add(courant);
-            courant = courant.getParent();
+        PointLivraison prochain = courant.getParent();
+
+        while (t != null) {
+            tspListe.add(t);
+            t = t.getParent();
 
         }
 
-        PointLivraison prochain = courant.getParent();
+
         PointLivraison astar;
         chemin.add(courant);
 
-        while (courant != null) {
+        while (courant != null && prochain != null) {
             System.out.println(" ----- " + courant.getNoeud().getId());
             astar = tournee.get(courant.getNoeud().getId()).get(prochain.getNoeud().getId());
             while (astar != null)

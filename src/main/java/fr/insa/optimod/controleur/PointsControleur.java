@@ -86,10 +86,10 @@ public class PointsControleur {
             }
         }
     }
-
+    /*
     public void afficherTournee() {
         String tourneeStr = controleurMetier.getTourneeStr();
         textePoints.setText(tourneeStr);
     }
-
+    */
 }
