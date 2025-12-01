@@ -102,6 +102,7 @@ public class AccueilControleur {
         }
     }
 
+    //IA
     public static boolean isValidXML(File file) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

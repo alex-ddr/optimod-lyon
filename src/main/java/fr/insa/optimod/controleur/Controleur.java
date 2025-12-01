@@ -14,9 +14,23 @@ public class Controleur {
 
     protected Carte carte = null;
     protected ArrayList<Troncon> troncons = null;
-    protected ArrayList<Troncon> chemin = null;
-    protected ArrayList<Troncon> tspListe = null;
+    protected ArrayList<PointLivraison> chemin = null;
+    protected ArrayList<PointLivraison> tspListe = null;
 
+    protected DemandeDeLivraions demandeDeLivraions = null;
+
+    public ArrayList<Troncon> getTronconsItineraire() {
+        return troncons;
+    }
+
+    public ArrayList<PointLivraison> getPointsItineraire() {
+        return tspListe;
+    }
+
+
+    public DemandeDeLivraions getDemandeDeLivraions() {
+        return demandeDeLivraions;
+    }
 
 
     protected Double heuristique(Noeud na, Noeud nb, Carte carte) {
@@ -111,7 +125,7 @@ public class Controleur {
             listeIds.add(livraison.getAdresseLivraison());
         }
 
-        System.out.println("listeIds : " + listeIds.size());
+        //System.out.println("listeIds : " + listeIds.size());
 
         HashMap<Long,Integer> mapIdAIndex = new HashMap<>();
         HashMap<Integer,Long> mapIndexAId = new HashMap<>();
@@ -160,8 +174,9 @@ public class Controleur {
             Integer idL = mapIdAIndex.get(L.getId());
             Integer idE = mapIdAIndex.get(E.getId());
             PointLivraison astarL =  astar(carte, L, E), astarE;
-            cout[idL][idE] = astarL.getG() + livraison.getDureeLivraison();
-            cout[idE][idL] = cout[idL][idE];
+            cout[idL][idE] = astarL.getG() +  livraison.getDureeEnlevement();
+            cout[idE][idL] = astarL.getG() + livraison.getDureeLivraison();
+
             //courtCheminE.put(livraison.getAdresseLivraison(), new ArrayList<>());
             courtCheminL.put(E.getId(), astarL);
             courtCheminE.put(L.getId(), astarL);
@@ -177,9 +192,9 @@ public class Controleur {
                 astarE = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));
 
                 cout[idL][liv] = astarL.getG() + livraison2.getDureeLivraison();
-                cout[idE][liv] = astarL.getG() +  livraison2.getDureeEnlevement();
+                cout[idE][liv] = astarL.getG() +  livraison2.getDureeLivraison();
 
-                cout[idL][enl] = astarE.getG() + livraison2.getDureeLivraison();
+                cout[idL][enl] = astarE.getG() + livraison2.getDureeEnlevement();
                 cout[idE][enl] = astarE.getG() +  livraison2.getDureeEnlevement();
 
                 courtCheminL.put(livraison2.getAdresseEnlevement(), astarE);
@@ -223,7 +238,7 @@ public class Controleur {
         chemin.add(courant);
 
         while (courant != null && prochain != null) {
-            System.out.println(" ----- " + courant.getNoeud().getId());
+//            System.out.println(" ----- " + courant.getNoeud().getId());
             astar = tournee.get(courant.getNoeud().getId()).get(prochain.getNoeud().getId());
             while (astar != null)
             {
@@ -231,10 +246,10 @@ public class Controleur {
                 if (astar.getAntecedent() != null)
                 {
                     troncons.add(astar.getAntecedent());
-                    System.out.println("ID - " + astar.getNoeud().getId());
-                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
-                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
-                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
+//                    System.out.println("ID - " + astar.getNoeud().getId());
+//                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
+//                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
+//                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
                 }
 
                 astar = astar.getParent();
@@ -262,6 +277,11 @@ public class Controleur {
         }
         System.out.println((l.getParent()));
         */
+
+        this.troncons = troncons;
+        this.chemin = chemin;
+        this.tspListe = tspListe;
+
         return null;
     }
 
@@ -342,8 +362,7 @@ public class Controleur {
 
 
 
-    public DemandeDeLivraions initialiserDemandeDeLivraions(String fichierDemande) {
-        DemandeDeLivraions demande = null;
+    public void initialiserDemandeDeLivraions(String fichierDemande) {
 
         try {
             File xmlFile = new File(fichierDemande);
@@ -386,14 +405,10 @@ public class Controleur {
 
             //System.out.println("Livraisons lus : " + listeLivraison.size());
 
-            demande = new DemandeDeLivraions(entrepot, listeLivraison);
+            demandeDeLivraions = new DemandeDeLivraions(entrepot, listeLivraison);
         } catch (Exception e) {
             e.printStackTrace();
-            return demande;
         }
-
-
-        return demande;
     }
 
 

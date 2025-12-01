@@ -14,7 +14,7 @@ public class Main {
 
         Application.launch(Interface.class, args);
 
-
+        /*
 
 
 
@@ -27,26 +27,17 @@ public class Main {
         ArrayList<Noeud> listeNoeuds = controleur.getCarte().getListeNoeuds();
 
 
-/*for(Noeud noeud : listeNoeuds){
-            System.out.println(noeud.getId() + "  " + noeud.getLongitude()+ "  " + noeud.getLatitude());
-        }*/
+
 
 
         DemandeDeLivraions demande = controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandePetit2.xml");
 
-       // ArrayList<Livraison> listeLivraions = demande.getListeLivraisons();
 
-
-/*
-        for(Livraison livraison : listeLivraions){
-            System.out.println(livraison.getDureeLivraison());
-        }
-        */
 
 
         controleur.preparerPlanTournee(controleur.getCarte(), demande);
 
-
+        */
 
 
     }
