@@ -49,6 +49,15 @@ public class PointsControleur {
     }
 
     @FXML
+    private void retourAccueil() {
+        try {
+            interfaceUtilisateur.afficherAccueil();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void retourCarte() {
         try {
             interfaceUtilisateur.afficherCarte();
