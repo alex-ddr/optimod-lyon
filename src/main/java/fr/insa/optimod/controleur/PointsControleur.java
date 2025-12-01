@@ -1,8 +1,6 @@
 package fr.insa.optimod.controleur;
 
-import fr.insa.optimod.modele.Carte;
-import fr.insa.optimod.modele.Noeud;
-import fr.insa.optimod.modele.Troncon;
+import fr.insa.optimod.modele.*;
 import fr.insa.optimod.vue.Interface;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -76,20 +74,35 @@ public class PointsControleur {
                 gc.setLineWidth(2);
                 gc.strokeLine(x1, y1, x2, y2);
             }
-            for (Noeud noeud : carte.getListeNoeuds()) {
-                double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-                double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
-                gc.setFill(Color.RED);
-                int rayon = 5;
-                gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
-            }
         }
     }
-    /*
+
+    public void afficherPoints() {
+        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
+
+        Color couleurAleatoire = Color.color(Math.random(), Math.random(), Math.random());
+
+        for (Livraison livraison : demandeDeLivraions.getListeLivraisons()) {
+            Noeud noeud = carte.obtenirNoeud(livraison.getAdresseEnlevement());
+            double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
+            double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+
+            gc.setFill(couleurAleatoire);
+            int rayon = 5;
+            gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+
+            noeud = carte.obtenirNoeud(livraison.getAdresseLivraison());
+            x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
+            y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+
+            gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+        }
+    }
+
     public void afficherTournee() {
         String tourneeStr = controleurMetier.getTourneeStr();
         textePoints.setText(tourneeStr);
     }
-    */
+
 }

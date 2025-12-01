@@ -120,7 +120,8 @@ public class CarteControleur {
     private void traiterFichierPoints(File fichierPoints) {
         System.out.println("Le fichier des points " + fichierPoints.getAbsolutePath());
 //        controleurMetier.initialiserPoints(fichierPoints.getAbsolutePath());
-        DemandeDeLivraions demande = controleurMetier.initialiserDemandeDeLivraions(fichierPoints.getAbsolutePath());
+        controleurMetier.initialiserDemandeDeLivraions(fichierPoints.getAbsolutePath());
+        DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();
         controleurMetier.preparerPlanTournee(carte, demande);
 
         try {

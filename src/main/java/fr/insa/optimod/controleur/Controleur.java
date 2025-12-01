@@ -17,6 +17,12 @@ public class Controleur {
     protected ArrayList<Troncon> chemin = null;
     protected ArrayList<Troncon> tspListe = null;
 
+    protected DemandeDeLivraions demandeDeLivraions = null;
+
+
+    public DemandeDeLivraions getDemandeDeLivraions() {
+        return demandeDeLivraions;
+    }
 
 
     protected Double heuristique(Noeud na, Noeud nb, Carte carte) {
@@ -342,8 +348,7 @@ public class Controleur {
 
 
 
-    public DemandeDeLivraions initialiserDemandeDeLivraions(String fichierDemande) {
-        DemandeDeLivraions demande = null;
+    public void initialiserDemandeDeLivraions(String fichierDemande) {
 
         try {
             File xmlFile = new File(fichierDemande);
@@ -386,14 +391,10 @@ public class Controleur {
 
             //System.out.println("Livraisons lus : " + listeLivraison.size());
 
-            demande = new DemandeDeLivraions(entrepot, listeLivraison);
+            demandeDeLivraions = new DemandeDeLivraions(entrepot, listeLivraison);
         } catch (Exception e) {
             e.printStackTrace();
-            return demande;
         }
-
-
-        return demande;
     }
 
 

@@ -79,7 +79,7 @@ public class Interface extends Application {
         pointsController.setControleurMetier(this.controleurMetier);
 
         pointsController.afficherCarte();
-        //pointsController.afficherTournee();
+        pointsController.afficherPoints();
 
         Scene scene = new Scene(points, 1920, 1080);
 

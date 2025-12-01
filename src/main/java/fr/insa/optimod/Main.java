@@ -32,7 +32,8 @@ public class Main {
         }*/
 
 
-        DemandeDeLivraions demande = controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandePetit2.xml");
+        controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandePetit2.xml");
+        DemandeDeLivraions demande = controleur.getDemandeDeLivraions();
 
        // ArrayList<Livraison> listeLivraions = demande.getListeLivraisons();
 
