@@ -8,7 +8,7 @@ public class PointLivraison {
         private Double g;         // coût réel
         private Double h;         // heuristique
         private PointLivraison parent;
-        private Troncon suivant;
+        private Troncon antecedent;
         //private Integer etat;
         //private Boolean DejaVu;
 
@@ -56,16 +56,16 @@ public class PointLivraison {
             this.parent = parent;
         }
 
-        public Troncon getSuivant() {
-            return suivant;
+        public Troncon getAntecedent() {
+            return antecedent;
         }
 
         public void setG(Double g) {
             this.g = g;
         }
 
-        public void setSuivant(Troncon suivant) {
-            this.suivant = suivant;
+        public void setAntecedent(Troncon suivant) {
+            this.antecedent = suivant;
         }
 
         public void setH(Double h) {

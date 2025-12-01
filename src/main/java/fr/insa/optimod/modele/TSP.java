@@ -5,16 +5,16 @@ import java.util.HashMap;
 public class TSP {
 
 
-    protected final HashMap<Long, HashMap<Long, PointLivraison>> memD = new HashMap<>();
+    protected HashMap<Long, HashMap<Long, PointLivraison>> memD = new HashMap<>();
 
-    // Récupérer une valeur mémorisée
+
     private PointLivraison getMemo(long nodeId, long subsetMask) {
         HashMap<Long, PointLivraison> inner = memD.get(nodeId);
         if (inner == null) return null;
         return inner.get(subsetMask);
     }
 
-    // Stocker une valeur mémorisée
+
     private void putMemo(long nodeId, long subsetMask, PointLivraison pl) {
         memD.computeIfAbsent(nodeId, k -> new HashMap<>())
                 .put(subsetMask, pl);
