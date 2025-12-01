@@ -14,10 +14,18 @@ public class Controleur {
 
     protected Carte carte = null;
     protected ArrayList<Troncon> troncons = null;
-    protected ArrayList<Troncon> chemin = null;
-    protected ArrayList<Troncon> tspListe = null;
+    protected ArrayList<PointLivraison> chemin = null;
+    protected ArrayList<PointLivraison> tspListe = null;
 
     protected DemandeDeLivraions demandeDeLivraions = null;
+
+    public ArrayList<Troncon> getTronconsItineraire() {
+        return troncons;
+    }
+
+    public ArrayList<PointLivraison> getPointsItineraire() {
+        return tspListe;
+    }
 
 
     public DemandeDeLivraions getDemandeDeLivraions() {

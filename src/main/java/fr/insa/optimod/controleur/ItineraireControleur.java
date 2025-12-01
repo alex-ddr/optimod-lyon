@@ -6,16 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
-import java.io.File;
+import java.util.ArrayList;
 
-public class PointsControleur {
+public class ItineraireControleur {
 
     Carte carte = null;
 
@@ -98,5 +94,18 @@ public class PointsControleur {
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
         }
     }
+    public void afficherItineraire() {
+        for (Troncon troncon : controleurMetier.getTronconsItineraire()) {
+            Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());
+            double x1 = (dep.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
+            double y1 = (dep.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+            Noeud arr = carte.getMapNoeuds().get(troncon.getDestination());
+            double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
+            double y2 = (arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(4);
+            gc.strokeLine(x1, y1, x2, y2);
+        }
+    }
 }
