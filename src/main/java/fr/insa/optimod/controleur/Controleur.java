@@ -173,7 +173,7 @@ public class Controleur {
             Noeud E= carte.obtenirNoeud(livraison.getAdresseEnlevement());
             Integer idL = mapIdAIndex.get(L.getId());
             Integer idE = mapIdAIndex.get(E.getId());
-            PointLivraison astarL =  astar(carte, L, E), astarE;
+            PointLivraison astarL =  astar(carte, L, E), astarLEnlevement, astarLLivraison, astarEEnlevement, astarELivraison;
             cout[idL][idE] = astarL.getG() +  livraison.getDureeEnlevement();
             cout[idE][idL] = astarL.getG() + livraison.getDureeLivraison();
 
@@ -188,20 +188,23 @@ public class Controleur {
                 Integer liv = mapIdAIndex.get(livraison2.getAdresseLivraison());
                 Integer enl = mapIdAIndex.get(livraison2.getAdresseEnlevement());
 
-                astarL = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseLivraison()));
-                astarE = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));
+                astarLEnlevement = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));
+                astarLLivraison = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseLivraison()));
 
-                cout[idL][liv] = astarL.getG() + livraison2.getDureeLivraison();
-                cout[idE][liv] = astarL.getG() +  livraison2.getDureeLivraison();
+                astarEEnlevement = astar(carte, E, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));
+                astarELivraison = astar(carte, E, carte.obtenirNoeud(livraison2.getAdresseLivraison()));
 
-                cout[idL][enl] = astarE.getG() + livraison2.getDureeEnlevement();
-                cout[idE][enl] = astarE.getG() +  livraison2.getDureeEnlevement();
+                cout[idL][liv] = astarLLivraison.getG() + livraison2.getDureeLivraison();
+                cout[idE][liv] = astarELivraison.getG() +  livraison2.getDureeLivraison();
 
-                courtCheminL.put(livraison2.getAdresseEnlevement(), astarE);
-                courtCheminL.put(livraison2.getAdresseLivraison(), astarL);
+                cout[idL][enl] = astarLEnlevement.getG() + livraison2.getDureeEnlevement();
+                cout[idE][enl] = astarEEnlevement.getG() +  livraison2.getDureeEnlevement();
 
-                courtCheminE.put(livraison2.getAdresseEnlevement(), astarE);
-                courtCheminE.put(livraison2.getAdresseLivraison(), astarL);
+                courtCheminL.put(livraison2.getAdresseEnlevement(),  astarLEnlevement);
+                courtCheminL.put(livraison2.getAdresseLivraison(), astarLLivraison);
+
+                courtCheminE.put(livraison2.getAdresseEnlevement(), astarEEnlevement);
+                courtCheminE.put(livraison2.getAdresseLivraison(), astarELivraison);
 
                 }
 
