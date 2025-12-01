@@ -12,7 +12,12 @@ import java.util.*;
 
 public class Controleur {
 
-    Carte carte = null;
+    protected Carte carte = null;
+    protected ArrayList<Troncon> troncons = null;
+    protected ArrayList<PointLivraison> chemin = null;
+    protected ArrayList<PointLivraison> tspListe = null;
+
+
 
 
     protected Double heuristique(Noeud na, Noeud nb, Carte carte) {
@@ -74,7 +79,7 @@ public class Controleur {
                 if (!score.containsKey(voisin) || tentative < score.get(voisin)) {
 
                     Double h = heuristique(noeudVoisin, adresseFin, carte);
-
+                    courant.setSuivant(t);
                     PointLivraison suivant = new PointLivraison(noeudVoisin, tentative, h, courant);
 
                     score.put(voisin, tentative);
@@ -210,12 +215,19 @@ public class Controleur {
             courant = courant.getParent();
         }
 
-
-        System.out.println("Chemin TSP :");
+        this.chemin = chemin;
+        this.troncons = troncons;
+        this.tspListe = tspListe;
+       /* System.out.println("Chemin TSP :");
 
         for (PointLivraison p : chemin) {
             if (p != null) {
                 System.out.println(" - " + p.getNoeud().getId());
+                System.out.println(" - " + p.getSuivant().getNomRue());
+                System.out.println(" - " + p.getSuivant().getDestination());
+                System.out.println(" - " + p.getSuivant().getOrigine());
+
+
             }
         }
         System.out.println((l.getParent()));
@@ -291,9 +303,7 @@ public class Controleur {
         carte = new Carte(listeNoeuds, listeTroncons, mapNoeuds, minLat, minLong, maxLat, maxLong);
         } catch (Exception e) {
             e.printStackTrace();
-            return carte;
         }
-    return carte;
     }
 
 

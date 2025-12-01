@@ -12,41 +12,41 @@ public class Main {
     public static void main(String[] args) {
 
 
-        Application.launch(Interface.class, args);
+        //Application.launch(Interface.class, args);
 
 
 
 
-/*
+
 
         Controleur controleur = new Controleur();
         File f = new File("src\\main\\resources\\xml\\petitPlan.xml");
         System.out.println(f.exists());
-        Carte carte = controleur.initialiserCarte("src\\main\\resources\\xml\\petitPlan.xml");
+        controleur.initialiserCarte("src\\main\\resources\\xml\\petitPlan.xml");
 
-        ArrayList<Noeud> listeNoeuds = carte.getListeNoeuds();
+        ArrayList<Noeud> listeNoeuds = controleur.getCarte().getListeNoeuds();
 
-        */
+
 /*for(Noeud noeud : listeNoeuds){
             System.out.println(noeud.getId() + "  " + noeud.getLongitude()+ "  " + noeud.getLatitude());
-        }*//*
+        }*/
 
 
         DemandeDeLivraions demande = controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandePetit2.xml");
 
-        ArrayList<Livraison> listeLivraions = demande.getListeLivraisons();
+       // ArrayList<Livraison> listeLivraions = demande.getListeLivraisons();
 
-        */
+
 /*
         for(Livraison livraison : listeLivraions){
             System.out.println(livraison.getDureeLivraison());
         }
-        *//*
+        */
 
 
-        controleur.preparerPlanTournee(carte, demande);
+        controleur.preparerPlanTournee(controleur.getCarte(), demande);
 
-*/
+
 
 
     }

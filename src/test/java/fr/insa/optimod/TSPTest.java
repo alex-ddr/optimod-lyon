@@ -1,9 +1,9 @@
 package fr.insa.optimod;
 
-import fr.insa.optimod.modele.PointLivraison;
-import fr.insa.optimod.modele.TSP;
+import fr.insa.optimod.modele.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -12,33 +12,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TSPTest {
 
 
-    static class Noeud {
-        private final long id;
-        Noeud(long id) { this.id = id; }
-        public long getId() { return id; }
-    }
-
-    static class Carte {
-        public Noeud obtenirNoeud(long id) {
-            return new Noeud(id);
-        }
-    }
-
     // ===============================================
     //  TEST PRINCIPAL : DP vs brute force
     // ===============================================
     @Test
     public void testTspPickupDeliveryOptimal() {
 
-        int n = 5;
+        int n = 7;
 
         double[][] cout = {
-                //  0    1    2    3    4
-                {  0,   2,   9,   3,   8 }, // 0 ->
-                {  2,   0,   1,   4,   7 }, // 1 ->
-                {  9,   1,   0,   6,   2 }, // 2 ->
-                {  3,   4,   6,   0,   1 }, // 3 ->
-                {  8,   7,   2,   1,   0 }  // 4 ->
+
+                {  0,   4,   9,   3,  12,   7,  15 },
+                {  4,   0,   1,   8,   6,   5,  11 },
+                {  9,   1,   0,   7,   2,  14,   4 },
+                {  3,   8,   7,   0,   1,   2,   9 },
+                { 12,   6,   2,   1,   0,  10,   3 },
+                {  7,   5,  14,   2,  10,   0,   6 },
+                { 15,  11,   4,   9,   3,   6,   0 }
         };
 
 
@@ -46,15 +36,21 @@ public class TSPTest {
         for (int i = 0; i < n; i++) {
             mapIndexAId.put(i, (long) i);
         }
-
-        Carte carte = new Carte();
+        ArrayList<Noeud> listeNoeuds = new ArrayList<>();
+        HashMap<Long, Noeud> mapNoeuds = new HashMap<>();
+        ArrayList<Troncon> listeTroncons = new ArrayList<>();
+        Double minLat = null;
+        Double minLong = null;
+        Double maxLat = null;
+        Double maxLong = null;
+        Carte  carte = new Carte(listeNoeuds, listeTroncons, mapNoeuds, minLat, minLong, maxLat, maxLong);;
 
 
         long s = (1L << (n - 1)) - 1L;
 
         // ===== 1. Résultat de ton DP =====
         TSP tsp = new TSP(); // ta classe (doit avoir computeD)
-        PointLivraison resDP = tsp.computeD(0, s, n, cout, carte, mapIndexAId);
+        PointLivraison resDP = tsp.computeDTest(0, s, n, cout, carte, mapIndexAId);
         double dpCost = resDP.getG();
 
         // ===== 2. Résultat brut force =====
@@ -63,6 +59,17 @@ public class TSPTest {
 
         System.out.println("Coût DP      = " + dpCost);
         System.out.println("Coût brute   = " + bfCost);
+
+        System.out.print("Chemin DP (indices) : ");
+        PointLivraison courant = resDP;
+        System.out.print(courant.getNoeud().getId());
+        courant = courant.getParent();
+        while (courant != null) {
+
+            System.out.print(" -> " + courant.getNoeud().getId());
+            courant = courant.getParent();
+        }
+        System.out.println();
 
         System.out.print("Chemin brute (indices) : 0");
         for (int idx : bf.chemin) {
@@ -147,7 +154,7 @@ public class TSPTest {
                 if (p < 0 || p >= pickupVu.length) return false;
                 if (!pickupVu[p]) return false;
             } else {
-              
+
                 if (j >= 0 && j < pickupVu.length) {
                     pickupVu[j] = true;
                 }
