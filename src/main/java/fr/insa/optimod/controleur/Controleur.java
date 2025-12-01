@@ -12,8 +12,11 @@ import java.util.*;
 
 public class Controleur {
 
-    Carte carte = null;
-    String tourneeStr = "";
+    protected Carte carte = null;
+    protected ArrayList<Troncon> troncons = null;
+    protected ArrayList<Troncon> chemin = null;
+    protected ArrayList<Troncon> tspListe = null;
+
 
 
     protected Double heuristique(Noeud na, Noeud nb, Carte carte) {
@@ -67,7 +70,7 @@ public class Controleur {
                 }
 
                 Noeud noeudVoisin = carte.obtenirNoeud(voisin);
-                Double tentative = courant.getG() + t.getLongueur();
+                Double tentative = courant.getG() + t.getLongueur()/4.1666666667;
 
                 if (fait.contains(voisin))
                     continue;
@@ -75,9 +78,9 @@ public class Controleur {
                 if (!score.containsKey(voisin) || tentative < score.get(voisin)) {
 
                     Double h = heuristique(noeudVoisin, adresseFin, carte);
-                    courant.setSuivant(t);
-                    PointLivraison suivant = new PointLivraison(noeudVoisin, tentative, h, courant);
 
+                    PointLivraison suivant = new PointLivraison(noeudVoisin, tentative, h, courant);
+                    suivant.setAntecedent(t);
                     score.put(voisin, tentative);
                     livrable.add(suivant);
                 }
@@ -93,9 +96,7 @@ public class Controleur {
 
 
 
-    public String getTourneeStr() {
-        return tourneeStr;
-    }
+
 
 
 
@@ -137,8 +138,8 @@ public class Controleur {
                 astarEntrepotL = astar(carte, entrepot, carte.obtenirNoeud(livraison2.getAdresseLivraison()));
                 astarEntrepotE = astar(carte, entrepot, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));
 
-                cout[ent][liv] = astarEntrepotL.getG();
-                cout[ent][enl] = astarEntrepotE.getG();
+                cout[ent][liv] = astarEntrepotL.getG() + livraison2.getDureeLivraison();
+                cout[ent][enl] = astarEntrepotE.getG() + livraison2.getDureeEnlevement();
 
                 courtCheminEntrepot.put(livraison2.getAdresseLivraison(), astarEntrepotL);
                 courtCheminEntrepot.put(livraison2.getAdresseEnlevement(), astarEntrepotE);
@@ -159,7 +160,7 @@ public class Controleur {
             Integer idL = mapIdAIndex.get(L.getId());
             Integer idE = mapIdAIndex.get(E.getId());
             PointLivraison astarL =  astar(carte, L, E), astarE;
-            cout[idL][idE] = astarL.getG();
+            cout[idL][idE] = astarL.getG() + livraison.getDureeLivraison();
             cout[idE][idL] = cout[idL][idE];
             //courtCheminE.put(livraison.getAdresseLivraison(), new ArrayList<>());
             courtCheminL.put(E.getId(), astarL);
@@ -175,11 +176,11 @@ public class Controleur {
                 astarL = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseLivraison()));
                 astarE = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));
 
-                cout[idL][liv] = astarL.getG();
-                cout[idE][liv] = astarL.getG();
+                cout[idL][liv] = astarL.getG() + livraison2.getDureeLivraison();
+                cout[idE][liv] = astarL.getG() +  livraison2.getDureeEnlevement();
 
-                cout[idL][enl] = astarE.getG();
-                cout[idE][enl] = astarE.getG();
+                cout[idL][enl] = astarE.getG() + livraison2.getDureeLivraison();
+                cout[idE][enl] = astarE.getG() +  livraison2.getDureeEnlevement();
 
                 courtCheminL.put(livraison2.getAdresseEnlevement(), astarE);
                 courtCheminL.put(livraison2.getAdresseLivraison(), astarL);
@@ -203,29 +204,64 @@ public class Controleur {
         //System.out.println(l.getG());
         //System.out.println(l.getParent().getNoeud().getId());
 
+        ArrayList<Troncon> troncons = new ArrayList<>();
         ArrayList<PointLivraison> chemin = new ArrayList<>();
+        ArrayList<PointLivraison> tspListe = new ArrayList<>();
 
         PointLivraison courant = l;
+        PointLivraison t = l;
+        PointLivraison prochain = courant.getParent();
 
-        while (courant != null) {
-            chemin.add(courant);
-            //System.out.println(courant.getNoeud().getId());
-            courant = courant.getParent();
+        while (t != null) {
+            tspListe.add(t);
+            t = t.getParent();
+
         }
 
-        tourneeStr = "";
 
-        System.out.println("Chemin TSP :");
-        tourneeStr += "Chemin TSP :\n";
+        PointLivraison astar;
+        chemin.add(courant);
+
+        while (courant != null && prochain != null) {
+            System.out.println(" ----- " + courant.getNoeud().getId());
+            astar = tournee.get(courant.getNoeud().getId()).get(prochain.getNoeud().getId());
+            while (astar != null)
+            {
+                chemin.add(astar);
+                if (astar.getAntecedent() != null)
+                {
+                    troncons.add(astar.getAntecedent());
+                    System.out.println("ID - " + astar.getNoeud().getId());
+                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
+                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
+                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
+                }
+
+                astar = astar.getParent();
+
+            }
+            //System.out.println(courant.getNoeud().getId());
+            courant = courant.getParent();
+            prochain = courant.getParent();
+
+
+        }
+
+
+       /* System.out.println("Chemin TSP :");
 
         for (PointLivraison p : chemin) {
             if (p != null) {
                 System.out.println(" - " + p.getNoeud().getId());
-                tourneeStr += " - " + p.getNoeud().getId() + "\n";
+                System.out.println(" - " + p.getSuivant().getNomRue());
+                System.out.println(" - " + p.getSuivant().getDestination());
+                System.out.println(" - " + p.getSuivant().getOrigine());
+
+
             }
         }
         System.out.println((l.getParent()));
-
+        */
         return null;
     }
 
@@ -260,7 +296,7 @@ public class Controleur {
 
                 listeNoeuds.add(new Noeud(id, lon, lat));
                 mapNoeuds.put(id, new Noeud(id, lon, lat));
-                System.out.println(id + " " + lon + " " + lat);
+                //System.out.println(id + " " + lon + " " + lat);
                 if (minLat == null || lat < minLat) {
                     minLat = lat.doubleValue();
                 }
@@ -289,11 +325,14 @@ public class Controleur {
                 listeTroncons.add(new Troncon(destination, origine, longueur, nomRue));
             }
 
-            // Affichage test
+
+            /*
             System.out.println("Noeuds lus : " + listeNoeuds.size());
             System.out.println("Tronçons lus : " + listeTroncons.size());
             System.out.println("MinLat : " + minLat + " MaxLat : " + maxLat);
             System.out.println("MinLong : " + minLong + " MaxLong : " + maxLong);
+            */
+
         carte = new Carte(listeNoeuds, listeTroncons, mapNoeuds, minLat, minLong, maxLat, maxLong);
         } catch (Exception e) {
             e.printStackTrace();
@@ -326,7 +365,7 @@ public class Controleur {
             DateTimeFormatter f = DateTimeFormatter.ofPattern("H:m:s");
             LocalTime heureDepart = LocalTime.parse(depart, f);
 
-            System.out.println("Heure départ = " + heureDepart);
+            //System.out.println("Heure départ = " + heureDepart);
 
 
             entrepot = new Entrepot(heureDepart, adresse);
@@ -344,8 +383,8 @@ public class Controleur {
                 listeLivraison.add(new Livraison(adresseEnlevement, adresseLivraison, dureeLivraison, dureeEnlevement));
             }
 
-            // Affichage test
-            System.out.println("Livraisons lus : " + listeLivraison.size());
+
+            //System.out.println("Livraisons lus : " + listeLivraison.size());
 
             demande = new DemandeDeLivraions(entrepot, listeLivraison);
         } catch (Exception e) {

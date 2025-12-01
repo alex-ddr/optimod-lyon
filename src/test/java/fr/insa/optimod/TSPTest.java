@@ -11,19 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TSPTest {
 
-    /*
-    static class Noeud {
-        private final long id;
-        Noeud(long id) { this.id = id; }
-        public long getId() { return id; }
-    }
 
-    static class Carte {
-        public Noeud obtenirNoeud(long id) {
-            return new Noeud(id);
-        }
-    }
-    */
     // ===============================================
     //  TEST PRINCIPAL : DP vs brute force
     // ===============================================
@@ -33,14 +21,14 @@ public class TSPTest {
         int n = 7;
 
         double[][] cout = {
-                //   0    1    2    3    4    5    6
-                {  0,   4,   9,   3,  12,   7,  15 }, // 0 ->
-                {  4,   0,   1,   8,   6,   5,  11 }, // 1 ->
-                {  9,   1,   0,   7,   2,  14,   4 }, // 2 ->
-                {  3,   8,   7,   0,   1,   2,   9 }, // 3 ->
-                { 12,   6,   2,   1,   0,  10,   3 }, // 4 ->
-                {  7,   5,  14,   2,  10,   0,   6 }, // 5 ->
-                { 15,  11,   4,   9,   3,   6,   0 }  // 6 ->
+
+                {  0,   4,   9,   3,  12,   7,  15 },
+                {  4,   0,   1,   8,   6,   5,  11 },
+                {  9,   1,   0,   7,   2,  14,   4 },
+                {  3,   8,   7,   0,   1,   2,   9 },
+                { 12,   6,   2,   1,   0,  10,   3 },
+                {  7,   5,  14,   2,  10,   0,   6 },
+                { 15,  11,   4,   9,   3,   6,   0 }
         };
 
 
