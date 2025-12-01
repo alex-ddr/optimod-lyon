@@ -58,6 +58,11 @@ public class ItineraireControleur {
         }
     }
 
+    @FXML
+    private void actualisationAuto() {
+        System.out.println("actualisationAuto");
+    }
+
     public void afficherCarte() {
         carte = controleurMetier.getCarte();
         if (carte != null) {

@@ -104,7 +104,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Rectangle arcHeight="3.0" arcWidth="5.0" fill="#f8f8f8" height="22.0" stroke="#d0d0d0" strokeType="INSIDE" width="22.0" />
+                              <Rectangle onMouseClicked="#actualisationAuto" arcHeight="3.0" arcWidth="5.0" fill="#f8f8f8" height="22.0" stroke="#d0d0d0" strokeType="INSIDE" width="22.0" />
                               <Text fill="#757575" strokeType="OUTSIDE" strokeWidth="0.0" text="Actualisation automatique">
                                  <font>
                                     <Font name="Inter Regular" size="20.0" />
