@@ -7,8 +7,12 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
+import org.w3c.dom.Document;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
 public class AccueilControleur {
@@ -16,7 +20,11 @@ public class AccueilControleur {
     private Interface interfaceUtilisateur;
     private Controleur controleurMetier;
 
-
+    @FXML
+    private SVGPath svgValid;
+    @FXML
+    private SVGPath svgWrong;
+    private File fichierPlan;
 
     private FileChooser explorateur = new FileChooser();
 
@@ -30,14 +38,16 @@ public class AccueilControleur {
 
     @FXML
     private void initialize() {
+        svgValid.setVisible(false);
+        svgWrong.setVisible(false);
         System.out.println("initialize AccueilControleur");
     }
 
     @FXML
     private void clicZoneCarte(MouseEvent event) {
         System.out.println("Le fichier plan va être choisi");
-        File fichierPlan = explorateur.showOpenDialog(null);
-        traiterFichierPlan(fichierPlan);
+        fichierPlan = explorateur.showOpenDialog(null);
+        traiterFichierPlan();
     }
 
     @FXML
@@ -59,13 +69,15 @@ public class AccueilControleur {
         Dragboard db = event.getDragboard();
         if (db.hasFiles())
         {
-            traiterFichierPlan(db.getFiles().getFirst());
+            fichierPlan = db.getFiles().getFirst();
+            traiterFichierPlan();
         }
         event.consume();
 
     }
 
-    private void traiterFichierPlan(File fichierPlan) {
+    @FXML
+    private void afficherCarte(){
         System.out.println("Le fichier plan " + fichierPlan.getAbsolutePath());
         controleurMetier.initialiserCarte(fichierPlan.getAbsolutePath());
 //        Carte carte = controleurMetier.getCarte();
@@ -76,6 +88,29 @@ public class AccueilControleur {
             interfaceUtilisateur.afficherCarte();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void traiterFichierPlan() {
+        if(isValidXML(fichierPlan)) {
+            svgWrong.setVisible(false);
+            svgValid.setVisible(true);
+        }
+        else {
+            svgValid.setVisible(false);
+            svgWrong.setVisible(true);
+        }
+    }
+
+    public static boolean isValidXML(File file) {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(file); // Si parse OK = XML valide
+            return true;
+        } catch (Exception e) {
+            return false; // Parse error = pas un XML valide
         }
     }
 
