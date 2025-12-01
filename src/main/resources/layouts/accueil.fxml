@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -15,9 +15,9 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.optimod.controleur.AccueilControleur">
    <children>
-      <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: FBE6DD;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="TOP_CENTER" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: FBE6DD;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="NEVER">
+            <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -30,9 +30,9 @@
                   <SVGPath content="M729.395 203.455L728.486 208.909C728.243 210.394 727.698 211.879 726.849 213.364C726.001 214.833 725.016 216.205 723.895 217.477C722.774 218.735 721.668 219.788 720.577 220.636L715.759 218C716.562 216.909 717.342 215.644 718.099 214.205C718.857 212.765 719.41 211 719.759 208.909L720.668 203.455H729.395ZM727.56 250L735.287 203.455H747.923L741.923 239.818H760.741L759.014 250H727.56ZM765.429 263.091C763.974 263.091 762.618 262.977 761.361 262.75C760.103 262.538 759.005 262.242 758.065 261.864L762.293 252.955C763.262 253.318 764.156 253.553 764.974 253.659C765.808 253.765 766.543 253.705 767.179 253.477C767.815 253.25 768.338 252.818 768.747 252.182L769.156 251.545L762.929 215.091H775.565L777.156 239.273H777.52L787.293 215.091H800.929L781.929 252.909C780.959 254.833 779.747 256.561 778.293 258.091C776.853 259.636 775.08 260.856 772.974 261.75C770.868 262.644 768.353 263.091 765.429 263.091ZM814.344 250.636C810.556 250.636 807.435 249.886 804.98 248.386C802.541 246.871 800.829 244.765 799.844 242.068C798.859 239.356 798.662 236.212 799.253 232.636C799.844 229.061 801.079 225.924 802.957 223.227C804.836 220.515 807.253 218.409 810.207 216.909C813.162 215.394 816.541 214.636 820.344 214.636C824.116 214.636 827.223 215.394 829.662 216.909C832.116 218.409 833.836 220.515 834.821 223.227C835.821 225.924 836.026 229.061 835.435 232.636C834.844 236.212 833.601 239.356 831.707 242.068C829.813 244.765 827.389 246.871 824.435 248.386C821.495 249.886 818.132 250.636 814.344 250.636ZM815.889 241.364C816.98 241.364 817.973 241.008 818.866 240.295C819.776 239.583 820.548 238.568 821.185 237.25C821.836 235.932 822.313 234.364 822.616 232.545C822.92 230.712 822.965 229.144 822.753 227.841C822.541 226.523 822.101 225.508 821.435 224.795C820.768 224.083 819.889 223.727 818.798 223.727C817.707 223.727 816.707 224.083 815.798 224.795C814.889 225.508 814.116 226.523 813.48 227.841C812.844 229.144 812.374 230.712 812.071 232.545C811.768 234.364 811.715 235.932 811.912 237.25C812.124 238.568 812.563 239.583 813.23 240.295C813.912 241.008 814.798 241.364 815.889 241.364ZM853.526 230.364L850.253 250H837.707L843.526 215.091H855.435L854.344 221.727H854.707C855.813 219.5 857.427 217.765 859.548 216.523C861.685 215.265 864.041 214.636 866.616 214.636C869.086 214.636 871.139 215.197 872.776 216.318C874.412 217.439 875.571 218.985 876.253 220.955C876.935 222.924 877.056 225.182 876.616 227.727L872.889 250H860.344L863.616 230.364C863.904 228.636 863.692 227.28 862.98 226.295C862.283 225.311 861.132 224.818 859.526 224.818C858.51 224.818 857.579 225.045 856.73 225.5C855.897 225.939 855.2 226.576 854.639 227.409C854.094 228.227 853.723 229.212 853.526 230.364Z" fill="#e9afa3" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="148.0" VBox.vgrow="NEVER">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="148.0" VBox.vgrow="NEVER">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="24.0" style="-fx-background-color: #f6f6f6; -fx-background-radius: 20; -fx-border-color: #591811; -fx-border-radius: 20; -fx-border-width: 2;" HBox.hgrow="NEVER">
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="24.0" HBox.hgrow="NEVER">
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="36.0" VBox.vgrow="NEVER">
                            <children>
@@ -46,24 +46,20 @@
                         </HBox>
                         <StackPane prefHeight="150.0" prefWidth="200.0">
                            <children>
+                              <Rectangle arcHeight="54.0" arcWidth="54.0" fill="#f6f6f6" height="348.0" onDragDropped="#ficherLacheCarte" onDragOver="#fichierAuDessusCarte" onMouseClicked="#clicZoneCarte" stroke="#591811" strokeType="OUTSIDE" strokeWidth="2.0" style="-fx-stroke-dash-array: 10;" width="723.0">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Rectangle>
                               <SVGPath fx:id="svgValid" content="M75.75 151.5C85.6976 151.5 95.5479 149.541 104.738 145.734C113.929 141.927 122.279 136.347 129.313 129.313C136.347 122.279 141.927 113.929 145.734 104.738C149.541 95.5479 151.5 85.6976 151.5 75.75C151.5 65.8024 149.541 55.9521 145.734 46.7617C141.927 37.5713 136.347 29.2207 129.313 22.1867C122.279 15.1526 113.929 9.57292 104.738 5.76612C95.5479 1.95933 85.6976 -1.48231e-07 75.75 0C55.6599 2.99367e-07 36.3925 7.98078 22.1867 22.1867C7.98078 36.3925 0 55.6599 0 75.75C0 95.8401 7.98078 115.107 22.1867 129.313C36.3925 143.519 55.6599 151.5 75.75 151.5ZM73.7973 106.387L115.881 55.8867L102.953 45.1133L66.761 88.5349L48.0339 69.7994L36.1328 81.7006L61.3828 106.951L67.8973 113.465L73.7973 106.387Z" fill="#92d282" fillRule="EVEN_ODD" />
                               <SVGPath fx:id="svgWrong" content="M128.438 21.9375C99.1875 -7.3125 51.1875 -7.3125 21.9375 21.9375C-7.3125 51.1875 -7.3125 99.1875 21.9375 128.438C51.1875 157.688 98.4375 157.688 127.688 128.438C156.938 99.1875 157.688 51.1875 128.438 21.9375ZM96.1875 106.688L75.1875 85.6875L54.1875 106.688L43.6875 96.1875L64.6875 75.1875L43.6875 54.1875L54.1875 43.6875L75.1875 64.6875L96.1875 43.6875L106.688 54.1875L85.6875 75.1875L106.688 96.1875L96.1875 106.688Z" fill="#e15a4d" fillRule="EVEN_ODD" />
-                              <Pane onDragDropped="#ficherLacheCarte" prefHeight="348.0" prefWidth="723.0">
-                                 <styleClass>
-                                    <String fx:value="-fx-background-color: #f6f6f6" />
-                                    <String fx:value="-fx-background-radius: 30;" />
-                                    <String fx:value="-fx-border-color: #591811;" />
-                                    <String fx:value="-fx-border-radius: 20;" />
-                                    <String fx:value="-fx-border-width: 2;" />
-                                 </styleClass>
-                              </Pane>
                            </children>
                         </StackPane>
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                <children>
                   <Button alignment="CENTER" mnemonicParsing="false" onAction="#afficherCarte" style="-fx-background-color: E15A4D; -fx-background-radius: 30;" text="Obtenir Tournée" textAlignment="CENTER" textFill="WHITE">
                      <font>
