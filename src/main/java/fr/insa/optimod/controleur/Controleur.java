@@ -212,9 +212,9 @@ public class Controleur {
         PointLivraison t = l;
         PointLivraison prochain = courant.getParent();
 
-        while (courant != null) {
-            tspListe.add(courant);
-            courant = courant.getParent();
+        while (t != null) {
+            tspListe.add(t);
+            t = t.getParent();
 
         }
 
@@ -222,7 +222,7 @@ public class Controleur {
         PointLivraison astar;
         chemin.add(courant);
 
-        while (courant != null) {
+        while (courant != null && prochain != null) {
             System.out.println(" ----- " + courant.getNoeud().getId());
             astar = tournee.get(courant.getNoeud().getId()).get(prochain.getNoeud().getId());
             while (astar != null)
