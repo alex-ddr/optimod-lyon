@@ -8,16 +8,18 @@ public class TSP {
     protected HashMap<Long, HashMap<Long, PointLivraison>> memD = new HashMap<>();
 
 
-    private PointLivraison getMemo(long nodeId, long subsetMask) {
+    private PointLivraison getMemo(long nodeId, long s) {
         HashMap<Long, PointLivraison> inner = memD.get(nodeId);
         if (inner == null) return null;
-        return inner.get(subsetMask);
+        return inner.get(s);
     }
 
 
-    private void putMemo(long nodeId, long subsetMask, PointLivraison pl) {
-        memD.computeIfAbsent(nodeId, k -> new HashMap<>())
-                .put(subsetMask, pl);
+    private void putMemo(long nodeId, long s, PointLivraison pl) {
+        if (!memD.containsKey(nodeId)) {
+            memD.put(nodeId, new HashMap<>());
+        }
+        memD.get(nodeId).put(s, pl);
     }
 
 

@@ -48,12 +48,12 @@ public class TSPTest {
 
         long s = (1L << (n - 1)) - 1L;
 
-        // ===== 1. Résultat de ton DP =====
-        TSP tsp = new TSP(); // ta classe (doit avoir computeD)
+
+        TSP tsp = new TSP();
         PointLivraison resDP = tsp.computeDTest(0, s, n, cout, carte, mapIndexAId);
         double dpCost = resDP.getG();
 
-        // ===== 2. Résultat brut force =====
+
         BruteForceResult bf = bruteForceTSP(n, cout);
         double bfCost = bf.cost;
 
@@ -83,7 +83,7 @@ public class TSPTest {
     }
 
 
-
+// Le code brute force a été réalisé à l'aide d'une ia
     static class BruteForceResult {
         double cost;
         int[] chemin;

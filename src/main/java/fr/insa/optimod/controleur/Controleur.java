@@ -14,8 +14,8 @@ public class Controleur {
 
     protected Carte carte = null;
     protected ArrayList<Troncon> troncons = null;
-    protected ArrayList<Troncon> chemin = null;
-    protected ArrayList<Troncon> tspListe = null;
+    protected ArrayList<PointLivraison> chemin = null;
+    protected ArrayList<PointLivraison> tspListe = null;
 
 
 
@@ -111,7 +111,7 @@ public class Controleur {
             listeIds.add(livraison.getAdresseLivraison());
         }
 
-        System.out.println("listeIds : " + listeIds.size());
+        //System.out.println("listeIds : " + listeIds.size());
 
         HashMap<Long,Integer> mapIdAIndex = new HashMap<>();
         HashMap<Integer,Long> mapIndexAId = new HashMap<>();
@@ -160,8 +160,9 @@ public class Controleur {
             Integer idL = mapIdAIndex.get(L.getId());
             Integer idE = mapIdAIndex.get(E.getId());
             PointLivraison astarL =  astar(carte, L, E), astarE;
-            cout[idL][idE] = astarL.getG() + livraison.getDureeLivraison();
-            cout[idE][idL] = cout[idL][idE];
+            cout[idL][idE] = astarL.getG() +  livraison.getDureeEnlevement();
+            cout[idE][idL] = astarL.getG() + livraison.getDureeLivraison();
+
             //courtCheminE.put(livraison.getAdresseLivraison(), new ArrayList<>());
             courtCheminL.put(E.getId(), astarL);
             courtCheminE.put(L.getId(), astarL);
@@ -177,9 +178,9 @@ public class Controleur {
                 astarE = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));
 
                 cout[idL][liv] = astarL.getG() + livraison2.getDureeLivraison();
-                cout[idE][liv] = astarL.getG() +  livraison2.getDureeEnlevement();
+                cout[idE][liv] = astarL.getG() +  livraison2.getDureeLivraison();
 
-                cout[idL][enl] = astarE.getG() + livraison2.getDureeLivraison();
+                cout[idL][enl] = astarE.getG() + livraison2.getDureeEnlevement();
                 cout[idE][enl] = astarE.getG() +  livraison2.getDureeEnlevement();
 
                 courtCheminL.put(livraison2.getAdresseEnlevement(), astarE);
