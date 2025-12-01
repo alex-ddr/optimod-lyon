@@ -237,7 +237,7 @@ public class Controleur {
         chemin.add(courant);
 
         while (courant != null && prochain != null) {
-            System.out.println(" ----- " + courant.getNoeud().getId());
+//            System.out.println(" ----- " + courant.getNoeud().getId());
             astar = tournee.get(courant.getNoeud().getId()).get(prochain.getNoeud().getId());
             while (astar != null)
             {
@@ -245,10 +245,10 @@ public class Controleur {
                 if (astar.getAntecedent() != null)
                 {
                     troncons.add(astar.getAntecedent());
-                    System.out.println("ID - " + astar.getNoeud().getId());
-                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
-                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
-                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
+//                    System.out.println("ID - " + astar.getNoeud().getId());
+//                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
+//                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
+//                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
                 }
 
                 astar = astar.getParent();
@@ -276,6 +276,11 @@ public class Controleur {
         }
         System.out.println((l.getParent()));
         */
+
+        this.troncons = troncons;
+        this.chemin = chemin;
+        this.tspListe = tspListe;
+
         return null;
     }
 

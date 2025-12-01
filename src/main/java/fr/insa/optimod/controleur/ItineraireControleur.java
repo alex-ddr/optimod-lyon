@@ -73,6 +73,7 @@ public class ItineraireControleur {
     }
 
     public void afficherPoints() {
+//        ArrayList<PointLivraison> pointsItineraire = controleurMetier.getPointsItineraire();
         DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
 
 
@@ -93,6 +94,14 @@ public class ItineraireControleur {
 
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
         }
+
+        Noeud noeud = carte.obtenirNoeud(demandeDeLivraions.getEntrepot().getAdresss());
+        double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
+        double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+
+        gc.setFill(Color.RED);
+        int rayon = 10;
+        gc.fillRoundRect(x - rayon, y - rayon, rayon * 2, rayon * 2, (double) rayon /4.0, (double) rayon /4.0);
     }
     public void afficherItineraire() {
         for (Troncon troncon : controleurMetier.getTronconsItineraire()) {

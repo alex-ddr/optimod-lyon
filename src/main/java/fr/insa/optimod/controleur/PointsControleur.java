@@ -99,4 +99,14 @@ public class PointsControleur {
         }
     }
 
+    @FXML
+    private void afficherItineraire() {
+        controleurMetier.preparerPlanTournee(controleurMetier.getCarte(), controleurMetier.getDemandeDeLivraions());
+        try {
+            interfaceUtilisateur.afficherItineraire();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
