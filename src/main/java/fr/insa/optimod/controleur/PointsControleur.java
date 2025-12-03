@@ -88,15 +88,15 @@ public class PointsControleur {
     public void afficherPoints() {
         DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
 
-
+        int index = 1;
         for (Livraison livraison : demandeDeLivraions.getListeLivraisons()) {
-            Color couleurAleatoire = Color.color(Math.random(), Math.random(), Math.random());
+            Color couleur = Couleur.getCouleur(index);
 
             Noeud noeud = carte.obtenirNoeud(livraison.getAdresseEnlevement());
             double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
             double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
-            gc.setFill(couleurAleatoire);
+            gc.setFill(couleur);
             int rayon = 10;
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
 
@@ -105,7 +105,26 @@ public class PointsControleur {
             y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+            index++;
         }
+    }
+
+    public void afficher_points_textuels() {
+        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
+        StringBuilder sb = new StringBuilder();
+        int index = 1;
+        for (Livraison livraison : demandeDeLivraions.getListeLivraisons()) {
+            Color couleur = Couleur.getCouleur(index);
+            int r = (int) Math.round(couleur.getRed() * 255);
+            int g = (int) Math.round(couleur.getGreen() * 255);
+            int b = (int) Math.round(couleur.getBlue() * 255);
+            sb.append("Livraison : ").append(String.format("#%02X%02X%02X", r, g, b)).append("\n");
+            sb.append("  Adresse d'enlèvement: ").append(livraison.getAdresseEnlevement()).append("\n");
+            sb.append("  Adresse de livraison: ").append(livraison.getAdresseLivraison()).append("\n");
+            sb.append("  Durée de la livraison: ").append(livraison.getDureeLivraison()).append(" secondes\n\n");
+            index++;
+        }
+        textePoints.setText(sb.toString());
     }
 
     @FXML

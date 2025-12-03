@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reseau>
+<!-- Composante 1 : 100 -> 200 -->
+<noeud id="100" latitude="45.750000" longitude="4.870000"/>
+<noeud id="200" latitude="45.750500" longitude="4.871000"/>
+
+<troncon origine="100" destination="200" longueur="50.0" nomRue="Rue 100-200"/>
+
+        <!-- Composante 2 : 300 -> 400 -->
+<noeud id="300" latitude="45.751000" longitude="4.872000"/>
+<noeud id="400" latitude="45.751500" longitude="4.873000"/>
+
+<troncon origine="300" destination="400" longueur="60.0" nomRue="Rue 300-400"/>
+</reseau>
