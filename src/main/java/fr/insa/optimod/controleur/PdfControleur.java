@@ -19,6 +19,7 @@ public class PdfControleur {
 
     private final String name = "LivreurDay.pdf";
     private final String chemin = "src\\main\\out";
+    private final String downloads = getDownloadsFolder();
 
     public void afficherPdf() throws IOException {
         PDDocument document = new PDDocument();
@@ -81,7 +82,7 @@ public class PdfControleur {
         }
     }
 
-    public void extractPdf(ArrayList<Troncon> troncons, ArrayList<PointLivraison> livraisons) throws IOException {
+    public void extrairePdf(ArrayList<Troncon> troncons, ArrayList<PointLivraison> livraisons) throws IOException {
         PDDocument document = new PDDocument();
         PDPage page = new PDPage();
         document.addPage(page);
@@ -108,13 +109,26 @@ public class PdfControleur {
             contentStream.setFont(font, fontSize);
             contentStream.newLineAtOffset(0, -2*offsetTitre);
 
-            for(int i = 0; i < livraisons.size(); i++) {
-                contentStream.showText(troncons.get(i).getNomRue());
+            String text;
+            text = "Partir de l'entrepot vers le " + donnerDirectionDepart(livraisons.get(0).getNoeud(), livraisons.get(1).getNoeud()) + " sur la rue " + troncons.getFirst().getNomRue();
+            contentStream.showText(text);
+            contentStream.newLineAtOffset(0, -offset);
+
+            if(livraisons.size() < 3) {return;}  // ca va de l'entrepot à l'entrepot
+            assert(livraisons.size() == troncons.size()+1);
+
+            for(int i = 0; i < livraisons.size()-3; i++) {
+                text = ecriteText(livraisons.get(i).getNoeud(), livraisons.get(i+1).getNoeud(), livraisons.get(i+2).getNoeud(), troncons.get(i+1).getNomRue());
+                contentStream.showText(text);
                 contentStream.newLineAtOffset(0, -offset);
             }
+
+            text = "Retour à l'entrepot : " + ecriteText(livraisons.get(livraisons.size()-3).getNoeud(),livraisons.get(livraisons.size()-2).getNoeud(), livraisons.getLast().getNoeud(),troncons.getLast().getNomRue());
+            contentStream.showText(text);
+
             contentStream.endText();
             contentStream.close();
-            document.save(new File(chemin, name));
+            document.save(new File(downloads, name));
             System.out.println("PDF created");
         }
         finally
@@ -219,6 +233,16 @@ public class PdfControleur {
 
     }
 
+    //IA
+    private static String getDownloadsFolder() {
+        String home = System.getProperty("user.home");
+        String os = System.getProperty("os.name").toLowerCase();
 
+        if (os.contains("win")) {
+            return home + "\\Downloads";
+        } else {
+            return home + "/Downloads";  // macOS + Linux
+        }
+    }
 
 }
