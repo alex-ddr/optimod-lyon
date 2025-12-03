@@ -3,6 +3,7 @@ package fr.insa.optimod.controleur;
 import fr.insa.optimod.modele.Noeud;
 import fr.insa.optimod.modele.PointLivraison;
 import fr.insa.optimod.modele.Troncon;
+import javafx.stage.FileChooser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -10,6 +11,15 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import com.itextpdf.html2pdf.HtmlConverter;
+
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.List;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +30,8 @@ public class PdfControleur {
     private final String name = "LivreurDay.pdf";
     private final String chemin = "src\\main\\out";
     private final String downloads = getDownloadsFolder();
+
+    private FileChooser explorateur = new FileChooser();
 
     public void afficherPdf() throws IOException {
         PDDocument document = new PDDocument();
@@ -99,7 +111,11 @@ public class PdfControleur {
 
         PDFont font = new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN);
 
-        try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+        PDPageContentStream contentStream = null;
+
+
+        try {
+            contentStream = new PDPageContentStream(document, page);
             contentStream.beginText();
 
             contentStream.setFont(font, fontSizeTitre);
@@ -108,6 +124,8 @@ public class PdfControleur {
 
             contentStream.setFont(font, fontSize);
             contentStream.newLineAtOffset(0, -2*offsetTitre);
+
+            float currentY = startY - 2 * offsetTitre;
 
             String text;
             text = "Partir de l'entrepot vers le " + donnerDirectionDepart(chemin.get(0).getNoeud(), chemin.get(1).getNoeud()) + " sur la rue " + troncons.getFirst().getNomRue();
@@ -123,9 +141,23 @@ public class PdfControleur {
             System.out.println(troncons.size());
 
             for(int i = 0; i < chemin.size()-3; i++) {
+                if (currentY < margin) {
+                    contentStream.endText();
+                    contentStream.close();
+
+                    page = new PDPage();
+                    document.addPage(page);
+                    contentStream = new PDPageContentStream(document, page);
+                    contentStream.beginText();
+                    contentStream.setFont(font, fontSize);
+                    contentStream.newLineAtOffset(startX, startY);
+                    currentY = startY;
+                }
+
                 text = ecriteText(chemin.get(i).getNoeud(), chemin.get(i+1).getNoeud(), chemin.get(i+2).getNoeud(), troncons.get(i+1).getNomRue());
                 contentStream.showText(text);
                 contentStream.newLineAtOffset(0, -offset);
+                currentY -= offset;
             }
 
             text = "Retour à l'entrepot : " + ecriteText(chemin.get(chemin.size()-3).getNoeud(),chemin.get(chemin.size()-2).getNoeud(), chemin.getLast().getNoeud(),troncons.getLast().getNomRue());
@@ -133,12 +165,75 @@ public class PdfControleur {
 
             contentStream.endText();
             contentStream.close();
-            document.save(new File(downloads, name));
+
+            explorateur.setTitle("Sauvegarder le PDF");
+            explorateur.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier PDF", "*.pdf"));
+            explorateur.setInitialFileName(name);
+            File fichier = explorateur.showSaveDialog(null);
+
+            if (fichier != null) {
+                document.save(fichier);
+            }
+
+//            document.save(new File(downloads, name));
             System.out.println("PDF created");
         }
         finally
         {
             document.close();
+        }
+    }
+
+    public void extrairePdf_2(ArrayList<Troncon> troncons, ArrayList<PointLivraison> chemin) throws IOException {
+        try {
+            List<String> listeInstructions = new ArrayList<>();
+
+            String text;
+            text = "Partir de l'entrepot vers le " + donnerDirectionDepart(chemin.get(0).getNoeud(), chemin.get(1).getNoeud()) + " sur la rue " + troncons.getFirst().getNomRue();
+            listeInstructions.add(text);
+
+            if(chemin.size() < 3) {return;}  // ca va de l'entrepot à l'entrepot
+
+            for(Troncon troncon: troncons) {
+                System.out.println(troncon.getNomRue());
+            }
+            System.out.println(chemin.size());
+            System.out.println(troncons.size());
+
+            for(int i = 0; i < chemin.size()-3; i++) {
+                text = ecriteText(chemin.get(i).getNoeud(), chemin.get(i+1).getNoeud(), chemin.get(i+2).getNoeud(), troncons.get(i+1).getNomRue());
+                listeInstructions.add(text);
+            }
+
+            text = "Retour à l'entrepot : " + ecriteText(chemin.get(chemin.size()-3).getNoeud(),chemin.get(chemin.size()-2).getNoeud(), chemin.getLast().getNoeud(),troncons.getLast().getNomRue());
+            listeInstructions.add(text);
+
+            ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+            templateResolver.setSuffix(".html");
+            templateResolver.setTemplateMode("HTML");
+
+            TemplateEngine templateEngine = new TemplateEngine();
+            templateEngine.setTemplateResolver(templateResolver);
+
+            Context context = new Context();
+            context.setVariable("dateDuJour", java.time.LocalDate.now().toString());
+            context.setVariable("instructions", listeInstructions);
+
+            String htmlContent = templateEngine.process("/templates/template_pdf", context);
+
+            explorateur.setTitle("Sauvegarder le PDF");
+            explorateur.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier PDF", "*.pdf"));
+            explorateur.setInitialFileName(name);
+            File fichier = explorateur.showSaveDialog(null);
+
+            if (fichier != null) {
+                try (OutputStream os = new FileOutputStream(fichier)) {
+                    HtmlConverter.convertToPdf(htmlContent, new FileOutputStream(fichier));
+                }
+                System.out.println("PDF created!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
