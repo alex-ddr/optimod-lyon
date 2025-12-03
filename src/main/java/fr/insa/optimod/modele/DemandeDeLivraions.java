@@ -17,4 +17,17 @@ public class DemandeDeLivraions {
     public ArrayList<Livraison> getListeLivraisons() {
         return listeLivraisons;
     }
+
+    public Livraison getLivraison(Long adresse) {
+        for (Livraison livraison : listeLivraisons) {
+            if (livraison.getAdresseLivraison().equals(adresse) || livraison.getAdresseEnlevement().equals(adresse)) {
+                return livraison;
+            }
+        }
+        return null;
+    }
+
+    public boolean estEntrepot(Long adresse) {
+        return this.entrepot.getAdresss().equals(adresse);
+    }
 }

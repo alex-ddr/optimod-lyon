@@ -90,15 +90,15 @@ public class ItineraireControleur {
 //        ArrayList<PointLivraison> pointsItineraire = controleurMetier.getPointsItineraire();
         DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
 
-
+        int index = 1;
         for (Livraison livraison : demandeDeLivraions.getListeLivraisons()) {
-            Color couleurAleatoire = Color.color(Math.random(), Math.random(), Math.random());
+            Color couleur = Couleur.getCouleur(index);
 
             Noeud noeud = carte.obtenirNoeud(livraison.getAdresseEnlevement());
             double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
             double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
-            gc.setFill(couleurAleatoire);
+            gc.setFill(couleur);
             int rayon = 10;
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
 
@@ -107,6 +107,7 @@ public class ItineraireControleur {
             y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+            index++;
         }
 
         Noeud noeud = carte.obtenirNoeud(demandeDeLivraions.getEntrepot().getAdresss());
@@ -117,6 +118,38 @@ public class ItineraireControleur {
         int rayon = 10;
         gc.fillRoundRect(x - rayon, y - rayon, rayon * 2, rayon * 2, (double) rayon /4.0, (double) rayon /4.0);
     }
+
+
+    public void afficherTextePoints() {
+        ArrayList<PointLivraison> pointsItineraire = controleurMetier.getPointsItineraire();
+        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
+        StringBuilder sb = new StringBuilder();
+
+        for (PointLivraison point : pointsItineraire) {
+            Livraison livraison = demandeDeLivraions.getLivraison(point.getNoeud().getId());
+            boolean estEntrepot = demandeDeLivraions.estEntrepot(point.getNoeud().getId());
+
+            if (estEntrepot) {
+                sb.append("Entrepôt : \n");
+                sb.append("  Adresse: ").append(point.getNoeud().getId()).append("\n").append("\n");
+            } else {
+                boolean estEnlevement = livraison.getAdresseEnlevement().equals(point.getNoeud().getId());
+                int index = demandeDeLivraions.getListeLivraisons().indexOf(livraison) + 1;
+                Color couleur = Couleur.getCouleur(index);
+                int r = (int) Math.round(couleur.getRed() * 255);
+                int g = (int) Math.round(couleur.getGreen() * 255);
+                int b = (int) Math.round(couleur.getBlue() * 255);
+                sb.append("Livraison : ").append(String.format("#%02X%02X%02X", r, g, b)).append("\n");
+                sb.append("  Type: ").append(estEnlevement ? "Enlèvement" : "Livraison").append("\n");
+                sb.append("  Adresse: ").append(point.getNoeud().getId()).append("\n").append("\n");
+            }
+
+        }
+        textePoints.setText(sb.toString());
+    }
+
+
+
     public void afficherItineraire() {
         for (Troncon troncon : controleurMetier.getTronconsItineraire()) {
             Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());

@@ -77,6 +77,7 @@ public class Interface extends Application {
 
         pointsController.afficherCarte();
         pointsController.afficherPoints();
+        pointsController.afficher_points_textuels();
 
         Scene scene = new Scene(points, 1920, 1080);
 
@@ -96,6 +97,7 @@ public class Interface extends Application {
         itineraireControleur.afficherCarte();
         itineraireControleur.afficherPoints();
         itineraireControleur.afficherItineraire();
+        itineraireControleur.afficherTextePoints();
 
         Scene scene = new Scene(points, 1920, 1080);
 
