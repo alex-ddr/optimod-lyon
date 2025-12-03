@@ -27,6 +27,8 @@ public class Controleur {
         return tspListe;
     }
 
+    public ArrayList<PointLivraison> getChemin() {return chemin;}
+
 
     public DemandeDeLivraions getDemandeDeLivraions() {
         return demandeDeLivraions;
@@ -277,7 +279,7 @@ public class Controleur {
                 chemin.add(astar);
                 if (astar.getAntecedent() != null)
                 {
-                    chemin.add(astar);
+                    //chemin.add(astar);
                     listeTampon.add(astar.getAntecedent());
                     //System.out.println("ID - " + astar.getNoeud().getId());
 //                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
