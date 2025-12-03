@@ -1,12 +1,12 @@
 package fr.insa.optimod.modele;
 
-public class Item {
+public class itemPoint {
     private int id;
     private Boolean estPickup;
     private String titre;
     private String adresse;
 
-    public Item(int id, Boolean estPickup, String titre, String adresse) {
+    public itemPoint(int id, Boolean estPickup, String titre, String adresse) {
         this.id = id;
         this.estPickup = estPickup;
         this.titre = titre;

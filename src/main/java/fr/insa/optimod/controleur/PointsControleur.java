@@ -4,26 +4,17 @@ import fr.insa.optimod.modele.*;
 import fr.insa.optimod.vue.Interface;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class PointsControleur {
 
@@ -37,8 +28,6 @@ public class PointsControleur {
 
     @FXML
     private GridPane itemsGrid;
-    private List<Item> items;
-    private int itemId;
 
     private GraphicsContext gc;
 
@@ -65,21 +54,21 @@ public class PointsControleur {
     }
 
     public void initData() {
-        items = new ArrayList<>(data());
+        List<itemPoint> itemPointList = new ArrayList<>(data());
 
         int column = 0;
         int row = 1;
 
         try {
-            for (int i=0; i<items.size(); i++) {
+            for (itemPoint itemPoint : itemPointList) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/layouts/item.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/layouts/itemPoint.fxml"));
 
                 HBox itemHBox = fxmlLoader.load();
 
-                ItemControleur itemControleur = fxmlLoader.getController();
-                itemControleur.setData(items.get(i));
-                itemControleur.setPointsControleur(this);
+                ItemPointControleur itemPointControleur = fxmlLoader.getController();
+                itemPointControleur.setData(itemPoint);
+                itemPointControleur.setPointsControleur(this);
 
                 if (column == 1) {
                     column = 0;
@@ -89,30 +78,30 @@ public class PointsControleur {
                 itemsGrid.add(itemHBox, column++, row);
                 GridPane.setMargin(itemHBox, new javafx.geometry.Insets(8));
 
-
-            }} catch (IOException e) {
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private List<Item> data() {
-        List<Item> ls = new ArrayList<>();
+    private List<itemPoint> data() {
+        List<itemPoint> itemPointList = new ArrayList<>();
 
         DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
-        itemId = 1;
+        int itemId = 1;
 
         for (Livraison l : demandeDeLivraions.getListeLivraisons()) {
-            Item pickup = new Item(itemId, true, "Pickup #" + itemId, l.getAdresseEnlevement().toString());
-            ls.add(pickup);
+            itemPoint pickup = new itemPoint(itemId, true, "Pickup #" + itemId, l.getAdresseEnlevement().toString());
+            itemPointList.add(pickup);
 
 
-            Item livraison = new Item(itemId, false, "Livraison #" + itemId, l.getAdresseLivraison().toString());
-            ls.add(livraison);
+            itemPoint livraison = new itemPoint(itemId, false, "Livraison #" + itemId, l.getAdresseLivraison().toString());
+            itemPointList.add(livraison);
 
             itemId++;
         }
 
-        return ls;
+        return itemPointList;
     }
 
     public void supprimerLivraison(Long adresse) {
