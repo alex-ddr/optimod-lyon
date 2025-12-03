@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -40,6 +41,13 @@ public class PointsControleur {
     private int itemId;
 
     private GraphicsContext gc;
+
+    @FXML
+    private Button boutonAjoutCourse;
+
+    private int ajoutCourse = 0; // 0 = non, 1 = enlevement, 2 = livraison
+    private Noeud nouvelEnlevement = null;
+    private Noeud nouvelleLivraison = null;
 
     public void setInterface(Interface interfaceUtilisateur) {
         this.interfaceUtilisateur = interfaceUtilisateur;
@@ -139,6 +147,14 @@ public class PointsControleur {
         }
     }
 
+    private double longToX(double longitude) {
+        return (longitude - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
+    }
+
+    private double latToY(double latitude) {
+        return gc.getCanvas().getHeight() - ((latitude - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
+    }
+
     public void afficherCarte() {
         carte = controleurMetier.getCarte();
         if (carte != null) {
@@ -148,11 +164,11 @@ public class PointsControleur {
             gc.fillRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());
             for (Troncon troncon : carte.getListeTroncon()) {
                 Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());
-                double x1 = (dep.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-                double y1 = gc.getCanvas().getHeight() - ((dep.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
+                double x1 = longToX(dep.getLongitude());
+                double y1 = latToY(dep.getLatitude());
                 Noeud arr = carte.getMapNoeuds().get(troncon.getDestination());
-                double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-                double y2 = gc.getCanvas().getHeight() - ((arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
+                double x2 = longToX(arr.getLongitude());
+                double y2 = latToY(arr.getLatitude());
 
                 gc.setStroke(Color.web("#6B3F3A")); // ou 6B3F3A  ou 8C5752 et couleur pour tracer la tournée --> #D65C4F
                 gc.setLineWidth(2);
@@ -170,24 +186,24 @@ public class PointsControleur {
             Color couleur = Couleur.getCouleur(index);
 
             Noeud noeud = carte.obtenirNoeud(livraison.getAdresseEnlevement());
-            double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-            double y = gc.getCanvas().getHeight() - ((noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
+            double x = longToX(noeud.getLongitude());
+            double y = latToY(noeud.getLatitude());
 
             gc.setFill(couleur);
             int rayon = 10;
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
 
             noeud = carte.obtenirNoeud(livraison.getAdresseLivraison());
-            x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-            y = gc.getCanvas().getHeight() - ((noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
+            x = longToX(noeud.getLongitude());
+            y = latToY(noeud.getLatitude());
 
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
             index++;
         }
 
         Noeud noeud = carte.obtenirNoeud(demandeDeLivraions.getEntrepot().getAdresss());
-        double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-        double y = gc.getCanvas().getHeight() - ((noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
+        double x = longToX(noeud.getLongitude());
+        double y = latToY(noeud.getLatitude());
 
         int rayon = 20;
 
@@ -218,6 +234,60 @@ public class PointsControleur {
             interfaceUtilisateur.afficherItineraire();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void clicBoutonCourse() {
+        if (ajoutCourse == 0) {
+            boutonAjoutCourse.setText("Annuler l'ajout");
+            ajoutCourse = 1;
+        } else {
+            nouvelEnlevement = null;
+            nouvelleLivraison = null;
+            afficherCarte();
+            afficherPoints();
+            ajoutCourse = 0;
+            boutonAjoutCourse.setText("Ajouter une course");
+        }
+    }
+
+
+    @FXML
+    private void clicCarte(MouseEvent event) {
+        if (ajoutCourse == 0) {
+            return;
+        }
+
+        double x = event.getX();
+        double y = event.getY();
+
+        for (Noeud noeud : carte.getListeNoeuds()) {
+            double nodeX = longToX(noeud.getLongitude());
+            double nodeY = latToY(noeud.getLatitude());
+            double distance = Math.sqrt(Math.pow(x - nodeX, 2) + Math.pow(y - nodeY, 2));
+            if (distance < 10) { // seuil de proximité
+                int nbLivraisons = controleurMetier.getDemandeDeLivraions().getListeLivraisons().size();
+                gc.setFill(Couleur.getCouleur(nbLivraisons + 1));
+                int rayon = 7;
+                gc.fillOval(longToX(noeud.getLongitude()) - rayon, latToY(noeud.getLatitude()) - rayon, rayon * 2, rayon * 2);
+
+                if (ajoutCourse == 1) {
+                    nouvelEnlevement = noeud;
+                    ajoutCourse = 2;
+                } else if (ajoutCourse == 2) {
+                    nouvelleLivraison = noeud;
+                    ajoutCourse = 0;
+                    controleurMetier.ajouterLivraison(nouvelEnlevement.getId(), nouvelleLivraison.getId());
+                    itemsGrid.getChildren().clear();
+                    initData();
+                    afficherCarte();
+                    afficherPoints();
+                    boutonAjoutCourse.setText("Ajouter une course");
+                }
+
+                break;
+            }
         }
     }
 

@@ -476,6 +476,11 @@ public class Controleur {
         demandeDeLivraions.supprimerLivraison(demandeDeLivraions.getLivraison(adresse));
     }
 
+    public void ajouterLivraison(Long adresseEnlevement, Long adresseLivraison) {
+        Livraison livraison = new Livraison(adresseEnlevement, adresseLivraison, 0L, 0L);
+        demandeDeLivraions.ajouterLivraison(livraison);
+    }
+
 
 
 
