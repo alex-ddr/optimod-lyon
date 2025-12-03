@@ -9,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ItineraireControleur {
@@ -78,7 +79,7 @@ public class ItineraireControleur {
                 double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
                 double y2 = (arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
-                gc.setStroke(Color.BLACK);
+                gc.setStroke(Color.web("#F4E6DF")); //carte
                 gc.setLineWidth(2);
                 gc.strokeLine(x1, y1, x2, y2);
             }
@@ -114,7 +115,7 @@ public class ItineraireControleur {
         double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
         double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
-        gc.setFill(Color.RED);
+        gc.setFill(Color.web("#D65C4F"));
         int rayon = 10;
         gc.fillRoundRect(x - rayon, y - rayon, rayon * 2, rayon * 2, (double) rayon /4.0, (double) rayon /4.0);
     }
@@ -163,5 +164,10 @@ public class ItineraireControleur {
             gc.setLineWidth(4);
             gc.strokeLine(x1, y1, x2, y2);
         }
+    }
+    @FXML
+    public void genererPDF() throws IOException {
+        PdfControleur pdfControleur = new PdfControleur();
+        pdfControleur.extractPdf(controleurMetier.getTronconsItineraire(), controleurMetier.getPointsItineraire());
     }
 }
