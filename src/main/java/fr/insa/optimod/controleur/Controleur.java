@@ -27,6 +27,8 @@ public class Controleur {
         return tspListe;
     }
 
+    public ArrayList<PointLivraison> getChemin() {return chemin;}
+
 
     public DemandeDeLivraions getDemandeDeLivraions() {
         return demandeDeLivraions;
@@ -145,7 +147,7 @@ public class Controleur {
 
 
         Noeud entrepot = carte.obtenirNoeud(demande.getEntrepot().getAdresss());
-        Integer ent = 0;//mapIdAIndex.get(entrepot.getId());
+        Integer ent = mapIdAIndex.get(entrepot.getId());
         for (Livraison livraison2 : demande.getListeLivraisons()) {
 
 
@@ -226,6 +228,7 @@ public class Controleur {
 
             }
 
+            Integer ent = mapIdAIndex.get(entrepot.getId());
 
             astarLEnlevement = astar(carte, L, carte.obtenirNoeud(entrepot.getId()));
             astarEEnlevement = astar(carte, E, carte.obtenirNoeud(entrepot.getId()));
