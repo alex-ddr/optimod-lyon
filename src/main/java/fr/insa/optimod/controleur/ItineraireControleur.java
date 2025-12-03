@@ -168,6 +168,6 @@ public class ItineraireControleur {
     @FXML
     public void genererPDF() throws IOException {
         PdfControleur pdfControleur = new PdfControleur();
-        pdfControleur.extractPdf(controleurMetier.getTronconsItineraire(), controleurMetier.getPointsItineraire());
+        pdfControleur.extrairePdf(controleurMetier.getTronconsItineraire(), controleurMetier.getPointsItineraire());
     }
 }

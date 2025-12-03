@@ -82,7 +82,7 @@ public class PdfControleur {
         }
     }
 
-    public void extrairePdf(ArrayList<Troncon> troncons, ArrayList<PointLivraison> livraisons) throws IOException {
+    public void extrairePdf(ArrayList<Troncon> troncons, ArrayList<PointLivraison> chemin) throws IOException {
         PDDocument document = new PDDocument();
         PDPage page = new PDPage();
         document.addPage(page);
@@ -110,20 +110,25 @@ public class PdfControleur {
             contentStream.newLineAtOffset(0, -2*offsetTitre);
 
             String text;
-            text = "Partir de l'entrepot vers le " + donnerDirectionDepart(livraisons.get(0).getNoeud(), livraisons.get(1).getNoeud()) + " sur la rue " + troncons.getFirst().getNomRue();
+            text = "Partir de l'entrepot vers le " + donnerDirectionDepart(chemin.get(0).getNoeud(), chemin.get(1).getNoeud()) + " sur la rue " + troncons.getFirst().getNomRue();
             contentStream.showText(text);
             contentStream.newLineAtOffset(0, -offset);
 
-            if(livraisons.size() < 3) {return;}  // ca va de l'entrepot à l'entrepot
-            assert(livraisons.size() == troncons.size()+1);
+            if(chemin.size() < 3) {return;}  // ca va de l'entrepot à l'entrepot
 
-            for(int i = 0; i < livraisons.size()-3; i++) {
-                text = ecriteText(livraisons.get(i).getNoeud(), livraisons.get(i+1).getNoeud(), livraisons.get(i+2).getNoeud(), troncons.get(i+1).getNomRue());
+            for(Troncon troncon: troncons) {
+                System.out.println(troncon.getNomRue());
+            }
+            System.out.println(chemin.size());
+            System.out.println(troncons.size());
+
+            for(int i = 0; i < chemin.size()-3; i++) {
+                text = ecriteText(chemin.get(i).getNoeud(), chemin.get(i+1).getNoeud(), chemin.get(i+2).getNoeud(), troncons.get(i+1).getNomRue());
                 contentStream.showText(text);
                 contentStream.newLineAtOffset(0, -offset);
             }
 
-            text = "Retour à l'entrepot : " + ecriteText(livraisons.get(livraisons.size()-3).getNoeud(),livraisons.get(livraisons.size()-2).getNoeud(), livraisons.getLast().getNoeud(),troncons.getLast().getNomRue());
+            text = "Retour à l'entrepot : " + ecriteText(chemin.get(chemin.size()-3).getNoeud(),chemin.get(chemin.size()-2).getNoeud(), chemin.getLast().getNoeud(),troncons.getLast().getNomRue());
             contentStream.showText(text);
 
             contentStream.endText();
