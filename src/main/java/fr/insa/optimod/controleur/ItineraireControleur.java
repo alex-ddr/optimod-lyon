@@ -69,7 +69,7 @@ public class ItineraireControleur {
         if (carte != null) {
             System.out.println("Affichage de la carte");
             gc.clearRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());
-            gc.setFill(Color.GRAY);
+            gc.setFill(Color.web("#F4E6DF"));
             gc.fillRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());
             for (Troncon troncon : carte.getListeTroncon()) {
                 Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());
@@ -79,7 +79,7 @@ public class ItineraireControleur {
                 double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
                 double y2 = (arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
-                gc.setStroke(Color.web("#F4E6DF")); //carte
+                gc.setStroke(Color.web("#6B3F3A")); // ou 6B3F3A  ou 8C5752 et couleur pour tracer la tournée --> #D65C4F
                 gc.setLineWidth(2);
                 gc.strokeLine(x1, y1, x2, y2);
             }
@@ -115,7 +115,7 @@ public class ItineraireControleur {
         double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
         double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
-        gc.setFill(Color.web("#D65C4F"));
+        gc.setFill(Color.RED);
         int rayon = 10;
         gc.fillRoundRect(x - rayon, y - rayon, rayon * 2, rayon * 2, (double) rayon /4.0, (double) rayon /4.0);
     }
@@ -160,7 +160,7 @@ public class ItineraireControleur {
             double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
             double y2 = (arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
-            gc.setStroke(Color.RED);
+            gc.setStroke(Color.web("#D65C4F"));
             gc.setLineWidth(4);
             gc.strokeLine(x1, y1, x2, y2);
         }

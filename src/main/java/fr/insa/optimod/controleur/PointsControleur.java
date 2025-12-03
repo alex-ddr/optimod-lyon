@@ -51,7 +51,8 @@ public class PointsControleur {
 
 
     @FXML
-    public void initialize() {
+    private void initialize() {
+        System.out.println("initialize CarteControleur");
         gc = canvasCarte.getGraphicsContext2D();
     }
 
@@ -144,7 +145,7 @@ public class PointsControleur {
                 double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
                 double y2 = (arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
-                gc.setStroke(Color.web("#6B3F3A"));
+                gc.setStroke(Color.web("#6B3F3A")); // ou 6B3F3A  ou 8C5752 et couleur pour tracer la tournée --> #D65C4F
                 gc.setLineWidth(2);
                 gc.strokeLine(x1, y1, x2, y2);
             }
