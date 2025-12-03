@@ -67,6 +67,8 @@ public class Interface extends Application {
     }
 
     public void afficherPoints() throws IOException {
+        System.out.println("JE SUIS ICI");
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/points.fxml"));
 
         Parent points = loader.load();
@@ -75,10 +77,9 @@ public class Interface extends Application {
 
         pointsController.setInterface(this);
         pointsController.setControleurMetier(this.controleurMetier);
-
+        pointsController.initData();
         pointsController.afficherCarte();
         pointsController.afficherPoints();
-        pointsController.afficher_points_textuels();
 
         Scene scene = new Scene(points, 1920, 1080);
 

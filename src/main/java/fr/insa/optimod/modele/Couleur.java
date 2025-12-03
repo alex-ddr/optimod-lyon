@@ -31,4 +31,13 @@ public class Couleur {
         listeCouleurs.add(nouvelleCouleur);
         return nouvelleCouleur;
     }
+
+    static public String getHexaCouleur(int index) {
+        Color couleur = Couleur.getCouleur(index);
+        int r = (int) Math.round(couleur.getRed() * 255);
+        int g = (int) Math.round(couleur.getGreen() * 255);
+        int b = (int) Math.round(couleur.getBlue() * 255);
+        
+        return String.format("#%02X%02X%02X", r, g, b);
+    }
 }
