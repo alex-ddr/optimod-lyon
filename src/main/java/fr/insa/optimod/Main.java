@@ -12,17 +12,17 @@ public class Main {
     public static void main(String[] args) {
 
 
-        Application.launch(Interface.class, args);
+        //Application.launch(Interface.class, args);
 
 
 
 
-        /*
+
 
         Controleur controleur = new Controleur();
-        File f = new File("src\\main\\resources\\xml\\petitPlan.xml");
+        File f = new File("src\\main\\resources\\xml\\grandPlan.xml");
         System.out.println(f.exists());
-        controleur.initialiserCarte("src\\main\\resources\\xml\\petitPlan.xml");
+        controleur.initialiserCarte("src\\main\\resources\\xml\\grandPlan.xml");
 
         ArrayList<Noeud> listeNoeuds = controleur.getCarte().getListeNoeuds();
 
@@ -30,14 +30,14 @@ public class Main {
 
 
 
-       controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandePetit2.xml");
+       controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandeGrand7.xml");
 
 
 
 
         controleur.preparerPlanTournee(controleur.getCarte(), controleur.getDemandeDeLivraions());
 
-        */
+
 
 
     }

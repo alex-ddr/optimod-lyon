@@ -141,11 +141,15 @@ public class Controleur {
 
         HashMap<Long, PointLivraison> courtCheminEntrepot = new HashMap<>();
         PointLivraison astarEntrepotL, astarEntrepotE;
+
+
+
         Noeud entrepot = carte.obtenirNoeud(demande.getEntrepot().getAdresss());
+        Integer ent = 0;//mapIdAIndex.get(entrepot.getId());
         for (Livraison livraison2 : demande.getListeLivraisons()) {
 
 
-                Integer ent = mapIdAIndex.get(entrepot.getId());
+
                 Integer liv = mapIdAIndex.get(livraison2.getAdresseLivraison());
                 Integer enl = mapIdAIndex.get(livraison2.getAdresseEnlevement());
 
@@ -222,7 +226,6 @@ public class Controleur {
 
             }
 
-            Integer ent = mapIdAIndex.get(entrepot.getId());
 
             astarLEnlevement = astar(carte, L, carte.obtenirNoeud(entrepot.getId()));
             astarEEnlevement = astar(carte, E, carte.obtenirNoeud(entrepot.getId()));
@@ -277,15 +280,19 @@ public class Controleur {
                 chemin.add(astar);
                 if (astar.getAntecedent() != null)
                 {
-                    chemin.add(astar);
                     listeTampon.add(astar.getAntecedent());
+
                     //System.out.println("ID - " + astar.getNoeud().getId());
 //                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
 //                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
 //                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
                 }
+                else {
+                    chemin.remove(astar);
+                }
 
                 astar = astar.getParent();
+
 
             }
             //Collections.reverse(listeTampon);
@@ -300,6 +307,10 @@ public class Controleur {
         }
 
         chemin.add(courant);
+
+        //System.out.println((chemin.size()));
+        //System.out.println((troncons.size()));
+
         /*
         for (Troncon troncon : troncons)
         {
