@@ -137,6 +137,17 @@ public class PdfControleur {
         }
     }
 
+    //Return Tourner à droite vers la rue [n2, n3] en partant de la rue [n1, n2]
+    private String ecriteText(Noeud n1, Noeud n2, Noeud n3, String rue){
+        String text = "";
+        int direction = donnerDirection(n1, n2, n3);
+        if (direction== 1){text += "Tourner à droite";}
+        else if (direction == 0) {text += "Tourner à gauche";}
+        else {text += "Aller tout droit";}
+        text += " vers la rue " + rue;
+        return text;
+    }
+
     // Indique si le passage du segment [n1, n2] au [n2, n3] nécéssite de tourner à droite (1) ou à gauche (0)
     private int donnerDirection(Noeud n1, Noeud n2, Noeud n3){
         double lat1 = n2.getLatitude()-n1.getLatitude();
