@@ -3,6 +3,7 @@ package fr.insa.optimod.controleur;
 import fr.insa.optimod.modele.Carte;
 import fr.insa.optimod.vue.Interface;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -10,6 +11,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,6 +26,8 @@ public class AccueilControleur {
     private SVGPath svgValid;
     @FXML
     private SVGPath svgWrong;
+    @FXML
+    private Button buttonTourne;
     private File fichierPlan;
 
     private FileChooser explorateur = new FileChooser();
@@ -40,6 +44,7 @@ public class AccueilControleur {
     private void initialize() {
         svgValid.setVisible(false);
         svgWrong.setVisible(false);
+        buttonTourne.setDisable(true);
         System.out.println("initialize AccueilControleur");
     }
 
@@ -95,19 +100,26 @@ public class AccueilControleur {
         if(isValidXML(fichierPlan)) {
             svgWrong.setVisible(false);
             svgValid.setVisible(true);
+            buttonTourne.setDisable(false);
         }
         else {
             svgValid.setVisible(false);
             svgWrong.setVisible(true);
+            buttonTourne.setDisable(true);
         }
     }
 
+    //Une partie par IA
     public static boolean isValidXML(File file) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(file); // Si parse OK = XML valide
+            NodeList nodeNoeud = document.getElementsByTagName("noeud");
+            NodeList nodeReseau = document.getElementsByTagName("reseau");
+            if(nodeNoeud.getLength() == 0) {return false;}
+            if(nodeReseau.getLength() == 0) {return false;}
             return true;
         } catch (Exception e) {
             return false; // Parse error = pas un XML valide
