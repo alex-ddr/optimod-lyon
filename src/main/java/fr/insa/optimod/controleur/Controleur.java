@@ -155,6 +155,9 @@ public class Controleur {
                 cout[ent][liv] = astarEntrepotL.getG() + livraison2.getDureeLivraison();
                 cout[ent][enl] = astarEntrepotE.getG() + livraison2.getDureeEnlevement();
 
+                astarEntrepotE.setG(cout[ent][enl]);
+                astarEntrepotL.setG(cout[ent][liv]);
+
                 courtCheminEntrepot.put(livraison2.getAdresseLivraison(), astarEntrepotL);
                 courtCheminEntrepot.put(livraison2.getAdresseEnlevement(), astarEntrepotE);
 
@@ -173,12 +176,15 @@ public class Controleur {
             Noeud E= carte.obtenirNoeud(livraison.getAdresseEnlevement());
             Integer idL = mapIdAIndex.get(L.getId());
             Integer idE = mapIdAIndex.get(E.getId());
-            PointLivraison astarL =  astar(carte, L, E), astarLEnlevement, astarLLivraison, astarEEnlevement, astarELivraison;
-            cout[idL][idE] = astarL.getG() +  livraison.getDureeEnlevement();
+            PointLivraison astarL, astarE =  astar(carte, L, E), astarLEnlevement, astarLLivraison, astarEEnlevement, astarELivraison;
+            astarL = astarE;
+            cout[idL][idE] = astarE.getG() +  livraison.getDureeEnlevement();
             cout[idE][idL] = astarL.getG() + livraison.getDureeLivraison();
 
+            astarE.setG(cout[idL][idE]);
+            astarL.setG(cout[idE][idL]);
             //courtCheminE.put(livraison.getAdresseLivraison(), new ArrayList<>());
-            courtCheminL.put(E.getId(), astarL);
+            courtCheminL.put(E.getId(), astarE);
             courtCheminE.put(L.getId(), astarL);
 
 
@@ -196,9 +202,13 @@ public class Controleur {
 
                 cout[idL][liv] = astarLLivraison.getG() + livraison2.getDureeLivraison();
                 cout[idE][liv] = astarELivraison.getG() +  livraison2.getDureeLivraison();
-
                 cout[idL][enl] = astarLEnlevement.getG() + livraison2.getDureeEnlevement();
                 cout[idE][enl] = astarEEnlevement.getG() +  livraison2.getDureeEnlevement();
+
+                astarLLivraison.setG(cout[idL][liv]);
+                astarELivraison.setG(cout[idE][liv]);
+                astarLEnlevement.setG(cout[idL][enl]);
+                astarLLivraison.setG(cout[idE][enl]);
 
                 courtCheminL.put(livraison2.getAdresseEnlevement(),  astarLEnlevement);
                 courtCheminL.put(livraison2.getAdresseLivraison(), astarLLivraison);
@@ -219,6 +229,9 @@ public class Controleur {
 
             cout[idL][ent] = astarLEnlevement.getG();
             cout[idE][ent] = astarEEnlevement.getG();
+
+            astarLEnlevement.setG(cout[idL][ent]);
+            astarEEnlevement.setG(cout[idE][ent]);
 
             courtCheminL.put(entrepot.getId(),  astarLEnlevement);
             courtCheminE.put(entrepot.getId(), astarEEnlevement);
