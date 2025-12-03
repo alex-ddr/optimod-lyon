@@ -146,5 +146,79 @@ public class PdfControleur {
 
     }
 
+    private String donnerDirectionDepart(Noeud n1, Noeud n2){
+        double lat1 = n2.getLatitude()-n1.getLatitude();
+        double lon1 = n2.getLongitude()-n1.getLongitude();
+        String retour = "";
+        boolean b = false;
+        if (lat1 > 0.000001)
+        {
+            retour = retour + "Nord";
+            b = true;
+        }
+        else if (lat1 < -0.000001)
+        {
+            retour = retour + "Sud";
+            b = true;
+        }
+
+        if (lon1 > 0.000001)
+        {
+            if(b)
+            {
+                retour = retour + "-Est";
+            }
+            else
+            {
+                retour = "Est";
+                b = true;
+            }
+
+        }
+        else if (lon1 < -0.000001)
+        {
+            if(b)
+            {
+                retour = retour + "-Ouest";
+            }
+            else
+            {
+                retour = "Ouest";
+                b = true;
+            }
+
+        }
+
+        if (!b)
+        {
+            if((lat1*lat1)>(lon1*lon1))
+            {
+                if (lat1>0)
+                {
+                    retour = retour + "Nord";
+                }
+                else
+                {
+                    retour = retour + "Sud";
+                }
+            }
+            else
+            {
+                if (lon1>0)
+                {
+                    retour = retour + "Est";
+                }
+                else
+                {
+                    retour = retour + "Ouest";
+                }
+            }
+        }
+
+        return retour;
+
+    }
+
+
 
 }
