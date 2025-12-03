@@ -134,11 +134,11 @@ public class PdfControleur {
         double dir1 = lat2 * lon1 - lat1 * lon2;
 
 
-        if (dir1 > 0.01)
+        if (dir1 > 0.000001)
         {
             return 0;
         }
-        else if (dir1 < -0.01)
+        else if (dir1 < -0.000001)
         {
             return 1;
         }
