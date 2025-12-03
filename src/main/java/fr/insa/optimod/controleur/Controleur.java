@@ -267,7 +267,7 @@ public class Controleur {
 
 
         while (courant != null && prochain != null) {
-            System.out.println(" ----- " + courant.getNoeud().getId());
+            //System.out.println(" ----- " + courant.getNoeud().getId());
             //System.out.println(" ----- " + prochain.getNoeud().getId());
             astar = tournee.get(prochain.getNoeud().getId()).get(courant.getNoeud().getId());
             ArrayList<Troncon> listeTampon = new ArrayList<>();

@@ -124,7 +124,25 @@ public class PdfControleur {
     }
 
     // Indique si le passage du segment [n1, n2] au [n2, n3] nécéssite de tourner à droite (1) ou à gauche (0)
-    private int giveDirection(Noeud n1, Noeud n2, Noeud n3){
+    private int donnerDirection(Noeud n1, Noeud n2, Noeud n3){
+        double lat1 = n2.getLatitude()-n1.getLatitude();
+        double lat2 = n3.getLatitude()-n2.getLatitude();
+
+        double lon1 = n2.getLongitude()-n1.getLongitude();
+        double lon2 = n3.getLongitude()-n2.getLongitude();
+
+        double dir1 = lat2 * lon1 - lat1 * lon2;
+
+
+        if (dir1 > 0.01)
+        {
+            return 0;
+        }
+        else if (dir1 < -0.01)
+        {
+            return 1;
+        }
+        return -1;
 
     }
 
