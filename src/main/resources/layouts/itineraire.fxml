@@ -137,19 +137,36 @@
                     <children>
                   <Button alignment="CENTER" mnemonicParsing="false" onAction="#afficherCarte" style="-fx-background-color: E15A4D; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 10, 0, 0, 4);" text="Itinéraire optimal" textAlignment="CENTER" textFill="WHITE">
                      <font>
-                        <Font name="Inter Bold" size="22.0" />
+                        <Font size="20.0" />
                      </font>
                      <padding>
                         <Insets bottom="14.0" left="30.0" right="30.0" top="14.0" />
                      </padding>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
                   </Button>
                   <Button alignment="CENTER" mnemonicParsing="false" onAction="#afficherCarte" style="-fx-background-color: E15A4D; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 10, 0, 0, 4);" text="Actualiser l'itinéraire" textAlignment="CENTER" textFill="WHITE">
                      <font>
-                        <Font name="Inter Bold" size="22.0" />
+                        <Font size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="14.0" left="30.0" right="25.0" top="14.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets left="-20.0" right="-20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button alignment="CENTER" layoutX="149.0" layoutY="17.0" mnemonicParsing="false" onAction="#genererPDF" style="-fx-background-color: E15A4D; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 10, 0, 0, 4);" text="Générer un PDF" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="20.0" />
                      </font>
                      <padding>
                         <Insets bottom="14.0" left="30.0" right="30.0" top="14.0" />
                      </padding>
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
                   </Button>
                     </children>
                <padding>

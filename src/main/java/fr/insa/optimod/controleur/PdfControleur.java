@@ -125,7 +125,7 @@ public class PdfControleur {
 
     // Indique si le passage du segment [n1, n2] au [n2, n3] nécéssite de tourner à droite (1) ou à gauche (0)
     private int giveDirection(Noeud n1, Noeud n2, Noeud n3){
-
+    return 0;
     }
 
 

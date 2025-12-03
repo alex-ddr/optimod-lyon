@@ -9,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ItineraireControleur {
@@ -163,5 +164,10 @@ public class ItineraireControleur {
             gc.setLineWidth(4);
             gc.strokeLine(x1, y1, x2, y2);
         }
+    }
+    @FXML
+    public void genererPDF() throws IOException {
+        PdfControleur pdfControleur = new PdfControleur();
+        pdfControleur.extractPdf(controleurMetier.getTronconsItineraire(), controleurMetier.getPointsItineraire());
     }
 }
