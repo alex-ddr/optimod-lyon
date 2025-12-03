@@ -97,8 +97,8 @@ public class Interface extends Application {
         itineraireControleur.setControleurMetier(this.controleurMetier);
 
         itineraireControleur.afficherCarte();
-        itineraireControleur.afficherPoints();
         itineraireControleur.afficherItineraire();
+        itineraireControleur.afficherPoints();
         itineraireControleur.afficherTextePoints();
 
         Scene scene = new Scene(points, 1920, 1080);
