@@ -74,10 +74,10 @@ public class ItineraireControleur {
             for (Troncon troncon : carte.getListeTroncon()) {
                 Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());
                 double x1 = (dep.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-                double y1 = (dep.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+                double y1 = gc.getCanvas().getHeight() - ((dep.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
                 Noeud arr = carte.getMapNoeuds().get(troncon.getDestination());
                 double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-                double y2 = (arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+                double y2 = gc.getCanvas().getHeight() - ((arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
 
                 gc.setStroke(Color.web("#6B3F3A")); // ou 6B3F3A  ou 8C5752 et couleur pour tracer la tournée --> #D65C4F
                 gc.setLineWidth(2);
@@ -97,7 +97,7 @@ public class ItineraireControleur {
 
             Noeud noeud = carte.obtenirNoeud(livraison.getAdresseEnlevement());
             double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-            double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+            double y = gc.getCanvas().getHeight() - ((noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
 
             gc.setFill(couleur);
             int rayon = 10;
@@ -105,7 +105,7 @@ public class ItineraireControleur {
 
             noeud = carte.obtenirNoeud(livraison.getAdresseLivraison());
             x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-            y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+            y = gc.getCanvas().getHeight() - ((noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
 
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
             index++;
@@ -113,11 +113,27 @@ public class ItineraireControleur {
 
         Noeud noeud = carte.obtenirNoeud(demandeDeLivraions.getEntrepot().getAdresss());
         double x = (noeud.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-        double y = (noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+        double y = gc.getCanvas().getHeight() - ((noeud.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
+
+        int rayon = 20;
+
+        double svgW = 576.0;
+        double svgH = 512.0;
+        double scale = 2.0 * rayon / svgW;
+        double tx = x - (svgW * scale) / 2.0;
+        double ty = y - (svgH * scale) / 2.0;
+
+        gc.save();
+        gc.translate(tx, ty);
+        gc.scale(scale, scale);
 
         gc.setFill(Color.RED);
-        int rayon = 10;
-        gc.fillRoundRect(x - rayon, y - rayon, rayon * 2, rayon * 2, (double) rayon /4.0, (double) rayon /4.0);
+        gc.beginPath();
+        gc.appendSVGPath("M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1v16.2c0 22.1-17.9 40-40 40h-16c-1.1 0-2.2 0-3.3-.1c-1.4.1-2.8.1-4.2.1L416 512h-24c-22.1 0-40-17.9-40-40v-88c0-17.7-14.3-32-32-32h-64c-17.7 0-32 14.3-32 32v88c0 22.1-17.9 40-40 40h-55.9c-1.5 0-3-.1-4.5-.2c-1.2.1-2.4.2-3.6.2h-16c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9.1-2.8v-69.7h-32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7l255.4 224.5c8 7 12 15 11 24");
+        gc.fill();
+        gc.closePath();
+
+        gc.restore();
     }
 
 
@@ -155,10 +171,10 @@ public class ItineraireControleur {
         for (Troncon troncon : controleurMetier.getTronconsItineraire()) {
             Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());
             double x1 = (dep.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-            double y1 = (dep.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+            double y1 = gc.getCanvas().getHeight() - ((dep.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
             Noeud arr = carte.getMapNoeuds().get(troncon.getDestination());
             double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-            double y2 = (arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+            double y2 = gc.getCanvas().getHeight() - ((arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));
 
             gc.setStroke(Color.web("#D65C4F"));
             gc.setLineWidth(4);
