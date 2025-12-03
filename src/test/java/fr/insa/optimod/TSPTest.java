@@ -83,7 +83,7 @@ public class TSPTest {
     }
 
 
-// Le code brute force a été réalisé à l'aide d'une ia
+// Le code brute force a été réalisé avec l'aide d'une ia
     static class BruteForceResult {
         double cost;
         int[] chemin;

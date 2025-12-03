@@ -14,10 +14,10 @@ public class Main {
 
         Application.launch(Interface.class, args);
 
+
+
+
         /*
-
-
-
 
         Controleur controleur = new Controleur();
         File f = new File("src\\main\\resources\\xml\\petitPlan.xml");
@@ -30,12 +30,12 @@ public class Main {
 
 
 
-        DemandeDeLivraions demande = controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandePetit2.xml");
+       controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandePetit2.xml");
 
 
 
 
-        controleur.preparerPlanTournee(controleur.getCarte(), demande);
+        controleur.preparerPlanTournee(controleur.getCarte(), controleur.getDemandeDeLivraions());
 
         */
 

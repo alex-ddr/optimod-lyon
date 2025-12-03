@@ -211,6 +211,19 @@ public class Controleur {
 
 
             }
+
+            Integer ent = mapIdAIndex.get(entrepot.getId());
+
+            astarLEnlevement = astar(carte, L, carte.obtenirNoeud(entrepot.getId()));
+            astarEEnlevement = astar(carte, E, carte.obtenirNoeud(entrepot.getId()));
+
+            cout[idL][ent] = astarLEnlevement.getG();
+            cout[idE][ent] = astarEEnlevement.getG();
+
+            courtCheminL.put(entrepot.getId(),  astarLEnlevement);
+            courtCheminE.put(entrepot.getId(), astarEEnlevement);
+
+
             tournee.put(L.getId(), courtCheminL);
             tournee.put(E.getId(), courtCheminE);
             }
@@ -238,18 +251,21 @@ public class Controleur {
 
 
         PointLivraison astar;
-        chemin.add(courant);
+
 
         while (courant != null && prochain != null) {
-//            System.out.println(" ----- " + courant.getNoeud().getId());
-            astar = tournee.get(courant.getNoeud().getId()).get(prochain.getNoeud().getId());
+            System.out.println(" ----- " + courant.getNoeud().getId());
+            //System.out.println(" ----- " + prochain.getNoeud().getId());
+            astar = tournee.get(prochain.getNoeud().getId()).get(courant.getNoeud().getId());
+            ArrayList<Troncon> listeTampon = new ArrayList<>();
             while (astar != null)
             {
+
                 chemin.add(astar);
                 if (astar.getAntecedent() != null)
                 {
-                    troncons.add(astar.getAntecedent());
-//                    System.out.println("ID - " + astar.getNoeud().getId());
+                    listeTampon.add(astar.getAntecedent());
+                    //System.out.println("ID - " + astar.getNoeud().getId());
 //                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
 //                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
 //                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
@@ -258,6 +274,10 @@ public class Controleur {
                 astar = astar.getParent();
 
             }
+            //Collections.reverse(listeTampon);
+            troncons.addAll(listeTampon);
+
+
             //System.out.println(courant.getNoeud().getId());
             courant = courant.getParent();
             prochain = courant.getParent();
@@ -265,6 +285,15 @@ public class Controleur {
 
         }
 
+        chemin.add(courant);
+        /*
+        for (Troncon troncon : troncons)
+        {
+            System.out.println("NOM - " + troncon.getNomRue());
+            System.out.println("DEST - " + troncon.getDestination());
+            System.out.println("ORI - " + troncon.getOrigine());
+        }
+        */
 
        /* System.out.println("Chemin TSP :");
 
