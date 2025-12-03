@@ -84,7 +84,12 @@ public class AccueilControleur {
     @FXML
     private void afficherCarte(){
         System.out.println("Le fichier plan " + fichierPlan.getAbsolutePath());
+        long startTime = System.nanoTime();
         controleurMetier.initialiserCarte(fichierPlan.getAbsolutePath());
+        long endTime = System.nanoTime();
+        long executionTime = (endTime - startTime) / 1000000;
+
+        System.out.println("Loading map takes "+ executionTime + "ms");
 //        Carte carte = controleurMetier.getCarte();
 //        System.out.print(carte.getListeNoeuds());
 //        System.out.println(carte.getListeTroncon());
