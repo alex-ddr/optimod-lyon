@@ -228,7 +228,8 @@ public class Controleur {
 
             }
 
-            Integer ent = mapIdAIndex.get(entrepot.getId());
+            // Integer ent = mapIdAIndex.get(entrepot.getId());
+            ent = mapIdAIndex.get(entrepot.getId());
 
             astarLEnlevement = astar(carte, L, carte.obtenirNoeud(entrepot.getId()));
             astarEEnlevement = astar(carte, E, carte.obtenirNoeud(entrepot.getId()));
