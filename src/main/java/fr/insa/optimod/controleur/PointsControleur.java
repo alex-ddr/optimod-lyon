@@ -71,6 +71,7 @@ public class PointsControleur {
 
                 ItemControleur itemControleur = fxmlLoader.getController();
                 itemControleur.setData(items.get(i));
+                itemControleur.setPointsControleur(this);
 
                 if (column == 1) {
                     column = 0;
@@ -104,6 +105,14 @@ public class PointsControleur {
         }
 
         return ls;
+    }
+
+    public void supprimerLivraison(Long adresse) {
+        controleurMetier.supprimerLivraison(adresse);
+        itemsGrid.getChildren().clear();
+        initData();
+        afficherCarte();
+        afficherPoints();
     }
 
 //    @FXML

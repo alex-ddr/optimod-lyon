@@ -472,6 +472,10 @@ public class Controleur {
         }
     }
 
+    public void supprimerLivraison(Long adresse) {
+        demandeDeLivraions.supprimerLivraison(demandeDeLivraions.getLivraison(adresse));
+    }
+
 
 
 

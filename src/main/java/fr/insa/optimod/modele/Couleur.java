@@ -22,6 +22,18 @@ public class Couleur {
         }
     }
 
+    static public void supprimerCouleur(int index) {
+        if (index < listeCouleurs.size()) {
+            listeCouleurs.remove(index);
+        }
+        if (listeCouleurs.isEmpty()) {
+            derniereCouleur = Color.hsb(nombreOr, 1.0, 1.0);
+            listeCouleurs.add(derniereCouleur);
+        } else {
+            derniereCouleur = listeCouleurs.getLast();
+        }
+    }
+
 
     static public Color prochaineCouleur() {
         double nouvelleHue = (derniereCouleur.getHue() + nombreOr) % 360.0;
