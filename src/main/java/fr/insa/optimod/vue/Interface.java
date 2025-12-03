@@ -29,6 +29,7 @@ public class Interface extends Application {
         fenetrePrincipale.setMaximized(true);
 
         afficherAccueil();
+        //afficherPoints();
 
         fenetrePrincipale.show();
     }
