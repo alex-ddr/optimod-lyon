@@ -41,12 +41,26 @@ public class ItineraireControleur {
     }
 
     @FXML
-    private void retourCarte() {
+    private void retourAccueil() {
         try {
-            interfaceUtilisateur.afficherCarte();
+            interfaceUtilisateur.afficherAccueil();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void retourPoints() {
+        try {
+            interfaceUtilisateur.afficherPoints();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void actualisationAuto() {
+        System.out.println("actualisationAuto");
     }
 
     public void afficherCarte() {
