@@ -67,7 +67,7 @@ public class PointsControleur {
         if (carte != null) {
             System.out.println("Affichage de la carte");
             gc.clearRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());
-            gc.setFill(Color.GRAY);
+            gc.setFill(Color.web("#F4E6DF"));
             gc.fillRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());
             for (Troncon troncon : carte.getListeTroncon()) {
                 Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());
@@ -77,7 +77,7 @@ public class PointsControleur {
                 double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
                 double y2 = (arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
 
-                gc.setStroke(Color.BLACK);
+                gc.setStroke(Color.web("#6B3F3A"));
                 gc.setLineWidth(2);
                 gc.strokeLine(x1, y1, x2, y2);
             }
