@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="500.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);" styleClass="transparent" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.optimod.controleur.ItemControleur">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="500.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);" styleClass="transparent" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.insa.optimod.controleur.ItemItineraireControleur">
    <children>
       <VBox fx:id="coloredTag" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="colored-tag" stylesheets="@../styles/style.css">
          <children>
@@ -26,14 +26,25 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Text>
-                  <Text id="item-adresse" fx:id="adresse" fill="#757575" strokeType="OUTSIDE" strokeWidth="0.0" text="Adresse" translateX="8.0">
+                  <Text id="itemPoint-adresse" fx:id="adresse" fill="#757575" strokeType="OUTSIDE" strokeWidth="0.0" text="Adresse" translateX="8.0">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
                </children>
             </VBox>
-            <SVGPath id="item-poubelle" fx:id="poubelle" content="M18.0833 1.29167H13.5625L12.2708 0H5.8125L4.52083 1.29167H0V3.875H18.0833M1.29167 20.6667C1.29167 21.3518 1.56384 22.0089 2.04831 22.4934C2.53278 22.9778 3.18986 23.25 3.875 23.25H14.2083C14.8935 23.25 15.5506 22.9778 16.035 22.4934C16.5195 22.0089 16.7917 21.3518 16.7917 20.6667V5.16667H1.29167V20.6667Z" fill="#e15a4d" onMouseClicked="#deleteItem" />
+            <VBox alignment="CENTER_LEFT" fillWidth="false" spacing="32.0" HBox.hgrow="NEVER">
+               <children>
+                  <SVGPath id="itemItineraire-monter" fx:id="flecheHaut" content="M 6 10.800781 C 5.515625 10.800781 5.078125 10.507812 4.890625 10.058594 C 4.703125 9.609375 4.808594 9.09375 5.152344 8.753906 L 11.152344 2.753906 C 11.621094 2.285156 12.382812 2.285156 12.851562 2.753906 L 18.851562 8.753906 C 19.195312 9.097656 19.296875 9.609375 19.109375 10.0625 C 18.921875 10.511719 18.484375 10.800781 18 10.800781 Z M 6 10.800781" fill="#9e9e9e" onMouseClicked="#moveUp" />
+                  <SVGPath id="itemItineraire-descendre" fx:id="flecheBas" content="M 6 13.199219 C 5.515625 13.199219 5.078125 13.492188 4.890625 13.941406 C 4.703125 14.390625 4.808594 14.90625 5.152344 15.246094 L 11.152344 21.246094 C 11.621094 21.714844 12.382812 21.714844 12.851562 21.246094 L 18.851562 15.246094 C 19.195312 14.902344 19.296875 14.390625 19.109375 13.9375 C 18.921875 13.488281 18.484375 13.199219 18 13.199219 Z M 6 13.199219" fill="#9e9e9e" layoutX="15.0" layoutY="26.0" onMouseClicked="#moveDown" />
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
          </children>
       </HBox>
    </children>

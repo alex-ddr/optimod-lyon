@@ -3,14 +3,17 @@ package fr.insa.optimod.controleur;
 import fr.insa.optimod.modele.*;
 import fr.insa.optimod.vue.Interface;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItineraireControleur {
 
@@ -21,6 +24,9 @@ public class ItineraireControleur {
 
     @FXML
     private Canvas canvasCarte;
+
+    @FXML
+    private GridPane itemsGrid;
 
     @FXML
     private TextArea textePoints;
@@ -39,6 +45,59 @@ public class ItineraireControleur {
     private void initialize() {
         System.out.println("initialize CarteControleur");
         gc = canvasCarte.getGraphicsContext2D();
+    }
+
+    public void initData() {
+        List<itemItineraire> itemItineraireListList = new ArrayList<>(data());
+
+        int column = 0;
+        int row = 1;
+
+        try {
+            for (itemItineraire itemItineraire : itemItineraireListList) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/layouts/itemItineraire.fxml"));
+
+                HBox itemHBox = fxmlLoader.load();
+
+                ItemItineraireControleur itemItineraireControleur = fxmlLoader.getController();
+                itemItineraireControleur.setData(itemItineraire);
+                itemItineraireControleur.setItineraireControleur(this);
+
+                if (column == 1) {
+                    column = 0;
+                    ++row;
+                }
+
+                itemsGrid.add(itemHBox, column++, row);
+                GridPane.setMargin(itemHBox, new javafx.geometry.Insets(8));
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<itemItineraire> data() {
+        List<itemItineraire> itemItineraireList = new ArrayList<>();
+
+        ArrayList<PointLivraison> pointsItineraire = controleurMetier.getPointsItineraire();
+        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
+
+        int itemId = 1;
+        for (PointLivraison point : pointsItineraire) {
+            Livraison livraison = demandeDeLivraions.getLivraison(point.getNoeud().getId());
+            boolean estEntrepot = demandeDeLivraions.estEntrepot(point.getNoeud().getId());
+            if (!estEntrepot) {
+                boolean estEnlevement = livraison.getAdresseEnlevement().equals(point.getNoeud().getId());
+                int index = demandeDeLivraions.getListeLivraisons().indexOf(livraison) + 1;
+                itemItineraire item = new itemItineraire(itemId, estEnlevement, (estEnlevement ? "Pickup #" : "Livraison #") + index, point.getNoeud().getId().toString(), point.getG().toString(), index);
+                itemItineraireList.add(item);
+            }
+            itemId++;
+        }
+
+        return itemItineraireList;
     }
 
     @FXML

@@ -4,10 +4,12 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
@@ -126,10 +128,15 @@
                     </VBox.margin>
                     <children>
                   <TextArea fx:id="textePoints" prefHeight="200.0" prefWidth="200.0" />
-                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin></Region>
+                  <ScrollPane styleClass="scrollPane" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
+                     <content>
+                        <GridPane fx:id="itemsGrid" prefHeight="137.0" prefWidth="111.0" styleClass="transparent" stylesheets="@../styles/style.css">
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                     </content>
+                  </ScrollPane>
                         <AnchorPane minHeight="27.0" style="-fx-background-color: E15A4D; -fx-background-radius: 0 0 30 30;" />
                     </children>
                 </VBox>
