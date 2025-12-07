@@ -81,7 +81,7 @@ public class CarteControleur {
     @FXML
     private void clicZonePoints(MouseEvent event) {
         System.out.println("Le fichier des points va être choisi");
-        File fichierPoints = explorateur.showOpenDialog(null);
+        File fichierPoints = explorateur.showOpenDialog(this.interfaceUtilisateur.getFenetrePrincipale());
         traiterFichierPoints(fichierPoints);
     }
 

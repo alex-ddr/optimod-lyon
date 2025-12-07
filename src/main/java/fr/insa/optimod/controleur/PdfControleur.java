@@ -3,6 +3,7 @@ package fr.insa.optimod.controleur;
 import fr.insa.optimod.modele.Noeud;
 import fr.insa.optimod.modele.PointLivraison;
 import fr.insa.optimod.modele.Troncon;
+import fr.insa.optimod.vue.Interface;
 import javafx.stage.FileChooser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -31,7 +32,13 @@ public class PdfControleur {
     private final String chemin = "src\\main\\out";
     private final String downloads = getDownloadsFolder();
 
+    private Interface interfaceUtilisateur;
+
     private FileChooser explorateur = new FileChooser();
+
+    public void setInterface(Interface interfaceUtilisateur) {
+        this.interfaceUtilisateur = interfaceUtilisateur;
+    }
 
     public void afficherPdf() throws IOException {
         PDDocument document = new PDDocument();
@@ -169,7 +176,7 @@ public class PdfControleur {
             explorateur.setTitle("Sauvegarder le PDF");
             explorateur.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier PDF", "*.pdf"));
             explorateur.setInitialFileName(name);
-            File fichier = explorateur.showSaveDialog(null);
+            File fichier = explorateur.showSaveDialog(this.interfaceUtilisateur.getFenetrePrincipale());
 
             if (fichier != null) {
                 document.save(fichier);
@@ -224,7 +231,7 @@ public class PdfControleur {
             explorateur.setTitle("Sauvegarder le PDF");
             explorateur.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier PDF", "*.pdf"));
             explorateur.setInitialFileName(name);
-            File fichier = explorateur.showSaveDialog(null);
+            File fichier = explorateur.showSaveDialog(this.interfaceUtilisateur.getFenetrePrincipale());
 
             if (fichier != null) {
                 try (OutputStream os = new FileOutputStream(fichier)) {

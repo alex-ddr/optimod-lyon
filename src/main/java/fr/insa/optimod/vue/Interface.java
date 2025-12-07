@@ -20,6 +20,10 @@ public class Interface extends Application {
         launch(args);
     }
 
+    public Stage getFenetrePrincipale() {
+        return fenetrePrincipale;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.fenetrePrincipale = primaryStage;

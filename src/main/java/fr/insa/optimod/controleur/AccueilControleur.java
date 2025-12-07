@@ -51,7 +51,7 @@ public class AccueilControleur {
     @FXML
     private void clicZoneCarte(MouseEvent event) {
         System.out.println("Le fichier plan va être choisi");
-        fichierPlan = explorateur.showOpenDialog(null);
+        fichierPlan = explorateur.showOpenDialog(this.interfaceUtilisateur.getFenetrePrincipale());
         traiterFichierPlan();
     }
 

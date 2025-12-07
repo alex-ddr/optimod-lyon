@@ -243,6 +243,7 @@ public class ItineraireControleur {
     @FXML
     public void genererPDF() throws IOException {
         PdfControleur pdfControleur = new PdfControleur();
+        pdfControleur.setInterface(this.interfaceUtilisateur);
         pdfControleur.extrairePdf_2(controleurMetier.getTronconsItineraire(), controleurMetier.getChemin());
     }
 }
