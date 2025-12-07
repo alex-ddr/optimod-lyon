@@ -8,12 +8,18 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.embed.swing.SwingFXUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class ItineraireControleur {
@@ -243,9 +249,10 @@ public class ItineraireControleur {
     }
     @FXML
     public void genererPDF() throws IOException {
+        String canvasBase64 = exporterCanvasEnBase64();
         PdfControleur pdfControleur = new PdfControleur();
         pdfControleur.setInterface(this.interfaceUtilisateur);
-        pdfControleur.extrairePdf_2(controleurMetier.getTronconsItineraire(), controleurMetier.getChemin());
+        pdfControleur.extrairePdf_2(controleurMetier.getTronconsItineraire(), controleurMetier.getChemin(), canvasBase64);
     }
 
     public void descendrePoint(int itemItineraireId) {
@@ -308,5 +315,24 @@ public class ItineraireControleur {
                 }
             }
         }
+    }
+
+    public String exporterCanvasEnBase64() throws IOException {
+        // Capturer le canvas en tant qu'image
+        WritableImage writableImage = new WritableImage(
+            (int) canvasCarte.getWidth(),
+            (int) canvasCarte.getHeight()
+        );
+        canvasCarte.snapshot(null, writableImage);
+
+        // Convertir en BufferedImage
+        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
+
+        // Encoder en base64
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "png", baos);
+        byte[] imageBytes = baos.toByteArray();
+
+        return Base64.getEncoder().encodeToString(imageBytes);
     }
 }

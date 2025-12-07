@@ -20,6 +20,7 @@ import com.itextpdf.html2pdf.HtmlConverter;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 import java.io.File;
@@ -191,13 +192,31 @@ public class PdfControleur {
         }
     }
 
-    public void extrairePdf_2(ArrayList<Troncon> troncons, ArrayList<PointLivraison> chemin) throws IOException {
+    public void extrairePdf_2(ArrayList<Troncon> troncons, ArrayList<PointLivraison> chemin, String canvasBase64) throws IOException {
         try {
-            List<String> listeInstructions = new ArrayList<>();
+            class Instruction {
+                public String texte;
+                public String SVGPath;
+                Instruction(String texte, String SVGPath) {
+                    this.texte = texte;
+                    this.SVGPath = SVGPath;
+                }
+
+                public String getTexte() {
+                    return texte;
+                }
+                public String getSVGPath() {
+                    return SVGPath;
+                }
+            }
+
+            List<Instruction> listeInstructions = new ArrayList<>();
 
             String text;
+            String SVGPath;
+            SVGPath = "M8 17V11H12V17H17V9H20L10 0L0 9H3V17H8Z"; // SVG pour entrepot
             text = "Partir de l'entrepot vers le " + donnerDirectionDepart(chemin.get(0).getNoeud(), chemin.get(1).getNoeud()) + " sur la rue " + troncons.getFirst().getNomRue();
-            listeInstructions.add(text);
+            listeInstructions.add(new Instruction(text, SVGPath));
 
             if(chemin.size() < 3) {return;}  // ca va de l'entrepot à l'entrepot
 
@@ -209,11 +228,20 @@ public class PdfControleur {
 
             for(int i = 0; i < chemin.size()-3; i++) {
                 text = ecriteText(chemin.get(i).getNoeud(), chemin.get(i+1).getNoeud(), chemin.get(i+2).getNoeud(), troncons.get(i+1).getNomRue());
-                listeInstructions.add(text);
+                int direction = donnerDirection(chemin.get(i).getNoeud(), chemin.get(i+1).getNoeud(), chemin.get(i+2).getNoeud());
+                if (direction == 1) {
+                    SVGPath = "M0 11.5C0 7.36 3.36 4 7.5 4H10V0L17 6L10 12V8H7.5C5.57 8 4 9.57 4 11.5V19H0V11.5Z"; // SVG pour tourner à droite
+                } else if (direction == 0) {
+                    SVGPath = "M17 19H13V11.5C13 9.57 11.43 8 9.5 8H7V12L0 6L7 0V4H9.5C13.64 4 17 7.36 17 11.5V19Z"; // SVG pour tourner à gauche
+                } else {
+                    SVGPath = "M4 9.5L4 7L-3.0598e-07 7L6 -2.62268e-07L12 7L8 7L8 9.5L8 19L4 19L4 9.5Z"; // SVG pour aller tout droit
+                }
+                listeInstructions.add(new Instruction(text, SVGPath));
             }
 
             text = "Retour à l'entrepot : " + ecriteText(chemin.get(chemin.size()-3).getNoeud(),chemin.get(chemin.size()-2).getNoeud(), chemin.getLast().getNoeud(),troncons.getLast().getNomRue());
-            listeInstructions.add(text);
+            SVGPath = "M8 17V11H12V17H17V9H20L10 0L0 9H3V17H8Z"; // SVG pour entrepot
+            listeInstructions.add(new Instruction(text, SVGPath));
 
             ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
             templateResolver.setSuffix(".html");
@@ -223,8 +251,13 @@ public class PdfControleur {
             templateEngine.setTemplateResolver(templateResolver);
 
             Context context = new Context();
-            context.setVariable("dateDuJour", java.time.LocalDate.now().toString());
+            context.setVariable("dateDuJour", java.time.LocalDate.now().getDayOfMonth() + "/" + java.time.LocalDate.now().getMonthValue() + "/" + java.time.LocalDate.now().getYear());
             context.setVariable("instructions", listeInstructions);
+            context.setVariable("canvasBase64", canvasBase64);
+
+            byte[] logoBytes = Files.readAllBytes(new File("src/main/resources/img/logo.png").toPath());
+            String logoBase64 = java.util.Base64.getEncoder().encodeToString(logoBytes);
+            context.setVariable("logoBase64", logoBase64);
 
             String htmlContent = templateEngine.process("/templates/template_pdf", context);
 

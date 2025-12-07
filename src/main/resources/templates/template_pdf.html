@@ -2,42 +2,51 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <style>
-        body { font-family: Helvetica, Arial, sans-serif; font-size: 12px; }
-        .header { display: flex; align-items: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-        .logo { width: 100px; height: auto; }
-        .title { font-size: 24px; font-weight: bold; margin-left: 20px; color: #333; }
+        body { font-family: Inter, Arial, sans-serif; font-size: 12px; }
+        .header { display: flex; align-items: center; margin-bottom: 20px; }
+        .logo { width: 240px; height: auto; }
+        .date { margin-left: auto; font-size: 12px; color: #591811; font-style: italic; }
+
+        .carte { height: 400px; width: auto; }
 
         .step-card {
-            background-color: #f4f4f4;
-            border-left: 5px solid #0056b3; /* Barre bleue à gauche */
-            padding: 10px;
-            margin-bottom: 10px;
-            page-break-inside: avoid; /* Empêche de couper une instruction en deux entre deux pages */
+            background-color: #ffffff;
+            border: 1px solid #D9D9D9;
+            margin-bottom: 4px;
+            page-break-inside: avoid;
         }
-        .step-number { font-weight: bold; color: #0056b3; }
-        .footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 10px; color: #777; }
+        .step-card .icon {
+            background-color: #FBE6DD;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 8px;
+        }
+        .step-card span {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 8px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="title">Feuille de Route - Livraisons</div>
-    <div style="margin-left: auto;">Date: <span th:text="${dateDuJour}">01/01/2024</span></div>
+    <img th:src="'data:image/png;base64, ' + ${logoBase64}" alt="Logo de Optimod'Lyon", class="logo"/>
+    <div class="date">Date: <span th:text="${dateDuJour}">01/01/2024</span></div>
 </div>
 
-<h3>Détails du trajet</h3>
-
-<div class="step-card" style="border-color: green;">
-    <strong>DÉPART :</strong> <span th:text="${departDescription}">Partir de l'entrepôt...</span>
+<div class="top-section">
+    <img class="carte" th:src="'data:image/png;base64, ' + ${canvasBase64}" alt="Carte de l'itinéraire">
 </div>
 
-<div th:each="step, stat : ${instructions}" class="step-card">
-    <span class="step-number">Étape <span th:text="${stat.count}">1</span></span> :
-    <span th:text="${step}">Tourner à droite sur rue X...</span>
-</div>
-
-<div class="step-card" style="border-color: red;">
-    <strong>ARRIVÉE :</strong> <span th:text="${retourDescription}">Retour à l'entrepôt...</span>
+<div th:each="step : ${instructions}" class="step-card">
+    <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#E05A4D" viewBox="0 0 24 24">
+            <path th:d="${step.SVGPath}"/>
+        </svg>
+    </div>
+    <span th:text="${step.texte}">Tourner à droite sur rue X...</span>
 </div>
 
 </body>
