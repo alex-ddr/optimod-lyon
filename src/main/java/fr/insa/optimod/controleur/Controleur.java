@@ -482,8 +482,7 @@ public class Controleur {
     }
 
 
-
-
-
-
+    public void echangerPointsItineraire(int id, int id1) {
+        Collections.swap(tspListe, id, id1);
+    }
 }

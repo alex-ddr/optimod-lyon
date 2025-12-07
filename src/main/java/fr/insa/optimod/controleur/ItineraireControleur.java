@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -84,7 +85,7 @@ public class ItineraireControleur {
         ArrayList<PointLivraison> pointsItineraire = controleurMetier.getPointsItineraire();
         DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
 
-        int itemId = 1;
+        int itemId = 0;
         for (PointLivraison point : pointsItineraire) {
             Livraison livraison = demandeDeLivraions.getLivraison(point.getNoeud().getId());
             boolean estEntrepot = demandeDeLivraions.estEntrepot(point.getNoeud().getId());
@@ -245,5 +246,67 @@ public class ItineraireControleur {
         PdfControleur pdfControleur = new PdfControleur();
         pdfControleur.setInterface(this.interfaceUtilisateur);
         pdfControleur.extrairePdf_2(controleurMetier.getTronconsItineraire(), controleurMetier.getChemin());
+    }
+
+    public void descendrePoint(int itemItineraireId) {
+        itemItineraire itemToMove = null;
+        List<itemItineraire> itemItineraireList = data();
+        for (itemItineraire item : itemItineraireList) {
+            if (item.getId() == itemItineraireId) {
+                itemToMove = item;
+                break;
+            }
+        }
+        itemItineraire itemNext = null;
+        if (itemToMove != null) {
+            int index = itemItineraireList.indexOf(itemToMove);
+            if (index < itemItineraireList.size() - 1) {
+                itemNext = itemItineraireList.get(index + 1);
+                if (itemNext != null) {
+                    if (itemToMove.getIndex() != itemNext.getIndex()) { // on peut pas mettre le pickup après la livraison
+                        controleurMetier.echangerPointsItineraire(itemToMove.getId(), itemNext.getId());
+                        itemsGrid.getChildren().clear();
+                        initData();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Action impossible");
+                        alert.setHeaderText("Impossible de descendre ce point");
+                        alert.setContentText("Vous ne pouvez pas descendre un point de pickup après son point de livraison.");
+                        alert.showAndWait();
+                    }
+                }
+            }
+        }
+    }
+
+    public void monterPoint(int itemItineraireId) {
+        itemItineraire itemToMove = null;
+        List<itemItineraire> itemItineraireList = data();
+        for (itemItineraire item : itemItineraireList) {
+            if (item.getId() == itemItineraireId) {
+                itemToMove = item;
+                break;
+            }
+        }
+        itemItineraire itemPrev = null;
+        if (itemToMove != null) {
+            int index = itemItineraireList.indexOf(itemToMove);
+            if (index > 0) {
+                itemPrev = itemItineraireList.get(index - 1);
+                if (itemPrev != null){
+                    if( itemToMove.getIndex() != itemPrev.getIndex()) { // on peut pas mettre la livraison avant le pickup
+                    controleurMetier.echangerPointsItineraire(itemToMove.getId(), itemPrev.getId());
+                    itemsGrid.getChildren().clear();
+                    initData();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Action impossible");
+                        alert.setHeaderText("Impossible de monter ce point");
+                        alert.setContentText("Vous ne pouvez pas monter un point de livraison avant son point de pickup.");
+                        alert.showAndWait();
+                    }
+                }
+            }
+        }
     }
 }

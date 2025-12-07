@@ -23,9 +23,6 @@ public class ItemItineraireControleur {
     private VBox coloredTag;
 
     @FXML
-    private SVGPath poubelle;
-
-    @FXML
     private Text titre;
 
     protected ItineraireControleur itineraireControleur;
@@ -37,15 +34,13 @@ public class ItemItineraireControleur {
     }
 
     @FXML
-    void moveUp(MouseEvent event) {
-        System.out.println("Move up clicked for item: " + itemItineraire.getAdresse());
-//        itineraireControleur.monterPoint(Long.parseLong(itemItineraire.getAdresse()));
+    void moveUp() {
+        itineraireControleur.monterPoint(itemItineraire.getId());
     }
 
     @FXML
-    void moveDown(MouseEvent event) {
-        System.out.println("Move down clicked for item: " + itemItineraire.getAdresse());
-//        itineraireControleur.descendrePoint(Long.parseLong(itemItineraire.getAdresse()));
+    void moveDown() {
+        itineraireControleur.descendrePoint(itemItineraire.getId());
     }
 
     public void setData(itemItineraire itemItineraire) {
