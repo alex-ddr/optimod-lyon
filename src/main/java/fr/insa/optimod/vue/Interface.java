@@ -20,6 +20,10 @@ public class Interface extends Application {
         launch(args);
     }
 
+    public Stage getFenetrePrincipale() {
+        return fenetrePrincipale;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.fenetrePrincipale = primaryStage;
@@ -29,6 +33,7 @@ public class Interface extends Application {
         fenetrePrincipale.setMaximized(true);
 
         afficherAccueil();
+        //afficherPoints();
 
         fenetrePrincipale.show();
     }
@@ -66,6 +71,8 @@ public class Interface extends Application {
     }
 
     public void afficherPoints() throws IOException {
+        System.out.println("JE SUIS ICI");
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/points.fxml"));
 
         Parent points = loader.load();
@@ -74,10 +81,9 @@ public class Interface extends Application {
 
         pointsController.setInterface(this);
         pointsController.setControleurMetier(this.controleurMetier);
-
+        pointsController.initData();
         pointsController.afficherCarte();
         pointsController.afficherPoints();
-        pointsController.afficher_points_textuels();
 
         Scene scene = new Scene(points, 1920, 1080);
 
@@ -94,10 +100,12 @@ public class Interface extends Application {
         itineraireControleur.setInterface(this);
         itineraireControleur.setControleurMetier(this.controleurMetier);
 
+        itineraireControleur.initData();
         itineraireControleur.afficherCarte();
-        itineraireControleur.afficherPoints();
         itineraireControleur.afficherItineraire();
+        itineraireControleur.afficherPoints();
         itineraireControleur.afficherTextePoints();
+
 
         Scene scene = new Scene(points, 1920, 1080);
 

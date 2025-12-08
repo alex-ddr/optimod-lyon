@@ -22,6 +22,18 @@ public class Couleur {
         }
     }
 
+    static public void supprimerCouleur(int index) {
+        if (index < listeCouleurs.size()) {
+            listeCouleurs.remove(index);
+        }
+        if (listeCouleurs.isEmpty()) {
+            derniereCouleur = Color.hsb(nombreOr, 1.0, 1.0);
+            listeCouleurs.add(derniereCouleur);
+        } else {
+            derniereCouleur = listeCouleurs.getLast();
+        }
+    }
+
 
     static public Color prochaineCouleur() {
         double nouvelleHue = (derniereCouleur.getHue() + nombreOr) % 360.0;
@@ -30,5 +42,14 @@ public class Couleur {
         derniereCouleur = nouvelleCouleur;
         listeCouleurs.add(nouvelleCouleur);
         return nouvelleCouleur;
+    }
+
+    static public String getHexaCouleur(int index) {
+        Color couleur = Couleur.getCouleur(index);
+        int r = (int) Math.round(couleur.getRed() * 255);
+        int g = (int) Math.round(couleur.getGreen() * 255);
+        int b = (int) Math.round(couleur.getBlue() * 255);
+        
+        return String.format("#%02X%02X%02X", r, g, b);
     }
 }

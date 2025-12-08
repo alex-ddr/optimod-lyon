@@ -282,6 +282,7 @@ public class Controleur {
             }
 
 
+
             astarLEnlevement = astar(carte, L, carte.obtenirNoeud(entrepot.getId()));
             astarEEnlevement = astar(carte, E, carte.obtenirNoeud(entrepot.getId()));
 
@@ -523,9 +524,17 @@ public class Controleur {
         }
     }
 
+    public void supprimerLivraison(Long adresse) {
+        demandeDeLivraions.supprimerLivraison(demandeDeLivraions.getLivraison(adresse));
+    }
+
+    public void ajouterLivraison(Long adresseEnlevement, Long adresseLivraison) {
+        Livraison livraison = new Livraison(adresseEnlevement, adresseLivraison, 0L, 0L);
+        demandeDeLivraions.ajouterLivraison(livraison);
+    }
 
 
-
-
-
+    public void echangerPointsItineraire(int id, int id1) {
+        Collections.swap(tspListe, id, id1);
+    }
 }

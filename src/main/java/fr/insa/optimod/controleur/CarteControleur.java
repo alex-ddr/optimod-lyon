@@ -66,10 +66,10 @@ public class CarteControleur {
             for (Troncon troncon : carte.getListeTroncon()) {
                 Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());
                 double x1 = (dep.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-                double y1 = (dep.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+                double y1 = gc.getCanvas().getHeight() - ((dep.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat() - carte.getMinLat()));
                 Noeud arr = carte.getMapNoeuds().get(troncon.getDestination());
                 double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());
-                double y2 = (arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat());
+                double y2 = gc.getCanvas().getHeight() - ((arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat() - carte.getMinLat()));
 
                 gc.setStroke(Color.web("#6B3F3A")); // ou 6B3F3A  ou 8C5752 et couleur pour tracer la tournée --> #D65C4F
                 gc.setLineWidth(2);
@@ -81,7 +81,7 @@ public class CarteControleur {
     @FXML
     private void clicZonePoints(MouseEvent event) {
         System.out.println("Le fichier des points va être choisi");
-        File fichierPoints = explorateur.showOpenDialog(null);
+        File fichierPoints = explorateur.showOpenDialog(this.interfaceUtilisateur.getFenetrePrincipale());
         traiterFichierPoints(fichierPoints);
     }
 

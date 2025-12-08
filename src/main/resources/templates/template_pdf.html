@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        body { font-family: Inter, Arial, sans-serif; font-size: 12px; }
+        .header { display: flex; align-items: center; margin-bottom: 20px; }
+        .logo { width: 240px; height: auto; }
+        .date { margin-left: auto; font-size: 12px; color: #591811; font-style: italic; }
+
+        .carte { height: 400px; width: auto; }
+
+        .step-card {
+            background-color: #ffffff;
+            border: 1px solid #D9D9D9;
+            margin-bottom: 4px;
+            page-break-inside: avoid;
+        }
+        .step-card .icon {
+            background-color: #FBE6DD;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 8px;
+        }
+        .step-card span {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img th:src="'data:image/png;base64, ' + ${logoBase64}" alt="Logo de Optimod'Lyon", class="logo"/>
+    <div class="date">Date: <span th:text="${dateDuJour}">01/01/2024</span></div>
+</div>
+
+<div class="top-section">
+    <img class="carte" th:src="'data:image/png;base64, ' + ${canvasBase64}" alt="Carte de l'itinéraire">
+</div>
+
+<div th:each="step : ${instructions}" class="step-card">
+    <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#E05A4D" viewBox="0 0 24 24">
+            <path th:d="${step.SVGPath}"/>
+        </svg>
+    </div>
+    <span th:text="${step.texte}">Tourner à droite sur rue X...</span>
+</div>
+
+</body>
+</html>

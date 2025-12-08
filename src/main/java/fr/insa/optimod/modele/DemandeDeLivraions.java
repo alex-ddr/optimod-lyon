@@ -27,6 +27,14 @@ public class DemandeDeLivraions {
         return null;
     }
 
+    public void ajouterLivraison(Livraison livraison) {
+        listeLivraisons.add(livraison);
+    }
+
+    public void supprimerLivraison(Livraison livraison) {
+        listeLivraisons.remove(livraison);
+    }
+
     public boolean estEntrepot(Long adresse) {
         return this.entrepot.getAdresss().equals(adresse);
     }

@@ -4,10 +4,11 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
@@ -20,11 +21,11 @@
    <children>
       <StackPane prefHeight="150.0" prefWidth="200.0">
          <children>
-            <Canvas fx:id="canvasCarte" height="1080.0" width="1045.0">
-               <cursor>
-                  <Cursor fx:constant="MOVE" />
-               </cursor>
-            </Canvas>
+             <Canvas fx:id="canvasCarte" height="1080.0" onMouseClicked="#clicCarte" width="1045.0">
+                 <cursor>
+                     <Cursor fx:constant="MOVE" />
+                 </cursor>
+             </Canvas>
             <StackPane maxHeight="74.0" maxWidth="74.0" minHeight="74.0" minWidth="74.0" onMouseClicked="#retourAccueil" prefHeight="74.0" prefWidth="74.0" StackPane.alignment="TOP_LEFT">
                <children>
                   <Circle fill="WHITE" radius="37.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0, 0, 4);" />
@@ -60,13 +61,24 @@
                   <Insets left="67.0" />
                </VBox.margin>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: F8F8F8; -fx-background-radius: 30; -fx-border-width: 1; -fx-border-color: D0D0D0; -fx-border-radius: 30;" VBox.vgrow="ALWAYS">
+            <VBox prefHeight="200.0" prefWidth="100.0" styleClass="scrollContainer" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets left="117.0" right="117.0" />
                </VBox.margin>
                <children>
-                  <TextArea fx:id="textePoints" prefHeight="200.0" prefWidth="200.0" />
-                  <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="boutonAjoutCourse" mnemonicParsing="false" onAction="#clicBoutonCourse" text="Ajouter une course" />
+                  <ScrollPane styleClass="scrollPane" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets left="30.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                     <content>
+                        <GridPane fx:id="itemsGrid" prefHeight="137.0" prefWidth="111.0" styleClass="transparent" stylesheets="@../styles/style.css">
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                     </content>
+                  </ScrollPane>
                    <AnchorPane minHeight="27.0" style="-fx-background-color: E15A4D; -fx-background-radius: 0 0 30 30;" />
                </children>
             </VBox>
