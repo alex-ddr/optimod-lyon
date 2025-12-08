@@ -150,23 +150,23 @@ public class PdfControleur {
 
         double dir1 = lat2 * lon1 - lat1 * lon2;
 
-        System.out.println("Lat 1:" + n1.getLatitude() + "Long 1:" + n1.getLongitude());
-        System.out.println("Lat 2:" + n2.getLatitude() + "Long 2:" + n2.getLongitude());
-        System.out.println("Lat 3:" + n3.getLatitude() + "Long 3:" + n3.getLongitude());
-
-        System.out.println("dir1: " + (dir1));
+//        System.out.println("Lat 1:" + n1.getLatitude() + "Long 1:" + n1.getLongitude());
+//        System.out.println("Lat 2:" + n2.getLatitude() + "Long 2:" + n2.getLongitude());
+//        System.out.println("Lat 3:" + n3.getLatitude() + "Long 3:" + n3.getLongitude());
+//
+//        System.out.println("dir1: " + (dir1));
         //double dir2 = lat1 * lon2 -  lat2 * lon1;
         //System.out.println("dir2: " + (dir2));
         double sens   = lon1 * lon2 + lat1 * lat2;
 
         if (dir1 > 0.0000002)
         {
-            System.out.println("gauche");
+            //System.out.println("gauche");
             return 0;
         }
         else if (dir1 < -0.0000002)
         {
-           System.out.println("droite");
+           //System.out.println("droite");
             return 1;
         }
 
@@ -174,10 +174,10 @@ public class PdfControleur {
 
         else if ( sens < 0 )
         {
-            System.out.println("Tout droit");
+            //System.out.println("Tout droit");
             return -2;
         }
-        System.out.println("Tout droit");
+        //System.out.println("Tout droit");
         return -1;
 
     }
