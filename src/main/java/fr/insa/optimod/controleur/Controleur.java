@@ -119,7 +119,7 @@ public class Controleur {
 
 
 
-    public void affichageTournee()
+    public void calculerTournee()
     {
         double total = 0;
         tspListe.get(0).setG(0.0);
@@ -580,5 +580,10 @@ public class Controleur {
 
     public void echangerPointsItineraire(int id, int id1) {
         Collections.swap(tspListe, id, id1);
+    }
+
+    public void deplacerPointItineraire(int sourceId, int targetIndex) {
+        PointLivraison itemToMove = tspListe.remove(sourceId);
+        tspListe.add(targetIndex, itemToMove);
     }
 }

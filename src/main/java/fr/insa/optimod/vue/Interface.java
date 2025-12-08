@@ -102,7 +102,6 @@ public class Interface extends Application {
         itineraireControleur.afficherCarte();
         itineraireControleur.afficherItineraire();
         itineraireControleur.afficherPoints();
-        itineraireControleur.afficherTextePoints();
 
 
         Scene scene = new Scene(points, 1920, 1080);

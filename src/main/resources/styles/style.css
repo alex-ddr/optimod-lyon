@@ -18,10 +18,24 @@
   -fx-background-color: #aaaaaa;
 }
 
+/* Modifie ce bloc pour réduire la taille des boutons à 0 */
 .scrollPane .scroll-bar .increment-button,
 .scrollPane .scroll-bar .decrement-button {
-  -fx-background-color: transparent;
-  -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+
+    /* Ces lignes forcent la taille à 0 pour les cacher totalement */
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+    -fx-opacity: 0;
+}
+
+/* Ajoute ceci pour supprimer la forme géométrique de la flèche à l'intérieur */
+.scrollPane .scroll-bar .increment-arrow,
+.scrollPane .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
 }
 
 .scrollPane .scroll-bar .track {

@@ -86,6 +86,7 @@ public class PointsControleur {
 
         return newItemPointList;
     }
+
     private void updateGrid() {
         itemsGrid.getChildren().clear();
 
