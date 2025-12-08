@@ -6,7 +6,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -15,6 +17,7 @@ import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PointsControleur {
 
@@ -37,8 +40,12 @@ public class PointsControleur {
     private List<ItemPoint> itemPointList;
 
     private int ajoutCourse = 0; // 0 = non, 1 = enlevement, 2 = livraison
+    private int modifCourse = 0; // 0 = non, 1 = enlevement, 2 = livraison
+    private Livraison courseAmodifier = null;
     private Noeud nouvelEnlevement = null;
     private Noeud nouvelleLivraison = null;
+
+    private ArrayList<double[]> listeCoordonnees = new ArrayList<double[]>();
 
     public void setInterface(Interface interfaceUtilisateur) {
         this.interfaceUtilisateur = interfaceUtilisateur;
@@ -139,6 +146,14 @@ public class PointsControleur {
         }
     }
 
+    public void supprimerLivraisonAdresse(Long adresse) {
+        controleurMetier.supprimerLivraison(adresse);
+        itemsGrid.getChildren().clear();
+        initData();
+        afficherCarte();
+        afficherPoints();
+    }
+
     @FXML
     private void retourAccueil() {
         try {
@@ -201,12 +216,14 @@ public class PointsControleur {
             gc.setFill(couleur);
             int rayon = 10;
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+            listeCoordonnees.add(new double[]{x - rayon, y - rayon, x + rayon, y + rayon});
 
             noeud = carte.obtenirNoeud(livraison.getAdresseLivraison());
             x = longToX(noeud.getLongitude());
             y = latToY(noeud.getLatitude());
 
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+            listeCoordonnees.add(new double[]{x - rayon, y - rayon, x + rayon, y + rayon});
         }
 
         Noeud noeud = carte.obtenirNoeud(demandeDeLivraions.getEntrepot().getAdresss());
@@ -246,7 +263,13 @@ public class PointsControleur {
     }
 
     public void clicBoutonCourse() {
-        if (ajoutCourse == 0) {
+        if (modifCourse != 0) {
+            modifCourse = 0;
+            courseAmodifier = null;
+            afficherCarte();
+            afficherPoints();
+            boutonAjoutCourse.setText("Ajouter une course");
+        } else if (ajoutCourse == 0) {
             boutonAjoutCourse.setText("Annuler l'ajout");
             ajoutCourse = 1;
         } else {
@@ -262,38 +285,101 @@ public class PointsControleur {
 
     @FXML
     private void clicCarte(MouseEvent event) {
-        if (ajoutCourse == 0) {
-            return;
-        }
-
         double x = event.getX();
         double y = event.getY();
 
-        for (Noeud noeud : carte.getListeNoeuds()) {
-            double nodeX = longToX(noeud.getLongitude());
-            double nodeY = latToY(noeud.getLatitude());
-            double distance = Math.sqrt(Math.pow(x - nodeX, 2) + Math.pow(y - nodeY, 2));
+        if (ajoutCourse != 0) {
+            for (Noeud noeud : carte.getListeNoeuds()) {
+                double nodeX = longToX(noeud.getLongitude());
+                double nodeY = latToY(noeud.getLatitude());
+                double distance = Math.sqrt(Math.pow(x - nodeX, 2) + Math.pow(y - nodeY, 2));
+                if (distance < 10) { // seuil de proximité
+                    DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
+                    gc.setFill(Couleur.getCouleur(demandeDeLivraions.getCompteurId()));
+                    int rayon = 7;
+                    double xNoeud = longToX(noeud.getLongitude());
+                    double yNoeud = latToY(noeud.getLatitude());
+                    gc.fillOval(xNoeud - rayon, yNoeud - rayon, rayon * 2, rayon * 2);
+                    listeCoordonnees.add(new double[]{xNoeud - rayon, yNoeud - rayon, xNoeud + rayon, yNoeud + rayon});
 
-            if (distance < 10) { // seuil de proximité
-                DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
-                gc.setFill(Couleur.getCouleur(demandeDeLivraions.getCompteurId()));
-                int rayon = 7;
-                gc.fillOval(longToX(noeud.getLongitude()) - rayon, latToY(noeud.getLatitude()) - rayon, rayon * 2, rayon * 2);
+                    if (ajoutCourse == 1) {
+                        nouvelEnlevement = noeud;
+                        ajoutCourse = 2;
+                    } else if (ajoutCourse == 2) {
+                        nouvelleLivraison = noeud;
+                        ajoutCourse = 0;
+                        controleurMetier.ajouterLivraison(nouvelEnlevement.getId(), nouvelleLivraison.getId());
+                        itemsGrid.getChildren().clear();
+                        initData();
+                        afficherCarte();
+                        afficherPoints();
+                        boutonAjoutCourse.setText("Ajouter une course");
+                    }
 
-                if (ajoutCourse == 1) {
-                    nouvelEnlevement = noeud;
-                    ajoutCourse = 2;
-                } else if (ajoutCourse == 2) {
-                    nouvelleLivraison = noeud;
-                    ajoutCourse = 0;
-                    controleurMetier.ajouterLivraison(nouvelEnlevement.getId(), nouvelleLivraison.getId());
+                    break;
+                }
+            }
+        } else if (modifCourse != 0) {
+            for (Noeud noeud : carte.getListeNoeuds()) {
+                double nodeX = longToX(noeud.getLongitude());
+                double nodeY = latToY(noeud.getLatitude());
+                double distance = Math.sqrt(Math.pow(x - nodeX, 2) + Math.pow(y - nodeY, 2));
+                if (distance < 10) { // seuil de proximité
+                    int indexLivraison = controleurMetier.getDemandeDeLivraions().getListeLivraisons().indexOf(courseAmodifier);
+                    gc.setFill(Couleur.getCouleur(indexLivraison + 1));
+                    int rayon = 10;
+                    double xNoeud = longToX(noeud.getLongitude());
+                    double yNoeud = latToY(noeud.getLatitude());
+                    gc.fillOval(xNoeud - rayon, yNoeud - rayon, rayon * 2, rayon * 2);
+                    // mise à jour des coordonnées pour le clic (remplacer l'ancien double[] par le nouveau), donc pas un .add()
+
+                    if (modifCourse == 1) {
+                        controleurMetier.modifierLivraison(indexLivraison, noeud.getId(), courseAmodifier.getAdresseLivraison());
+                    } else if (modifCourse == 2) {
+                        controleurMetier.modifierLivraison(indexLivraison, courseAmodifier.getAdresseEnlevement(), noeud.getId());
+                    }
+                    modifCourse = 0;
+                    itemsGrid.getChildren().clear();
                     initData();
                     afficherCarte();
                     afficherPoints();
                     boutonAjoutCourse.setText("Ajouter une course");
-                }
 
-                break;
+                    break;
+                }
+            }
+        } else {
+            for (double[] coord : listeCoordonnees) {
+                if (x >= coord[0] && x <= coord[2] && y >= coord[1] && y <= coord[3]) {
+                    int index = listeCoordonnees.indexOf(coord);
+                    int livraisonIndex = index / 2;
+                    int isPickup = index % 2;
+
+                    ButtonType buttonTypeModifier = new ButtonType("Modifier");
+                    ButtonType buttonTypeSupprimer = new ButtonType("Supprimer");
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Détails de la livraison " + (livraisonIndex + 1));
+                    alert.initOwner(this.interfaceUtilisateur.getFenetrePrincipale());
+                    alert.getButtonTypes().setAll(buttonTypeModifier, buttonTypeSupprimer, ButtonType.CLOSE);
+                    Livraison livraison = controleurMetier.getDemandeDeLivraions().getListeLivraisons().get(livraisonIndex);
+                    if (isPickup == 0) {
+                        alert.setHeaderText("Point de retrait");
+                        alert.setContentText("Adresse de retrait: " + livraison.getAdresseEnlevement().toString());
+                    } else {
+                        alert.setHeaderText("Point de livraison");
+                        alert.setContentText("Adresse de livraison: " + livraison.getAdresseLivraison().toString());
+                    }
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.isPresent() && result.get() == buttonTypeSupprimer) {
+                        supprimerLivraison(livraison.getAdresseEnlevement());
+                    } else if (result.isPresent() && result.get() == buttonTypeModifier) {
+                        modifCourse = isPickup == 0 ? 1 : 2;
+                        courseAmodifier = livraison;
+                        boutonAjoutCourse.setText("Annuler la modification");
+                    }
+                    break;
+                }
             }
         }
     }

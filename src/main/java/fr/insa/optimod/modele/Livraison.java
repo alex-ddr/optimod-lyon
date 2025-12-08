@@ -31,6 +31,13 @@ public class Livraison {
         return dureeLivraison;
     }
 
+    public void setAdresseEnlevement(Long adresseEnlevement) {
+        this.adresseEnlevement = adresseEnlevement;
+    }
+    public void setAdresseLivraison(Long adresseLivraison) {
+        this.adresseLivraison = adresseLivraison;
+    }
+
     public int getId() {
         return id;
     }

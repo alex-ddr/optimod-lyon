@@ -575,5 +575,13 @@ public class Controleur {
 
     public void echangerPointsItineraire(int id, int id1) {
         Collections.swap(tspListe, id, id1);
+        affichageTournee();
+    }
+
+    public void modifierLivraison(int indexLivraison, Long adresseEnlevement, Long adresseLivraison) {
+        Livraison livraison = demandeDeLivraions.getListeLivraisons().get(indexLivraison);
+        livraison.setAdresseEnlevement(adresseEnlevement);
+        livraison.setAdresseLivraison(adresseLivraison);
+        demandeDeLivraions.getListeLivraisons().set(indexLivraison, livraison);
     }
 }
