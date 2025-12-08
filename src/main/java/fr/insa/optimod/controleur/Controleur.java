@@ -41,6 +41,22 @@ public class Controleur {
         return demandeDeLivraions;
     }
 
+    public void reinitialiserCarte() {
+        this.carte = null;
+    }
+
+    public void reinitialiserDemandeDeLivraison() {
+        this.demandeDeLivraions = null;
+    }
+
+    public void reinitialiserTournee() {
+        this.troncons = null;
+        this.chemin = null;
+        this.tspListe = null;
+        this.tournee = null;
+        this.mapIdAIndex = null;
+        this.cout = null;
+    }
 
     protected Double heuristique(Noeud na, Noeud nb, Carte carte) {
 

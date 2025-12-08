@@ -157,6 +157,8 @@ public class PointsControleur {
     @FXML
     private void retourAccueil() {
         try {
+            controleurMetier.reinitialiserDemandeDeLivraison();
+            controleurMetier.reinitialiserCarte();
             interfaceUtilisateur.afficherAccueil();
         } catch (Exception e) {
             e.printStackTrace();

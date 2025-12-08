@@ -110,6 +110,9 @@ public class ItineraireControleur {
     @FXML
     private void retourAccueil() {
         try {
+            controleurMetier.reinitialiserTournee();
+            controleurMetier.reinitialiserDemandeDeLivraison();
+            controleurMetier.reinitialiserCarte();
             interfaceUtilisateur.afficherAccueil();
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,6 +122,7 @@ public class ItineraireControleur {
     @FXML
     private void retourPoints() {
         try {
+            controleurMetier.reinitialiserTournee();
             interfaceUtilisateur.afficherPoints();
         } catch (Exception e) {
             e.printStackTrace();

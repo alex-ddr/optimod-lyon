@@ -60,6 +60,7 @@ public class CarteControleur {
     @FXML
     private void retourAccueil() {
         try {
+            controleurMetier.reinitialiserCarte();
             interfaceUtilisateur.afficherAccueil();
         } catch (Exception e) {
             e.printStackTrace();
