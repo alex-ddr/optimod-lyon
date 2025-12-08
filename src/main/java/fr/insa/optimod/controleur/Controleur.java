@@ -16,7 +16,7 @@ public class Controleur {
     protected ArrayList<Troncon> troncons = null;
     protected ArrayList<PointLivraison> chemin = null;
     protected ArrayList<PointLivraison> tspListe = null;
-
+    protected HashMap<Long, HashMap<Long,PointLivraison> > tournee = null;
     protected DemandeDeLivraions demandeDeLivraions = null;
 
     public ArrayList<Troncon> getTronconsItineraire() {
@@ -110,6 +110,59 @@ public class Controleur {
     }
 
 
+
+
+    public void affichageTournee()
+    {
+        ArrayList<Troncon> troncons = new ArrayList<>();
+        ArrayList<PointLivraison> chemin = new ArrayList<>();
+
+        PointLivraison courant = tspListe.get(0);
+        PointLivraison prochain = courant.getParent();
+
+        PointLivraison astar;
+
+
+        while (courant != null && prochain != null) {
+            astar = tournee.get(prochain.getNoeud().getId()).get(courant.getNoeud().getId());
+            ArrayList<Troncon> listeTampon = new ArrayList<>();
+            while (astar != null)
+            {
+
+                chemin.add(astar);
+                if (astar.getAntecedent() != null)
+                {
+                    listeTampon.add(astar.getAntecedent());
+                }
+                else {
+                    chemin.remove(astar);
+                }
+
+                astar = astar.getParent();
+
+
+            }
+            //Collections.reverse(listeTampon);
+            troncons.addAll(listeTampon);
+
+
+            //System.out.println(courant.getNoeud().getId());
+            courant = courant.getParent();
+            prochain = courant.getParent();
+
+
+        }
+
+        chemin.add(courant);
+
+        //System.out.println((chemin.size()));
+        //System.out.println((troncons.size()));
+
+        this.troncons = troncons;
+        this.chemin = chemin;
+
+        return;
+    }
 
 
 
@@ -228,7 +281,6 @@ public class Controleur {
 
             }
 
-            Integer ent = mapIdAIndex.get(entrepot.getId());
 
             astarLEnlevement = astar(carte, L, carte.obtenirNoeud(entrepot.getId()));
             astarEEnlevement = astar(carte, E, carte.obtenirNoeud(entrepot.getId()));
@@ -337,7 +389,7 @@ public class Controleur {
         }
         System.out.println((l.getParent()));
         */
-
+        this.tournee = tournee;
         this.troncons = troncons;
         this.chemin = chemin;
         this.tspListe = tspListe;
