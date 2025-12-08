@@ -18,6 +18,13 @@ public class Controleur {
     protected ArrayList<PointLivraison> tspListe = null;
     protected HashMap<Long, HashMap<Long,PointLivraison> > tournee = null;
     protected DemandeDeLivraions demandeDeLivraions = null;
+    protected  HashMap<Long,Integer> mapIdAIndex;
+    protected  double[][] cout;
+
+
+    public ArrayList<PointLivraison> getTspListe() {
+        return tspListe;
+    }
 
     public ArrayList<Troncon> getTronconsItineraire() {
         return troncons;
@@ -114,6 +121,20 @@ public class Controleur {
 
     public void affichageTournee()
     {
+        double total = 0;
+        tspListe.get(0).setG(0.0);
+
+        for (int k = 0; k < tspListe.size() - 1; k++) {
+            Noeud a = tspListe.get(k).getNoeud();
+            Noeud b = tspListe.get(k+1).getNoeud();
+            Integer Ia = mapIdAIndex.get(a.getId());
+            Integer Ib = mapIdAIndex.get(b.getId());
+            double d = cout[Ia][Ib]; // ou via carte.astar(a,b)
+            tspListe.get(k+1).setG(total + d);
+            total += d;
+        }
+
+
         ArrayList<Troncon> troncons = new ArrayList<>();
         ArrayList<PointLivraison> chemin = new ArrayList<>();
 
@@ -189,6 +210,8 @@ public class Controleur {
             mapIdAIndex.put(listeIds.get(k), k);
             mapIndexAId.put(k, listeIds.get(k));
         }
+        this.mapIdAIndex = mapIdAIndex;
+
         long s = (1L << (listeIds.size() - 1)) - 1L;
         double[][] cout = new double[listeIds.size()][listeIds.size()];
         HashMap<Long, HashMap<Long,PointLivraison> > tournee = new HashMap<>();
@@ -390,6 +413,20 @@ public class Controleur {
         }
         System.out.println((l.getParent()));
         */
+
+        double total = 0;
+        tspListe.get(0).setG(0.0);
+        for (int k = 0; k < tspListe.size() - 1; k++) {
+            Noeud a = tspListe.get(k).getNoeud();
+            Noeud b = tspListe.get(k+1).getNoeud();
+            Integer Ia = mapIdAIndex.get(a.getId());
+            Integer Ib = mapIdAIndex.get(b.getId());
+            double d = cout[Ia][Ib]; // ou via carte.astar(a,b)
+            tspListe.get(k+1).setG(total + d);
+            total += d;
+        }
+
+        this.cout = cout;
         this.tournee = tournee;
         this.troncons = troncons;
         this.chemin = chemin;

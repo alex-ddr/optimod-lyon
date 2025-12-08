@@ -299,11 +299,11 @@ public class PdfControleur {
         double dir1 = lat2 * lon1 - lat1 * lon2;
 
 
-        if (dir1 > 0.000001)
+        if (dir1 > 0.00001)
         {
             return 0;
         }
-        else if (dir1 < -0.000001)
+        else if (dir1 < -0.00001)
         {
             return 1;
         }
@@ -316,18 +316,18 @@ public class PdfControleur {
         double lon1 = n2.getLongitude()-n1.getLongitude();
         String retour = "";
         boolean b = false;
-        if (lat1 > 0.000001)
+        if (lat1 > 0.00001)
         {
             retour = retour + "Nord";
             b = true;
         }
-        else if (lat1 < -0.000001)
+        else if (lat1 < -0.00001)
         {
             retour = retour + "Sud";
             b = true;
         }
 
-        if (lon1 > 0.000001)
+        if (lon1 > 0.00001)
         {
             if(b)
             {
@@ -340,7 +340,7 @@ public class PdfControleur {
             }
 
         }
-        else if (lon1 < -0.000001)
+        else if (lon1 < -0.00001)
         {
             if(b)
             {
@@ -384,7 +384,7 @@ public class PdfControleur {
 
     }
 
-    //IA
+
     private static String getDownloadsFolder() {
         String home = System.getProperty("user.home");
         String os = System.getProperty("os.name").toLowerCase();

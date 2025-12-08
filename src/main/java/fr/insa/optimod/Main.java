@@ -37,8 +37,14 @@ public class Main {
 
         controleur.preparerPlanTournee(controleur.getCarte(), controleur.getDemandeDeLivraions());
 
+        ArrayList<PointLivraison> Tsp = controleur.getTspListe();
 
+        for (PointLivraison p : Tsp) {
+            System.out.println(p.getNoeud().getId());
+            System.out.println(p.getG());
+        }
 
+        
 
     }
 }
