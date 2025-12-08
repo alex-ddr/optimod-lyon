@@ -12,12 +12,12 @@ public class Main {
     public static void main(String[] args) {
 
 
-        //Application.launch(Interface.class, args);
+        Application.launch(Interface.class, args);
 
 
 
 
-
+        /*
 
         Controleur controleur = new Controleur();
         File f = new File("src\\main\\resources\\xml\\grandPlan.xml");
@@ -44,7 +44,7 @@ public class Main {
             System.out.println(p.getG());
         }
 
-        
+        */
 
     }
 }

@@ -233,8 +233,11 @@ public class PdfControleur {
                     SVGPath = "M0 11.5C0 7.36 3.36 4 7.5 4H10V0L17 6L10 12V8H7.5C5.57 8 4 9.57 4 11.5V19H0V11.5Z"; // SVG pour tourner à droite
                 } else if (direction == 0) {
                     SVGPath = "M17 19H13V11.5C13 9.57 11.43 8 9.5 8H7V12L0 6L7 0V4H9.5C13.64 4 17 7.36 17 11.5V19Z"; // SVG pour tourner à gauche
-                } else {
+                } else if (direction == -1) {
                     SVGPath = "M4 9.5L4 7L-3.0598e-07 7L6 -2.62268e-07L12 7L8 7L8 9.5L8 19L4 19L4 9.5Z"; // SVG pour aller tout droit
+                }
+                else if (direction == -2) {
+                    SVGPath = ""; // SVG demi tour
                 }
                 listeInstructions.add(new Instruction(text, SVGPath));
             }
@@ -283,7 +286,8 @@ public class PdfControleur {
         int direction = donnerDirection(n1, n2, n3);
         if (direction== 1){text += "Tourner à droite";}
         else if (direction == 0) {text += "Tourner à gauche";}
-        else {text += "Aller tout droit";}
+        else if (direction == -1){text += "Aller tout droit";}
+        else if (direction == -2){text += "Demi-tour";}
         text += " vers la rue " + rue;
         return text;
     }
@@ -298,15 +302,33 @@ public class PdfControleur {
 
         double dir1 = lat2 * lon1 - lat1 * lon2;
 
+//        System.out.println("Lat 1:" + n1.getLatitude() + "Long 1:" + n1.getLongitude());
+//      System.out.println("Lat 2:" + n2.getLatitude() + "Long 2:" + n2.getLongitude());
+//        System.out.println("Lat 3:" + n3.getLatitude() + "Long 3:" + n3.getLongitude());
 
-        if (dir1 > 0.00001)
+        //System.out.println("dir1: " + (dir1));
+        //double dir2 = lat1 * lon2 -  lat2 * lon1;
+        //System.out.println("dir2: " + (dir2));
+        double sens   = lon1 * lon2 + lat1 * lat2;
+
+        if (dir1 > 0.0000005)
         {
+            //System.out.println("gauche");
             return 0;
         }
-        else if (dir1 < -0.00001)
+        else if (dir1 < -0.0000005)
         {
+           // System.out.println("droite");
             return 1;
         }
+
+
+
+        else if ( sens < 0 )
+        {
+            return -2;
+        }
+        //System.out.println("Tout droit");
         return -1;
 
     }
@@ -316,18 +338,18 @@ public class PdfControleur {
         double lon1 = n2.getLongitude()-n1.getLongitude();
         String retour = "";
         boolean b = false;
-        if (lat1 > 0.00001)
+        if (lat1 > 0.0001)
         {
             retour = retour + "Nord";
             b = true;
         }
-        else if (lat1 < -0.00001)
+        else if (lat1 < -0.0001)
         {
             retour = retour + "Sud";
             b = true;
         }
 
-        if (lon1 > 0.00001)
+        if (lon1 > 0.0001)
         {
             if(b)
             {
@@ -340,7 +362,7 @@ public class PdfControleur {
             }
 
         }
-        else if (lon1 < -0.00001)
+        else if (lon1 < -0.0001)
         {
             if(b)
             {

@@ -139,12 +139,13 @@ public class Controleur {
         ArrayList<PointLivraison> chemin = new ArrayList<>();
 
         PointLivraison courant = tspListe.get(0);
-        PointLivraison prochain = courant.getParent();
+        PointLivraison prochain = tspListe.get(1);
 
         PointLivraison astar;
 
-
-        while (courant != null && prochain != null) {
+        for( int i = 0; i < tspListe.size()-1; i++ ) {
+            courant = tspListe.get(i);
+            prochain = tspListe.get(i+1);
             astar = tournee.get(prochain.getNoeud().getId()).get(courant.getNoeud().getId());
             ArrayList<Troncon> listeTampon = new ArrayList<>();
             while (astar != null)
@@ -168,8 +169,7 @@ public class Controleur {
 
 
             //System.out.println(courant.getNoeud().getId());
-            courant = courant.getParent();
-            prochain = courant.getParent();
+
 
 
         }
