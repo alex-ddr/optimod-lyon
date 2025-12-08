@@ -140,8 +140,8 @@ public class PdfControleur {
         return text;
     }
 
-    // Indique si le passage du segment [n1, n2] au [n2, n3] nécéssite de tourner à droite (1) ou à gauche (0)
-    private int donnerDirection(Noeud n1, Noeud n2, Noeud n3){
+    // Indique si le passage du segment [n1, n2] au [n2, n3] nécéssite de tourner à droite (1), à gauche (0), tout droit (-1) ou demi tour (-2)
+    public int donnerDirection(Noeud n1, Noeud n2, Noeud n3){
         double lat1 = n2.getLatitude()-n1.getLatitude();
         double lat2 = n3.getLatitude()-n2.getLatitude();
 
@@ -150,13 +150,6 @@ public class PdfControleur {
 
         double dir1 = lat2 * lon1 - lat1 * lon2;
 
-//        System.out.println("Lat 1:" + n1.getLatitude() + "Long 1:" + n1.getLongitude());
-//        System.out.println("Lat 2:" + n2.getLatitude() + "Long 2:" + n2.getLongitude());
-//        System.out.println("Lat 3:" + n3.getLatitude() + "Long 3:" + n3.getLongitude());
-//
-//        System.out.println("dir1: " + (dir1));
-        //double dir2 = lat1 * lon2 -  lat2 * lon1;
-        //System.out.println("dir2: " + (dir2));
         double sens   = lon1 * lon2 + lat1 * lat2;
 
         if (dir1 > 0.0000002)
@@ -182,7 +175,7 @@ public class PdfControleur {
 
     }
 
-    private String donnerDirectionDepart(Noeud n1, Noeud n2){
+    public String donnerDirectionDepart(Noeud n1, Noeud n2){
         double lat1 = n2.getLatitude()-n1.getLatitude();
         double lon1 = n2.getLongitude()-n1.getLongitude();
         String retour = "";
@@ -253,18 +246,6 @@ public class PdfControleur {
 
         return retour;
 
-    }
-
-
-    private static String getDownloadsFolder() {
-        String home = System.getProperty("user.home");
-        String os = System.getProperty("os.name").toLowerCase();
-
-        if (os.contains("win")) {
-            return home + "\\Downloads";
-        } else {
-            return home + "/Downloads";  // macOS + Linux
-        }
     }
 
 }
