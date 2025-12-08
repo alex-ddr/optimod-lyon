@@ -61,12 +61,12 @@
                   <Insets left="67.0" />
                </VBox.margin>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" styleClass="scrollContainer" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
+            <VBox maxHeight="781.0" prefHeight="200.0" prefWidth="100.0" styleClass="scrollContainer" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets left="117.0" right="117.0" />
                </VBox.margin>
                <children>
-                  <ScrollPane styleClass="scrollPane" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
+                  <ScrollPane maxHeight="742.0" styleClass="scrollPane" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets left="30.0" right="20.0" top="10.0" />
                      </VBox.margin>

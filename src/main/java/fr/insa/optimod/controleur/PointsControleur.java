@@ -36,9 +36,17 @@ public class PointsControleur {
 
     private List<ItemPoint> itemPointList;
 
-    private int ajoutCourse = 0; // 0 = non, 1 = enlevement, 2 = livraison
-    private Noeud nouvelEnlevement = null;
+    private ItemCourseAAjouter itemCourseAAjouter = null;
+    private ItemCourseAAjouterControleur itemCourseAAjouterControleur = null;
+
+    private int affichageBoutonAjouterCourse = 0; // 0 = bouton ajouter, 1 = course à ajouter
+    private int ajoutPickupOuLivraison = 0; // 0 = non, 1 = pickup, 2 = livraison
+    private Noeud nouveauPickup = null;
     private Noeud nouvelleLivraison = null;
+
+    private int modififactionAdresse = 0; // 0 pas en train de modifier, 1 = en train de modifier
+    private Noeud nouvelleAdresse = null;
+    private ItemPoint itemPointAModifier = null;
 
     public void setInterface(Interface interfaceUtilisateur) {
         this.interfaceUtilisateur = interfaceUtilisateur;
@@ -67,11 +75,12 @@ public class PointsControleur {
         DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
 
         for (Livraison l : demandeDeLivraions.getListeLivraisons()) {
-            ItemPoint pickup = new ItemPoint(l.getId(), true, "Pickup #" + l.getId(), l.getAdresseEnlevement().toString());
+            String titrePickup = l.getTitre() != null ? l.getTitre() : "Pickup #" + l.getId();
+            ItemPoint pickup = new ItemPoint(l.getId(), true, titrePickup, l.getAdresseEnlevement().toString());
             newItemPointList.add(pickup);
 
-
-            ItemPoint livraison = new ItemPoint(l.getId(), false, "Livraison #" + l.getId(), l.getAdresseLivraison().toString());
+            String titreLivraison = l.getTitre() != null ? l.getTitre() : "Livraison #" + l.getId();
+            ItemPoint livraison = new ItemPoint(l.getId(), false, titreLivraison, l.getAdresseLivraison().toString());
             newItemPointList.add(livraison);
         }
 
@@ -85,12 +94,22 @@ public class PointsControleur {
 
         try {
 
-            loadItemAjouterCourse(column, row);
+            if (affichageBoutonAjouterCourse == 0) {
+                loadItemAjouterCourse(column, row);
+                column++;
+                if (column == 1) {
+                    column = 0;
+                    ++row;
+                }
+            }
+            else {
+                loadItemCourseAAjouter(column, row);
+                column++;
+                if (column == 1) {
+                    column = 0;
+                    ++row;
+                }
 
-            column++;
-            if (column == 1) {
-                column = 0;
-                ++row;
             }
 
             for (ItemPoint itemPoint : itemPointList) {
@@ -121,8 +140,99 @@ public class PointsControleur {
 
         HBox boutonAjoutHBox = fxmlLoaderAjout.load();
 
+        ItemAjouterCourseControleur controller = fxmlLoaderAjout.getController();
+
+        if (controller != null) {
+            controller.setPointsControleur(this);
+        }
+
         itemsGrid.add(boutonAjoutHBox, column, row);
         GridPane.setMargin(boutonAjoutHBox, new javafx.geometry.Insets(8));
+    }
+
+    public void creerItemCourseAAjouter() {
+        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
+        this.itemCourseAAjouter = new ItemCourseAAjouter(demandeDeLivraions.getCompteurId());
+    }
+
+    public void loadItemCourseAAjouter(int column, int row) throws IOException {
+        FXMLLoader fxmlLoaderAjout = new FXMLLoader();
+        fxmlLoaderAjout.setLocation(getClass().getResource("/layouts/itemCourseAAjouter.fxml"));
+        HBox itemCourseAAjouterHBox = fxmlLoaderAjout.load();
+
+        this.itemCourseAAjouterControleur = fxmlLoaderAjout.getController();
+
+
+        if (this.itemCourseAAjouterControleur != null) {
+            this.itemCourseAAjouterControleur.setPointsControleur(this);
+            DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();
+            this.itemCourseAAjouterControleur.initialize(demande.getCompteurId());
+
+            if(nouveauPickup != null) this.itemCourseAAjouterControleur.setAdressePickup(nouveauPickup.getId());
+            if(nouvelleLivraison != null) this.itemCourseAAjouterControleur.setAdresseLivraison(nouvelleLivraison.getId());
+        }
+
+        itemsGrid.add(itemCourseAAjouterHBox, column, row);
+        GridPane.setMargin(itemCourseAAjouterHBox, new javafx.geometry.Insets(8));
+    }
+
+    public void setModeSelectionPickup() {
+        if (ajoutPickupOuLivraison == 0 && modififactionAdresse == 0) {
+            ajoutPickupOuLivraison = 1;
+        }
+    }
+
+    public void setModeSelectionLivraison() {
+        if (ajoutPickupOuLivraison == 0 && modififactionAdresse == 0) {
+            ajoutPickupOuLivraison = 2;
+        }
+    }
+
+    private void setModeModificationAdresse() {
+        if (ajoutPickupOuLivraison == 0) {
+            modififactionAdresse = 1;
+        }
+    }
+
+    public void modifierAdressePoint(ItemPoint item) {
+        setModeModificationAdresse();
+        if (modififactionAdresse == 1) {
+            this.itemPointAModifier = item;
+        }
+    }
+
+    public void annulerAjout() {
+        itemCourseAAjouter = null;
+        affichageBoutonAjouterCourse = 0;
+        ajoutPickupOuLivraison = 0;
+        nouveauPickup = null;
+        nouvelleLivraison = null;
+        updateGrid();
+        afficherCarte();
+        afficherPoints();
+    }
+
+    public void validerAjoutFinal() {
+        if (nouveauPickup != null && nouvelleLivraison != null) {
+            String titreSaisi = itemCourseAAjouterControleur.getTitre();
+
+            if (titreSaisi != null && !titreSaisi.trim().isEmpty()) {
+                controleurMetier.ajouterLivraison(titreSaisi, nouveauPickup.getId(), nouvelleLivraison.getId());
+            } else {
+                controleurMetier.ajouterLivraison(nouveauPickup.getId(), nouvelleLivraison.getId());
+            }
+
+            itemCourseAAjouter = null;
+            nouveauPickup = null;
+            nouvelleLivraison = null;
+            itemCourseAAjouterControleur = null;
+            affichageBoutonAjouterCourse = 0;
+            ajoutPickupOuLivraison = 0;
+
+            initData();
+            afficherCarte();
+            afficherPoints();
+        }
     }
 
     public void supprimerLivraison(ItemPoint item) {
@@ -246,23 +356,16 @@ public class PointsControleur {
     }
 
     public void clicBoutonCourse() {
-        if (ajoutCourse == 0) {
-            boutonAjoutCourse.setText("Annuler l'ajout");
-            ajoutCourse = 1;
-        } else {
-            nouvelEnlevement = null;
-            nouvelleLivraison = null;
-            afficherCarte();
-            afficherPoints();
-            ajoutCourse = 0;
-            boutonAjoutCourse.setText("Ajouter une course");
-        }
+        affichageBoutonAjouterCourse = 1;
+        updateGrid();
+
+
     }
 
 
     @FXML
     private void clicCarte(MouseEvent event) {
-        if (ajoutCourse == 0) {
+        if (ajoutPickupOuLivraison == 0 && modififactionAdresse == 0) {
             return;
         }
 
@@ -280,17 +383,47 @@ public class PointsControleur {
                 int rayon = 7;
                 gc.fillOval(longToX(noeud.getLongitude()) - rayon, latToY(noeud.getLatitude()) - rayon, rayon * 2, rayon * 2);
 
-                if (ajoutCourse == 1) {
-                    nouvelEnlevement = noeud;
-                    ajoutCourse = 2;
-                } else if (ajoutCourse == 2) {
-                    nouvelleLivraison = noeud;
-                    ajoutCourse = 0;
-                    controleurMetier.ajouterLivraison(nouvelEnlevement.getId(), nouvelleLivraison.getId());
+                if (modififactionAdresse == 1 && itemPointAModifier != null) {
+                    DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();
+                    Livraison livraisonAModifier = demande.getLivraisonParId(itemPointAModifier.getId());
+
+                    if (livraisonAModifier != null) {
+                        if (itemPointAModifier.getEstPickup()) {
+                            livraisonAModifier.setAdresseEnlevement(noeud.getId());
+                        } else {
+                            livraisonAModifier.setAdresseLivraison(noeud.getId());
+                        }
+                    }
+
+                    modififactionAdresse = 0;
+                    itemPointAModifier = null;
+
                     initData();
                     afficherCarte();
                     afficherPoints();
-                    boutonAjoutCourse.setText("Ajouter une course");
+
+                    return;
+                }
+                else if (ajoutPickupOuLivraison == 1) {
+                    // Pour le point
+                    nouveauPickup = noeud;
+                    // Pour l'item affiché
+                    if (itemCourseAAjouterControleur != null) {
+                        itemCourseAAjouterControleur.setAdressePickup(nouveauPickup.getId());
+                    }
+                    // Pour le futur item à créer
+                    itemCourseAAjouter.setAdressePickup(nouveauPickup.getId());
+
+                    ajoutPickupOuLivraison = 0;
+                    return;
+                } else if (ajoutPickupOuLivraison == 2) {
+                    nouvelleLivraison = noeud;
+                    if (itemCourseAAjouterControleur != null) {
+                        itemCourseAAjouterControleur.setAdresseLivraison(nouvelleLivraison.getId());
+                    }
+                    itemCourseAAjouter.setAdresseLivraison(nouvelleLivraison.getId());
+                    ajoutPickupOuLivraison = 0;
+                    return;
                 }
 
                 break;

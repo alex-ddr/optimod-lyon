@@ -561,6 +561,11 @@ public class Controleur {
         }
     }
 
+    public void ajouterLivraison(String titre, Long adresseEnlevement, Long adresseLivraison) {
+        Livraison livraison = new Livraison(titre, adresseEnlevement, adresseLivraison, 0L, 0L);
+        demandeDeLivraions.ajouterLivraison(livraison);
+    }
+
     public void ajouterLivraison(Long adresseEnlevement, Long adresseLivraison) {
         Livraison livraison = new Livraison(adresseEnlevement, adresseLivraison, 0L, 0L);
         demandeDeLivraions.ajouterLivraison(livraison);
