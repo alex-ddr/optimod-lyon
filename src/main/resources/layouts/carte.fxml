@@ -44,10 +44,16 @@
                   <SVGPath content="M42 30V38C42 39.0609 41.5786 40.0783 40.8284 40.8284C40.0783 41.5786 39.0609 42 38 42H10C8.93913 42 7.92172 41.5786 7.17157 40.8284C6.42143 40.0783 6 39.0609 6 38V30M14 20L24 30M24 30L34 20M24 30V6" fill="#de595000" stroke="#e05b4f" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" />
                </children>
             </HBox>
-            <Rectangle arcHeight="54.0" arcWidth="54.0" fill="#f6f6f6" height="240.0" onDragDropped="#ficherLachePoints" onDragOver="#fichierAuDessusPoints" onMouseClicked="#clicZonePoints" stroke="BLACK" strokeType="OUTSIDE" style="-fx-stroke-dash-array: 10;" width="500.0">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Rectangle>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <Rectangle arcHeight="54.0" arcWidth="54.0" fill="#f6f6f6" height="240.0" onDragDropped="#ficherLachePoints" onDragOver="#fichierAuDessusPoints" onMouseClicked="#clicZonePoints" stroke="BLACK" strokeType="OUTSIDE" style="-fx-stroke-dash-array: 10;" width="500.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Rectangle>
+                  <SVGPath fx:id="svgWrong" content="M128.438 21.9375C99.1875 -7.3125 51.1875 -7.3125 21.9375 21.9375C-7.3125 51.1875 -7.3125 99.1875 21.9375 128.438C51.1875 157.688 98.4375 157.688 127.688 128.438C156.938 99.1875 157.688 51.1875 128.438 21.9375ZM96.1875 106.688L75.1875 85.6875L54.1875 106.688L43.6875 96.1875L64.6875 75.1875L43.6875 54.1875L54.1875 43.6875L75.1875 64.6875L96.1875 43.6875L106.688 54.1875L85.6875 75.1875L106.688 96.1875L96.1875 106.688Z" fill="#e15a4d" fillRule="EVEN_ODD" />
+               </children>
+            </StackPane>
          </children>
       </VBox>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e15a4d" height="1080.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="41.0" />
