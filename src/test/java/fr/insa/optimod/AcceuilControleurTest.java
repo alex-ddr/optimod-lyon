@@ -1,12 +1,10 @@
 package fr.insa.optimod;
 
 import fr.insa.optimod.controleur.AccueilControleur;
-import fr.insa.optimod.controleur.Controleur;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,7 +21,7 @@ public class AcceuilControleurTest {
         controleur = new AccueilControleur();
         String grandPlanPath = AcceuilControleurTest.class.getResource("/xml/grandPlan.xml").getPath();
         String demandeGrand = AcceuilControleurTest.class.getResource("/xml/demandeGrand9.xml").getPath();
-        String tourneePath = AcceuilControleurTest.class.getResource("/LivreurDay.pdf").getPath();
+        String tourneePath = AcceuilControleurTest.class.getResource("/pdf/LivreurDay.pdf").getPath();
         assertNotNull(grandPlanPath, "Fichier introuvable");
         assertNotNull(demandeGrand, "Fichier introuvable");
         assertNotNull(tourneePath, "Fichier introuvable");
