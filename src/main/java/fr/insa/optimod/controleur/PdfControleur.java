@@ -85,7 +85,7 @@ public class PdfControleur {
                     SVGPath = "M4 9.5L4 7L-3.0598e-07 7L6 -2.62268e-07L12 7L8 7L8 9.5L8 19L4 19L4 9.5Z"; // SVG pour aller tout droit
                 }
                 else if (direction == -2) {
-                    SVGPath = ""; // SVG demi tour
+                    SVGPath = "M19 7.5V15H15V7.5C15 5.57 13.43 4 11.5 4C9.57 4 8 5.57 8 7.5V10H12L6 17L0 10H4V7.5C4 3.36 7.36 0 11.5 0C15.64 0 19 3.36 19 7.5Z"; // SVG demi-tour
                 }
                 listeInstructions.add(new Instruction(text, SVGPath));
             }
