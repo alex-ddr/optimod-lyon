@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 
 public class ItineraireControleur {
@@ -235,8 +236,6 @@ public class ItineraireControleur {
         textePoints.setText(sb.toString());
     }
 
-
-
     public void afficherItineraire() {
         for (Troncon troncon : controleurMetier.getTronconsItineraire()) {
             Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());
@@ -281,6 +280,7 @@ public class ItineraireControleur {
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Action impossible");
+                        alert.initOwner(this.interfaceUtilisateur.getFenetrePrincipale());
                         alert.setHeaderText("Impossible de descendre ce point");
                         alert.setContentText("Vous ne pouvez pas descendre un point de pickup après son point de livraison.");
                         alert.showAndWait();
@@ -309,9 +309,13 @@ public class ItineraireControleur {
                     controleurMetier.echangerPointsItineraire(itemToMove.getId(), itemPrev.getId());
                     itemsGrid.getChildren().clear();
                     initData();
+                    afficherCarte();
+                    afficherItineraire();
+                    afficherPoints();
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Action impossible");
+                        alert.initOwner(this.interfaceUtilisateur.getFenetrePrincipale());
                         alert.setHeaderText("Impossible de monter ce point");
                         alert.setContentText("Vous ne pouvez pas monter un point de livraison avant son point de pickup.");
                         alert.showAndWait();
