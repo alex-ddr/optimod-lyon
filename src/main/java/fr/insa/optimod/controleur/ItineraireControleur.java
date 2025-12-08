@@ -103,23 +103,29 @@ public class ItineraireControleur {
     public void refreshStyles() {
         if (checkBox.isSelected() || itineraireActualise) {
             boutonActualiser.setOpacity(0.25);
+            boutonActualiser.setDisable(true);
         }
         else {
             boutonActualiser.setOpacity(1);
+            boutonActualiser.setDisable(false);
         }
 
         if (itineraireOptimal) {
             boutonOptimal.setOpacity(0.25);
+            boutonOptimal.setDisable(true);
         }
         else {
             boutonOptimal.setOpacity(1);
+            boutonOptimal.setDisable(false);
         }
 
         if (itineraireActualise) {
             boutonPdf.setOpacity(1);
+            boutonPdf.setDisable(false);
         }
         else {
             boutonPdf.setOpacity(0.25);
+            boutonPdf.setDisable(true);
         }
     }
 
