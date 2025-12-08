@@ -4,10 +4,18 @@ import java.util.ArrayList;
 public class DemandeDeLivraions {
     protected Entrepot entrepot;
     protected ArrayList<Livraison> listeLivraisons;
+    private int compteurId;
 
     public DemandeDeLivraions(Entrepot entrepot, ArrayList<Livraison> listeLivraisons) {
         this.entrepot = entrepot;
         this.listeLivraisons = listeLivraisons;
+        this.compteurId = 1;
+
+        if (this.listeLivraisons != null) {
+            for (Livraison l : this.listeLivraisons) {
+                l.setId(this.compteurId++);
+            }
+        }
     }
 
     public Entrepot getEntrepot() {
@@ -28,7 +36,17 @@ public class DemandeDeLivraions {
     }
 
     public void ajouterLivraison(Livraison livraison) {
+        livraison.setId(this.compteurId++);
         listeLivraisons.add(livraison);
+    }
+
+    public Livraison getLivraisonParId(int id) {
+        for (Livraison l : listeLivraisons) {
+            if (l.getId() == id) {
+                return l;
+            }
+        }
+        return null;
     }
 
     public void supprimerLivraison(Livraison livraison) {
@@ -37,5 +55,9 @@ public class DemandeDeLivraions {
 
     public boolean estEntrepot(Long adresse) {
         return this.entrepot.getAdresss().equals(adresse);
+    }
+
+    public int getCompteurId() {
+        return compteurId;
     }
 }

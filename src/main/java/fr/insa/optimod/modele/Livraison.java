@@ -1,6 +1,7 @@
 package fr.insa.optimod.modele;
 
 public class Livraison {
+    private int id;
     protected Long adresseEnlevement;
     protected Long adresseLivraison;
     protected Long dureeEnlevement;
@@ -11,6 +12,7 @@ public class Livraison {
         this.adresseLivraison = adresseLivraison;
         this.dureeLivraison = dureeLivraison;
         this.dureeEnlevement = dureeEnlevement;
+        this.id = -1;
     }
 
     public Long getAdresseEnlevement() {
@@ -27,5 +29,13 @@ public class Livraison {
 
     public Long getDureeLivraison() {
         return dureeLivraison;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

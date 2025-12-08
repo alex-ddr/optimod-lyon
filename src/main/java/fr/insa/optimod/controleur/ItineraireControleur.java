@@ -55,13 +55,13 @@ public class ItineraireControleur {
     }
 
     public void initData() {
-        List<itemItineraire> itemItineraireListList = new ArrayList<>(data());
+        List<ItemItineraire> itemItineraireListList = new ArrayList<>(data());
 
         int column = 0;
         int row = 1;
 
         try {
-            for (itemItineraire itemItineraire : itemItineraireListList) {
+            for (ItemItineraire itemItineraire : itemItineraireListList) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/layouts/itemItineraire.fxml"));
 
@@ -85,8 +85,8 @@ public class ItineraireControleur {
         }
     }
 
-    private List<itemItineraire> data() {
-        List<itemItineraire> itemItineraireList = new ArrayList<>();
+    private List<ItemItineraire> data() {
+        List<ItemItineraire> itemItineraireList = new ArrayList<>();
 
         ArrayList<PointLivraison> pointsItineraire = controleurMetier.getPointsItineraire();
         DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
@@ -98,7 +98,7 @@ public class ItineraireControleur {
             if (!estEntrepot) {
                 boolean estEnlevement = livraison.getAdresseEnlevement().equals(point.getNoeud().getId());
                 int index = demandeDeLivraions.getListeLivraisons().indexOf(livraison) + 1;
-                itemItineraire item = new itemItineraire(itemId, estEnlevement, (estEnlevement ? "Pickup #" : "Livraison #") + index, point.getNoeud().getId().toString(), point.getG().toString(), index);
+                ItemItineraire item = new ItemItineraire(itemId, estEnlevement, (estEnlevement ? "Pickup #" : "Livraison #") + index, point.getNoeud().getId().toString(), point.getG().toString(), index);
                 itemItineraireList.add(item);
             }
             itemId++;
@@ -256,15 +256,15 @@ public class ItineraireControleur {
     }
 
     public void descendrePoint(int itemItineraireId) {
-        itemItineraire itemToMove = null;
-        List<itemItineraire> itemItineraireList = data();
-        for (itemItineraire item : itemItineraireList) {
+        ItemItineraire itemToMove = null;
+        List<ItemItineraire> itemItineraireList = data();
+        for (ItemItineraire item : itemItineraireList) {
             if (item.getId() == itemItineraireId) {
                 itemToMove = item;
                 break;
             }
         }
-        itemItineraire itemNext = null;
+        ItemItineraire itemNext = null;
         if (itemToMove != null) {
             int index = itemItineraireList.indexOf(itemToMove);
             if (index < itemItineraireList.size() - 1) {
@@ -287,15 +287,15 @@ public class ItineraireControleur {
     }
 
     public void monterPoint(int itemItineraireId) {
-        itemItineraire itemToMove = null;
-        List<itemItineraire> itemItineraireList = data();
-        for (itemItineraire item : itemItineraireList) {
+        ItemItineraire itemToMove = null;
+        List<ItemItineraire> itemItineraireList = data();
+        for (ItemItineraire item : itemItineraireList) {
             if (item.getId() == itemItineraireId) {
                 itemToMove = item;
                 break;
             }
         }
-        itemItineraire itemPrev = null;
+        ItemItineraire itemPrev = null;
         if (itemToMove != null) {
             int index = itemItineraireList.indexOf(itemToMove);
             if (index > 0) {

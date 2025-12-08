@@ -66,7 +66,6 @@
                   <Insets left="117.0" right="117.0" />
                </VBox.margin>
                <children>
-                  <Button fx:id="boutonAjoutCourse" mnemonicParsing="false" onAction="#clicBoutonCourse" text="Ajouter une course" />
                   <ScrollPane styleClass="scrollPane" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets left="30.0" right="20.0" top="10.0" />

@@ -17,34 +17,28 @@ public class Main {
 
 
 
-        /*
+//
+//
+//        Controleur controleur = new Controleur();
+//        File f = new File("src\\main\\resources\\xml\\grandPlan.xml");
+//        System.out.println(f.exists());
+//        controleur.initialiserCarte("src\\main\\resources\\xml\\grandPlan.xml");
+//
+//        ArrayList<Noeud> listeNoeuds = controleur.getCarte().getListeNoeuds();
+//
+//
+//
+//
+//
+//       controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandeGrand7.xml");
+//
+//
+//
+//
+//        controleur.preparerPlanTournee(controleur.getCarte(), controleur.getDemandeDeLivraions());
+//
+//
 
-        Controleur controleur = new Controleur();
-        File f = new File("src\\main\\resources\\xml\\grandPlan.xml");
-        System.out.println(f.exists());
-        controleur.initialiserCarte("src\\main\\resources\\xml\\grandPlan.xml");
-
-        ArrayList<Noeud> listeNoeuds = controleur.getCarte().getListeNoeuds();
-
-
-
-
-
-       controleur.initialiserDemandeDeLivraions("src\\main\\resources\\xml\\demandeGrand7.xml");
-
-
-
-
-        controleur.preparerPlanTournee(controleur.getCarte(), controleur.getDemandeDeLivraions());
-
-        ArrayList<PointLivraison> Tsp = controleur.getTspListe();
-
-        for (PointLivraison p : Tsp) {
-            System.out.println(p.getNoeud().getId());
-            System.out.println(p.getG());
-        }
-
-        */
 
     }
 }

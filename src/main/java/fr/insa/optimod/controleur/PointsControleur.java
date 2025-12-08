@@ -34,6 +34,8 @@ public class PointsControleur {
     @FXML
     private Button boutonAjoutCourse;
 
+    private List<ItemPoint> itemPointList;
+
     private int ajoutCourse = 0; // 0 = non, 1 = enlevement, 2 = livraison
     private Noeud nouvelEnlevement = null;
     private Noeud nouvelleLivraison = null;
@@ -54,15 +56,46 @@ public class PointsControleur {
     }
 
     public void initData() {
-        List<itemPoint> itemPointList = new ArrayList<>(data());
+        this.itemPointList = data();
+        itemsGrid.getChildren().clear();
+        updateGrid();
+    }
+
+    private List<ItemPoint> data() {
+        List<ItemPoint> newItemPointList = new ArrayList<>();
+
+        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
+
+        for (Livraison l : demandeDeLivraions.getListeLivraisons()) {
+            ItemPoint pickup = new ItemPoint(l.getId(), true, "Pickup #" + l.getId(), l.getAdresseEnlevement().toString());
+            newItemPointList.add(pickup);
+
+
+            ItemPoint livraison = new ItemPoint(l.getId(), false, "Livraison #" + l.getId(), l.getAdresseLivraison().toString());
+            newItemPointList.add(livraison);
+        }
+
+        return newItemPointList;
+    }
+    private void updateGrid() {
+        itemsGrid.getChildren().clear();
 
         int column = 0;
         int row = 1;
 
         try {
-            for (itemPoint itemPoint : itemPointList) {
+
+            loadItemAjouterCourse(column, row);
+
+            column++;
+            if (column == 1) {
+                column = 0;
+                ++row;
+            }
+
+            for (ItemPoint itemPoint : itemPointList) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/layouts/itemPoint.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/layouts/ItemPoint.fxml"));
 
                 HBox itemHBox = fxmlLoader.load();
 
@@ -74,49 +107,37 @@ public class PointsControleur {
                     column = 0;
                     ++row;
                 }
-
                 itemsGrid.add(itemHBox, column++, row);
                 GridPane.setMargin(itemHBox, new javafx.geometry.Insets(8));
-
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private List<itemPoint> data() {
-        List<itemPoint> itemPointList = new ArrayList<>();
+    public void loadItemAjouterCourse(int column, int row) throws IOException {
+        FXMLLoader fxmlLoaderAjout = new FXMLLoader();
+        fxmlLoaderAjout.setLocation(getClass().getResource("/layouts/itemAjouterCourse.fxml"));
 
-        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
-        int itemId = 1;
+        HBox boutonAjoutHBox = fxmlLoaderAjout.load();
 
-        for (Livraison l : demandeDeLivraions.getListeLivraisons()) {
-            itemPoint pickup = new itemPoint(itemId, true, "Pickup #" + itemId, l.getAdresseEnlevement().toString());
-            itemPointList.add(pickup);
+        itemsGrid.add(boutonAjoutHBox, column, row);
+        GridPane.setMargin(boutonAjoutHBox, new javafx.geometry.Insets(8));
+    }
 
+    public void supprimerLivraison(ItemPoint item) {
+        int idLivraison = item.getId();
+        DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();
+        Livraison aSupprimer = demande.getLivraisonParId(idLivraison);
 
-            itemPoint livraison = new itemPoint(itemId, false, "Livraison #" + itemId, l.getAdresseLivraison().toString());
-            itemPointList.add(livraison);
+        if (aSupprimer != null) {
+            controleurMetier.supprimerLivraison(aSupprimer);
 
-            itemId++;
+            initData();
+            afficherCarte();
+            afficherPoints();
         }
-
-        return itemPointList;
     }
-
-    public void supprimerLivraison(Long adresse) {
-        controleurMetier.supprimerLivraison(adresse);
-        itemsGrid.getChildren().clear();
-        initData();
-        afficherCarte();
-        afficherPoints();
-    }
-
-//    @FXML
-//    private void initialize() {
-//        System.out.println("initialize CarteControleur");
-//        gc = canvasCarte.getGraphicsContext2D();
-//    }
 
     @FXML
     private void retourAccueil() {
@@ -170,9 +191,8 @@ public class PointsControleur {
     public void afficherPoints() {
         DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
 
-        int index = 1;
         for (Livraison livraison : demandeDeLivraions.getListeLivraisons()) {
-            Color couleur = Couleur.getCouleur(index);
+            Color couleur = Couleur.getCouleur(livraison.getId());
 
             Noeud noeud = carte.obtenirNoeud(livraison.getAdresseEnlevement());
             double x = longToX(noeud.getLongitude());
@@ -187,7 +207,6 @@ public class PointsControleur {
             y = latToY(noeud.getLatitude());
 
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
-            index++;
         }
 
         Noeud noeud = carte.obtenirNoeud(demandeDeLivraions.getEntrepot().getAdresss());
@@ -226,8 +245,7 @@ public class PointsControleur {
         }
     }
 
-    @FXML
-    private void clicBoutonCourse() {
+    public void clicBoutonCourse() {
         if (ajoutCourse == 0) {
             boutonAjoutCourse.setText("Annuler l'ajout");
             ajoutCourse = 1;
@@ -255,9 +273,10 @@ public class PointsControleur {
             double nodeX = longToX(noeud.getLongitude());
             double nodeY = latToY(noeud.getLatitude());
             double distance = Math.sqrt(Math.pow(x - nodeX, 2) + Math.pow(y - nodeY, 2));
+
             if (distance < 10) { // seuil de proximité
-                int nbLivraisons = controleurMetier.getDemandeDeLivraions().getListeLivraisons().size();
-                gc.setFill(Couleur.getCouleur(nbLivraisons + 1));
+                DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
+                gc.setFill(Couleur.getCouleur(demandeDeLivraions.getCompteurId()));
                 int rayon = 7;
                 gc.fillOval(longToX(noeud.getLongitude()) - rayon, latToY(noeud.getLatitude()) - rayon, rayon * 2, rayon * 2);
 
@@ -268,7 +287,6 @@ public class PointsControleur {
                     nouvelleLivraison = noeud;
                     ajoutCourse = 0;
                     controleurMetier.ajouterLivraison(nouvelEnlevement.getId(), nouvelleLivraison.getId());
-                    itemsGrid.getChildren().clear();
                     initData();
                     afficherCarte();
                     afficherPoints();

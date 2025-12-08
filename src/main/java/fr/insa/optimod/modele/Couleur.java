@@ -12,28 +12,11 @@ public class Couleur {
     public Couleur() {}
 
     static public Color getCouleur(int index) {
-        if (index < listeCouleurs.size()) {
-            return listeCouleurs.get(index);
-        } else {
-            while (listeCouleurs.size() <= index) {
-                prochaineCouleur();
-            }
-            return listeCouleurs.get(index);
+        while (listeCouleurs.size() <= index) {
+            prochaineCouleur();
         }
+        return listeCouleurs.get(index);
     }
-
-    static public void supprimerCouleur(int index) {
-        if (index < listeCouleurs.size()) {
-            listeCouleurs.remove(index);
-        }
-        if (listeCouleurs.isEmpty()) {
-            derniereCouleur = Color.hsb(nombreOr, 1.0, 1.0);
-            listeCouleurs.add(derniereCouleur);
-        } else {
-            derniereCouleur = listeCouleurs.getLast();
-        }
-    }
-
 
     static public Color prochaineCouleur() {
         double nouvelleHue = (derniereCouleur.getHue() + nombreOr) % 360.0;

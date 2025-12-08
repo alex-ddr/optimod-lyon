@@ -561,13 +561,15 @@ public class Controleur {
         }
     }
 
-    public void supprimerLivraison(Long adresse) {
-        demandeDeLivraions.supprimerLivraison(demandeDeLivraions.getLivraison(adresse));
-    }
-
     public void ajouterLivraison(Long adresseEnlevement, Long adresseLivraison) {
         Livraison livraison = new Livraison(adresseEnlevement, adresseLivraison, 0L, 0L);
         demandeDeLivraions.ajouterLivraison(livraison);
+    }
+
+    public void supprimerLivraison(Livraison livraison) {
+        if (demandeDeLivraions != null) {
+            demandeDeLivraions.supprimerLivraison(livraison);
+        }
     }
 
 

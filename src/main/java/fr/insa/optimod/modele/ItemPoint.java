@@ -1,20 +1,16 @@
 package fr.insa.optimod.modele;
 
-public class itemItineraire {
+public class ItemPoint {
     private int id;
     private Boolean estPickup;
     private String titre;
     private String adresse;
-    private String heure;
-    private int index;
 
-    public itemItineraire(int id, Boolean estPickup, String titre, String adresse, String heure, int index) {
+    public ItemPoint(int id, Boolean estPickup, String titre, String adresse) {
         this.id = id;
         this.estPickup = estPickup;
         this.titre = titre;
         this.adresse = adresse;
-        this.heure = heure;
-        this.index = index;
     }
 
     public int getId() {
@@ -47,22 +43,6 @@ public class itemItineraire {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
-    }
-
-    public String getHeure() {
-        return heure;
-    }
-
-    public void setHeure(String heure) {
-        this.heure = heure;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 
 }
