@@ -56,12 +56,14 @@ jobs:
 
       - name: Create Native Package (macOS)
         run: |
+          JAR_FILE=$(ls target/*.jar | head -n 1 | xargs basename)
+          echo "JAR file: $JAR_FILE"
           jpackage --type dmg \
                    --name OptimOdLyon \
                    --app-version 1.0.0 \
                    --vendor H31 \
                    --input target \
-                   --main-jar *.jar \
+                   --main-jar "$JAR_FILE" \
                    --runtime-image target/runtime \
                    --dest target/dist
 
