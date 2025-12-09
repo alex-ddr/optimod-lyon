@@ -59,6 +59,7 @@ jobs:
         run: Expand-Archive -Path javafx-jmods.zip -DestinationPath .
 
       - name: Debug - Verify jmods
+        if: runner.os != 'Windows'
         run: |
           ls javafx-jmods-21.0.9
           echo "JAVA_HOME: ${JAVA_HOME}"
