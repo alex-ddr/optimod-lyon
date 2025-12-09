@@ -20,9 +20,9 @@ jobs:
             jpackage_type: dmg
           - os: ubuntu-latest
             artifact_name: optimod-lyon-linux
-            asset_extension: .AppImage
+            asset_extension: .deb
             javafx_url: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_linux-x64_bin-jmods.zip
-            jpackage_type: app-image
+            jpackage_type: deb
           - os: windows-latest
             artifact_name: optimod-lyon-windows
             asset_extension: .msi
@@ -68,7 +68,12 @@ jobs:
       - name: Create Runtime Image (jlink)
         shell: bash
         run: |
-          jlink --module-path "javafx-jmods-21.0.9:${JAVA_HOME}/jmods" \
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            SEP=";"
+          else
+            SEP=":"
+          fi
+          jlink --module-path "javafx-jmods-21.0.9${SEP}${JAVA_HOME}/jmods" \
                 --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing \
                 --output target/runtime \
                 --strip-debug \
@@ -76,7 +81,25 @@ jobs:
                 --no-man-pages \
                 --compress=2
 
-      - name: Create Native Package
+      - name: Create Native Package (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          JAR_FILE=$(ls target/*.jar | head -n 1 | xargs basename)
+          echo "JAR file: $JAR_FILE"
+          jpackage --type deb \
+                   --name OptimodLyon \
+                   --app-version 1.0.0 \
+                   --vendor H31 \
+                   --input target \
+                   --main-jar "$JAR_FILE" \
+                   --runtime-image target/runtime \
+                   --dest target/dist \
+                   --linux-deb-maintainer "H31" \
+                   --linux-shortcut
+
+      - name: Create Native Package (macOS/Windows)
+        if: runner.os != 'Linux'
         shell: bash
         run: |
           JAR_FILE=$(ls target/*.jar | head -n 1 | xargs basename)
