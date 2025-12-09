@@ -95,6 +95,7 @@ public class PdfControleur {
             listeInstructions.add(new Instruction(text, SVGPath));
 
             ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+            templateResolver.setPrefix("templates/");
             templateResolver.setSuffix(".html");
             templateResolver.setTemplateMode("HTML");
 
