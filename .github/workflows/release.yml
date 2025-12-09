@@ -1,0 +1,112 @@
+name: Build Native Executables
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            artifact_name: optimod-lyon-linux
+            asset_extension: .deb
+          - os: windows-latest
+            artifact_name: optimod-lyon-windows
+            asset_extension: .exe
+          - os: macos-latest
+            artifact_name: optimod-lyon-macos
+            asset_extension: .dmg
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Create Runtime Image (jlink)
+        run: |
+          jlink --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing \
+                --output target/runtime \
+                --strip-debug \
+                --no-header-files \
+                --no-man-pages \
+                --compress=2
+
+      - name: Create Native Package (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          jpackage --type deb \
+                   --name OptimOdLyon \
+                   --app-version 1.0.0 \
+                   --vendor INSA \
+                   --input target \
+                   --main-jar *.jar \
+                   --runtime-image target/runtime \
+                   --dest target/dist
+
+      - name: Create Native Package (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          jpackage --type exe `
+                   --name OptimOdLyon `
+                   --app-version 1.0.0 `
+                   --vendor INSA `
+                   --input target `
+                   --main-jar (Get-ChildItem target/*.jar).Name `
+                   --runtime-image target/runtime `
+                   --dest target/dist `
+                   --win-menu `
+                   --win-shortcut
+
+      - name: Create Native Package (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          jpackage --type dmg \
+                   --name OptimOdLyon \
+                   --app-version 1.0.0 \
+                   --vendor INSA \
+                   --input target \
+                   --main-jar *.jar \
+                   --runtime-image target/runtime \
+                   --dest target/dist
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: target/dist/*${{ matrix.asset_extension }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/**/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
