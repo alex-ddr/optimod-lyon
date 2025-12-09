@@ -38,9 +38,20 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
+      - name: Set up JavaFX
+        run: |
+          JAVA_FX_VERSION=23
+          PLATFORM="mac" # or "linux" or "win" depending on runner.os
+          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then PLATFORM="linux"; fi
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then PLATFORM="win"; fi
+          curl -L -o javafx.zip https://download2.gluonhq.com/openjfx/${JAVA_FX_VERSION}/openjfx-${JAVA_FX_VERSION}_${PLATFORM}-x64_bin-sdk.zip
+          unzip -q javafx.zip
+          echo "JAVA_FX_SDK=javafx-sdk-${JAVA_FX_VERSION}" >> $GITHUB_ENV
+
       - name: Create Runtime Image (jlink)
         run: |
-          jlink --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing \
+          jlink --module-path "$JAVA_HOME/jmods:${JAVA_FX_SDK}/lib" \
+                --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing \
                 --output target/runtime \
                 --strip-debug \
                 --no-header-files \
