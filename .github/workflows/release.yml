@@ -10,11 +10,23 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
         include:
           - os: macos-latest
             artifact_name: optimod-lyon-macos
             asset_extension: .dmg
+            javafx_url: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-x64_bin-jmods.zip
+            jpackage_type: dmg
+          - os: ubuntu-latest
+            artifact_name: optimod-lyon-linux
+            asset_extension: .deb
+            javafx_url: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_linux-x64_bin-jmods.zip
+            jpackage_type: deb
+          - os: windows-latest
+            artifact_name: optimod-lyon-windows
+            asset_extension: .msi
+            javafx_url: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_windows-x64_bin-jmods.zip
+            jpackage_type: msi
 
     runs-on: ${{ matrix.os }}
 
@@ -34,9 +46,16 @@ jobs:
 
       - name: Download JavaFX jmods
         run: |
-          curl -L https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-x64_bin-jmods.zip -o javafx-jmods.zip
-          unzip -q javafx-jmods.zip
-          ls -la
+          curl -L ${{ matrix.javafx_url }} -o javafx-jmods.zip
+
+      - name: Extract JavaFX jmods (Unix)
+        if: runner.os != 'Windows'
+        run: unzip -q javafx-jmods.zip
+
+      - name: Extract JavaFX jmods (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: Expand-Archive -Path javafx-jmods.zip -DestinationPath .
 
       - name: Debug - Verify jmods
         run: |
@@ -54,12 +73,13 @@ jobs:
                 --no-man-pages \
                 --compress=2
 
-      - name: Create Native Package (macOS)
+      - name: Create Native Package
+        shell: bash
         run: |
           JAR_FILE=$(ls target/*.jar | head -n 1 | xargs basename)
           echo "JAR file: $JAR_FILE"
-          jpackage --type dmg \
-                   --name OptimOdLyon \
+          jpackage --type ${{ matrix.jpackage_type }} \
+                   --name OptimodLyon \
                    --app-version 1.0.0 \
                    --vendor H31 \
                    --input target \
