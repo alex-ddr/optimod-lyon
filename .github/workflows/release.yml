@@ -38,24 +38,34 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Set up JavaFX
+      - name: Download JavaFX jmods
         run: |
-          JAVA_FX_VERSION=23
-          PLATFORM="mac" # or "linux" or "win" depending on runner.os
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then PLATFORM="linux"; fi
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then PLATFORM="win"; fi
-          curl -L -o javafx.zip https://download2.gluonhq.com/openjfx/${JAVA_FX_VERSION}/openjfx-${JAVA_FX_VERSION}_${PLATFORM}-x64_bin-sdk.zip
-          unzip -q javafx.zip
-          echo "JAVA_FX_SDK=javafx-sdk-${JAVA_FX_VERSION}" >> $GITHUB_ENV
+          curl -L https://download2.gluonhq.com/openjfx/21.0.1/openjfx-21.0.1_${PLATFORM}-x64_bin-jmods.tar.gz -o javafx-jmods.tar.gz
+          tar -xzf javafx-jmods.tar.gz
+        env:
+          PLATFORM: ${{ matrix.os == 'ubuntu-latest' && 'linux' || matrix.os == 'windows-latest' && 'windows' || 'osx' }}
+
 
       - name: Create Runtime Image (jlink)
         run: |
-          jlink --module-path "$JAVA_HOME/jmods:${JAVA_FX_SDK}/lib" \
+          jlink --module-path "javafx-jmods-21.0.1:${JAVA_HOME}/jmods" \
                 --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing \
                 --output target/runtime \
                 --strip-debug \
                 --no-header-files \
                 --no-man-pages \
+                --compress=2
+        shell: bash
+
+      - name: Create Runtime Image (jlink) - Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          jlink --module-path "javafx-jmods-21.0.1;$env:JAVA_HOME\jmods" `
+                --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing `
+                --output target/runtime `
+                --strip-debug `
+                --no-header-files `
+                --no-man-pages `
                 --compress=2
 
       - name: Create Native Package (Linux)
@@ -64,7 +74,7 @@ jobs:
           jpackage --type deb \
                    --name OptimOdLyon \
                    --app-version 1.0.0 \
-                   --vendor INSA \
+                   --vendor H31 \
                    --input target \
                    --main-jar *.jar \
                    --runtime-image target/runtime \
@@ -76,7 +86,7 @@ jobs:
           jpackage --type exe `
                    --name OptimOdLyon `
                    --app-version 1.0.0 `
-                   --vendor INSA `
+                   --vendor H31 `
                    --input target `
                    --main-jar (Get-ChildItem target/*.jar).Name `
                    --runtime-image target/runtime `
@@ -90,7 +100,7 @@ jobs:
           jpackage --type dmg \
                    --name OptimOdLyon \
                    --app-version 1.0.0 \
-                   --vendor INSA \
+                   --vendor H31 \
                    --input target \
                    --main-jar *.jar \
                    --runtime-image target/runtime \
