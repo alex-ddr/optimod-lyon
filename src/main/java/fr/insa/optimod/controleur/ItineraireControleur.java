@@ -145,7 +145,7 @@ public class ItineraireControleur {
 
                 if (!estEntrepot && livraison != null) {
                     boolean estEnlevement = livraison.getAdresseEnlevement().equals(point.getNoeud().getId());
-                    int indexCouleur = demandeDeLivraions.getListeLivraisons().indexOf(livraison) + 1;
+                    int indexCouleur = livraison.getId();
 
                     String titre = (estEnlevement ? "Pickup #" : "Livraison #") + indexCouleur;
 
