@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
         include:
@@ -59,9 +60,9 @@ jobs:
 
       - name: Debug - Verify jmods
         run: |
-          ls -la javafx-jmods-21.0.9
+          ls javafx-jmods-21.0.9
           echo "JAVA_HOME: ${JAVA_HOME}"
-          ls -la ${JAVA_HOME}/jmods
+          ls ${JAVA_HOME}/jmods
 
       - name: Create Runtime Image (jlink)
         run: |
