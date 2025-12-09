@@ -104,14 +104,28 @@ jobs:
         run: |
           JAR_FILE=$(ls target/*.jar | head -n 1 | xargs basename)
           echo "JAR file: $JAR_FILE"
-          jpackage --type ${{ matrix.jpackage_type }} \
-                   --name OptimodLyon \
-                   --app-version 1.0.0 \
-                   --vendor H31 \
-                   --input target \
-                   --main-jar "$JAR_FILE" \
-                   --runtime-image target/runtime \
-                   --dest target/dist
+              if [ "$RUNNER_OS" == "Windows" ]; then
+                jpackage --type msi \
+                --name OptimodLyon \
+                --app-version 1.0.0 \
+                --vendor H31 \
+                --input target \
+                --main-jar "$JAR_FILE" \
+                --runtime-image target/runtime \
+                --dest target/dist \
+                --win-dir-chooser \
+                --win-menu \
+                --win-shortcut
+              else
+                jpackage --type dmg \
+                --name OptimodLyon \
+                --app-version 1.0.0 \
+                --vendor H31 \
+                --input target \
+                --main-jar "$JAR_FILE" \
+                --runtime-image target/runtime \
+                --dest target/dist
+              fi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
