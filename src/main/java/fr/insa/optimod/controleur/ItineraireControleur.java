@@ -233,6 +233,12 @@ public class ItineraireControleur {
 
     @FXML
     public void checkboxClic() {
+        if (checkBox.isSelected()) {
+            controleurMetier.calculerTournee();
+            afficherItineraire();
+            afficherPoints();
+            itineraireActualise = true;
+        }
         refreshStyles();
     }
 
