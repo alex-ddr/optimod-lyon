@@ -582,27 +582,20 @@ public class Controleur {
         return demandeDeLivraions.ajouterLivraison(livraison);
     }
 
+    public int ajouterLivraison(Long adresseEnlevement, Long adresseLivraison) {
+        Livraison livraison = new Livraison(adresseEnlevement, adresseLivraison, 0L, 0L);
+        return demandeDeLivraions.ajouterLivraison(livraison);
+    }
+
     public void supprimerLivraison(Livraison livraison) {
         if (demandeDeLivraions != null) {
             demandeDeLivraions.supprimerLivraison(livraison);
         }
     }
 
-    public void supprimerLivraisonAdresse(Long adresse) {
-        demandeDeLivraions.supprimerLivraison(demandeDeLivraions.getLivraison(adresse));
-    }
-
-
     public void echangerPointsItineraire(int id, int id1) {
         Collections.swap(tspListe, id, id1);
         calculerTournee();
-    }
-
-    public void modifierLivraison(int indexLivraison, Long adresseEnlevement, Long adresseLivraison) {
-        Livraison livraison = demandeDeLivraions.getListeLivraisons().get(indexLivraison);
-        livraison.setAdresseEnlevement(adresseEnlevement);
-        livraison.setAdresseLivraison(adresseLivraison);
-        demandeDeLivraions.getListeLivraisons().set(indexLivraison, livraison);
     }
 
     public void deplacerPointItineraire(int sourceId, int targetIndex) {

@@ -59,12 +59,4 @@ public class Livraison {
     public String getTitre() {
         return titre;
     }
-
-    public void setAdresseEnlevement(Long adresseEnlevement) {
-        this.adresseEnlevement = adresseEnlevement;
-    }
-
-    public void setAdresseLivraison(Long adresseLivraison) {
-        this.adresseLivraison = adresseLivraison;
-    }
 }
