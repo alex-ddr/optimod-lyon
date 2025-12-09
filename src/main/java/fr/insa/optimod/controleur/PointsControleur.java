@@ -475,15 +475,19 @@ public class PointsControleur {
                     ButtonType buttonTypeSupprimer = new ButtonType("Supprimer");
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Détails de la livraison " + livraisonId);
+
+                    DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();
+                    String titre = demande.getLivraisonParId(zone.getLivraisonId()).getTitre() == null ? "#"+zone.getLivraisonId() : demande.getLivraisonParId(zone.getLivraisonId()).getTitre();
+
+                    alert.setTitle("Détails de la course " + titre);
                     alert.initOwner(this.interfaceUtilisateur.getFenetrePrincipale());
                     alert.getButtonTypes().setAll(buttonTypeModifier, buttonTypeSupprimer, ButtonType.CLOSE);
                     Livraison livraison = controleurMetier.getDemandeDeLivraions().getLivraisonParId(livraisonId);
                     if (isEnlevement) {
-                        alert.setHeaderText("Point de retrait de la livraison " + livraisonId);
-                        alert.setContentText("Adresse de retrait: " + controleurMetier.getRueNoeud(livraison.getAdresseEnlevement()));
+                        alert.setHeaderText("Point de pickup de la course " + titre);
+                        alert.setContentText("Adresse de pickup: " + controleurMetier.getRueNoeud(livraison.getAdresseEnlevement()));
                     } else {
-                        alert.setHeaderText("Point de livraison de la livraison " + livraisonId);
+                        alert.setHeaderText("Point de livraison de la course " + titre);
                         alert.setContentText("Adresse de livraison: " + controleurMetier.getRueNoeud(livraison.getAdresseLivraison()));
                     }
                     Optional<ButtonType> result = alert.showAndWait();

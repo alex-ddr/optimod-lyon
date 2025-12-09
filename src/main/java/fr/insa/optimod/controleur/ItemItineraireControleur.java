@@ -3,6 +3,7 @@ package fr.insa.optimod.controleur;
 import fr.insa.optimod.modele.Couleur;
 import fr.insa.optimod.modele.ItemItineraire;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.SVGPath;
@@ -14,7 +15,7 @@ public class ItemItineraireControleur {
     private SVGPath svgLettre;
 
     @FXML
-    private Text adresse;
+    private Label adresse;
 
     @FXML
     private Text heure;

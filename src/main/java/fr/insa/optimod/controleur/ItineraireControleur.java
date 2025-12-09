@@ -149,11 +149,13 @@ public class ItineraireControleur {
 
                     String titre = (estEnlevement ? "Pickup #" : "Livraison #") + indexCouleur;
 
+                    String adresse = (estEnlevement ? controleurMetier.getRueNoeud(livraison.getAdresseEnlevement()) : controleurMetier.getRueNoeud(livraison.getAdresseLivraison()));
+
                     ItemItineraire item = new ItemItineraire(
                             uniqueIdForItem,
                             estEnlevement,
                             titre,
-                            point.getNoeud().getId().toString(),
+                            adresse,
                             point.getG().toString(),
                             indexCouleur
                     );
