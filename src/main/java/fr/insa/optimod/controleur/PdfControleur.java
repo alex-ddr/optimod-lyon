@@ -117,6 +117,7 @@ public class PdfControleur {
             context.setVariable("logoBase64", logoBase64);
 
             String htmlContent = templateEngine.process("/templates/template_pdf", context);
+            String htmlContent = templateEngine.process("templates/template_pdf", context);
 
             explorateur.setTitle("Sauvegarder le PDF");
             explorateur.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier PDF", "*.pdf"));
