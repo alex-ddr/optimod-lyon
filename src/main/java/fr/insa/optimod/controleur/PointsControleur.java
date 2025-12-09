@@ -80,11 +80,11 @@ public class PointsControleur {
 
         for (Livraison l : demandeDeLivraions.getListeLivraisons()) {
             String titrePickup = l.getTitre() != null ? l.getTitre() : "Pickup #" + l.getId();
-            ItemPoint pickup = new ItemPoint(l.getId(), true, titrePickup, l.getAdresseEnlevement().toString());
+            ItemPoint pickup = new ItemPoint(l.getId(), true, titrePickup, controleurMetier.getRueNoeud(l.getAdresseEnlevement()));
             newItemPointList.add(pickup);
 
             String titreLivraison = l.getTitre() != null ? l.getTitre() : "Livraison #" + l.getId();
-            ItemPoint livraison = new ItemPoint(l.getId(), false, titreLivraison, l.getAdresseLivraison().toString());
+            ItemPoint livraison = new ItemPoint(l.getId(), false, titreLivraison, controleurMetier.getRueNoeud(l.getAdresseLivraison()));
             newItemPointList.add(livraison);
         }
 

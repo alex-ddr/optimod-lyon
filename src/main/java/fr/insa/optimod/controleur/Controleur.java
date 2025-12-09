@@ -602,4 +602,27 @@ public class Controleur {
         PointLivraison itemToMove = tspListe.remove(sourceId);
         tspListe.add(targetIndex, itemToMove);
     }
+
+    public String getRueNoeud(Long idNoeud) {
+        Set<String> rues = new HashSet<>();
+        StringBuilder rue = new StringBuilder();
+        Noeud noeud = carte.obtenirNoeud(idNoeud);
+        for (Troncon troncon : noeud.getAdjacense()) {
+            if (troncon.getOrigine().equals(idNoeud)) {
+                rues.add(troncon.getNomRue());
+            }
+            if (troncon.getDestination().equals(idNoeud)) {
+                rues.add(troncon.getNomRue());
+            }
+        }
+        for (String r : rues) {
+            if (r != null && !r.isEmpty()) {
+                rue.append(r).append(", ");
+            }
+        }
+        if (rue.length() >= 2) {
+            rue.setLength(rue.length() - 2); // derniere virgule
+        }
+        return rue.toString();
+    }
 }
