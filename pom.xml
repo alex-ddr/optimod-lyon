@@ -107,6 +107,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <name>OptimOdLyon</name>
+                    <appVersion>1.0.0</appVersion>
+                    <vendor>INSA</vendor>
+                    <destination>target/dist</destination>
+                    <module>fr.insa.optimod/fr.insa.optimod.Main</module>
+                    <runtimeImage>target/runtime</runtimeImage>
+                    <javaOptions>
+                        <option>-Dfile.encoding=UTF-8</option>
+                    </javaOptions>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
