@@ -20,9 +20,9 @@ jobs:
             jpackage_type: dmg
           - os: ubuntu-latest
             artifact_name: optimod-lyon-linux
-            asset_extension: .deb
+            asset_extension: .AppImage
             javafx_url: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_linux-x64_bin-jmods.zip
-            jpackage_type: deb
+            jpackage_type: app-image
           - os: windows-latest
             artifact_name: optimod-lyon-windows
             asset_extension: .msi
@@ -66,6 +66,7 @@ jobs:
           ls ${JAVA_HOME}/jmods
 
       - name: Create Runtime Image (jlink)
+        shell: bash
         run: |
           jlink --module-path "javafx-jmods-21.0.9:${JAVA_HOME}/jmods" \
                 --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing \
