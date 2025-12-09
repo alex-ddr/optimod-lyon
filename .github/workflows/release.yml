@@ -34,14 +34,20 @@ jobs:
 
       - name: Download JavaFX jmods
         run: |
-          mvn dependency:copy -Dartifact=org.openjfx:javafx-jmods:21.0.1:zip:mac -DoutputDirectory=.
-          unzip -q javafx-jmods-21.0.1-mac.zip
+          curl -L https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-x64_bin-jmods.zip -o javafx-jmods.zip
+          unzip -q javafx-jmods.zip
           ls -la
+
+      - name: Debug - Verify jmods
+        run: |
+          ls -la javafx-jmods-21.0.9
+          echo "JAVA_HOME: ${JAVA_HOME}"
+          ls -la ${JAVA_HOME}/jmods
 
       - name: Create Runtime Image (jlink)
         run: |
-          jlink --module-path "javafx-jmods-21.0.1:${JAVA_HOME}/jmods" \
-                --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,javafx.media,javafx.web \
+          jlink --module-path "javafx-jmods-21.0.9:${JAVA_HOME}/jmods" \
+                --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing \
                 --output target/runtime \
                 --strip-debug \
                 --no-header-files \
