@@ -10,14 +10,8 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [macos-latest]
         include:
-          - os: ubuntu-latest
-            artifact_name: optimod-lyon-linux
-            asset_extension: .deb
-          - os: windows-latest
-            artifact_name: optimod-lyon-windows
-            asset_extension: .exe
           - os: macos-latest
             artifact_name: optimod-lyon-macos
             asset_extension: .dmg
@@ -40,11 +34,9 @@ jobs:
 
       - name: Download JavaFX jmods
         run: |
-          curl -L https://download2.gluonhq.com/openjfx/21.0.1/openjfx-21.0.1_${PLATFORM}-x64_bin-jmods.tar.gz -o javafx-jmods.tar.gz
+          curl -L https://download2.gluonhq.com/openjfx/21.0.1/openjfx-21.0.1_osx-x64_bin-jmods.tar.gz -o javafx-jmods.tar.gz
           tar -xzf javafx-jmods.tar.gz
-        env:
-          PLATFORM: ${{ matrix.os == 'ubuntu-latest' && 'linux' || matrix.os == 'windows-latest' && 'windows' || 'osx' }}
-
+          ls -la
 
       - name: Create Runtime Image (jlink)
         run: |
@@ -55,47 +47,8 @@ jobs:
                 --no-header-files \
                 --no-man-pages \
                 --compress=2
-        shell: bash
-
-      - name: Create Runtime Image (jlink) - Windows
-        if: matrix.os == 'windows-latest'
-        run: |
-          jlink --module-path "javafx-jmods-21.0.1;$env:JAVA_HOME\jmods" `
-                --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing `
-                --output target/runtime `
-                --strip-debug `
-                --no-header-files `
-                --no-man-pages `
-                --compress=2
-
-      - name: Create Native Package (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          jpackage --type deb \
-                   --name OptimOdLyon \
-                   --app-version 1.0.0 \
-                   --vendor H31 \
-                   --input target \
-                   --main-jar *.jar \
-                   --runtime-image target/runtime \
-                   --dest target/dist
-
-      - name: Create Native Package (Windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          jpackage --type exe `
-                   --name OptimOdLyon `
-                   --app-version 1.0.0 `
-                   --vendor H31 `
-                   --input target `
-                   --main-jar (Get-ChildItem target/*.jar).Name `
-                   --runtime-image target/runtime `
-                   --dest target/dist `
-                   --win-menu `
-                   --win-shortcut
 
       - name: Create Native Package (macOS)
-        if: matrix.os == 'macos-latest'
         run: |
           jpackage --type dmg \
                    --name OptimOdLyon \
@@ -116,7 +69,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
-    
+
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
