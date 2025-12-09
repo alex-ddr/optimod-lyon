@@ -106,7 +106,13 @@ public class PdfControleur {
             context.setVariable("instructions", listeInstructions);
             context.setVariable("canvasBase64", canvasBase64);
 
-            byte[] logoBytes = Files.readAllBytes(new File("src/main/resources/img/logo.png").toPath());
+            byte[] logoBytes;
+            try (java.io.InputStream logoStream = PdfControleur.class.getResourceAsStream("/img/logo.png")) {
+                if (logoStream == null) {
+                    throw new IOException("Resource not found: /img/logo.png");
+                }
+                logoBytes = logoStream.readAllBytes();
+            }
             String logoBase64 = java.util.Base64.getEncoder().encodeToString(logoBytes);
             context.setVariable("logoBase64", logoBase64);
 
