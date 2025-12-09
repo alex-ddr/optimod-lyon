@@ -116,7 +116,6 @@ public class PdfControleur {
             String logoBase64 = java.util.Base64.getEncoder().encodeToString(logoBytes);
             context.setVariable("logoBase64", logoBase64);
 
-            String htmlContent = templateEngine.process("/templates/template_pdf", context);
             String htmlContent = templateEngine.process("templates/template_pdf", context);
 
             explorateur.setTitle("Sauvegarder le PDF");
