@@ -17,9 +17,8 @@ public class ItemAjouterCourseControleur {
 
     @FXML
     void ajouterCourse(MouseEvent event) {
-        if (pointsControleur != null) {
-            pointsControleur.clicBoutonCourse();
-        }
+        pointsControleur.clicBoutonCourse();
+        pointsControleur.creerItemCourseAAjouter();
     }
 
 }

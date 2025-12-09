@@ -8,6 +8,15 @@ public class ItemItineraire {
     private String heure;
     private int index;
 
+    private boolean peutMonter = true;
+    private boolean peutDescendre = true;
+
+    public boolean isPeutMonter() { return peutMonter; }
+    public void setPeutMonter(boolean peutMonter) { this.peutMonter = peutMonter; }
+
+    public boolean isPeutDescendre() { return peutDescendre; }
+    public void setPeutDescendre(boolean peutDescendre) { this.peutDescendre = peutDescendre; }
+
     public ItemItineraire(int id, Boolean estPickup, String titre, String adresse, String heure, int index) {
         this.id = id;
         this.estPickup = estPickup;
@@ -63,6 +72,22 @@ public class ItemItineraire {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+
+    public static String convertirHeure(String heureEnSecondes) {
+        try {
+            double totalSecondes = Double.parseDouble(heureEnSecondes);
+
+            int h = (int) (totalSecondes / 3600);
+            int m = (int) ((totalSecondes % 3600) / 60);
+
+            h = h % 24;
+
+            return String.format("%02dh%02d", h, m);
+        } catch (NumberFormatException e) {
+            return "--:--";
+        }
     }
 
 }

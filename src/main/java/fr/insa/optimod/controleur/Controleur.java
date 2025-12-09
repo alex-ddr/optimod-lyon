@@ -135,7 +135,7 @@ public class Controleur {
 
 
 
-    public void affichageTournee()
+    public void calculerTournee()
     {
         double total = 0;
         tspListe.get(0).setG(0.0);
@@ -577,8 +577,8 @@ public class Controleur {
         }
     }
 
-    public int ajouterLivraison(Long adresseEnlevement, Long adresseLivraison) {
-        Livraison livraison = new Livraison(adresseEnlevement, adresseLivraison, 0L, 0L);
+    public int ajouterLivraison(String titre, Long adresseEnlevement, Long adresseLivraison) {
+        Livraison livraison = new Livraison(titre, adresseEnlevement, adresseLivraison, 0L, 0L);
         return demandeDeLivraions.ajouterLivraison(livraison);
     }
 
@@ -595,7 +595,7 @@ public class Controleur {
 
     public void echangerPointsItineraire(int id, int id1) {
         Collections.swap(tspListe, id, id1);
-        affichageTournee();
+        calculerTournee();
     }
 
     public void modifierLivraison(int indexLivraison, Long adresseEnlevement, Long adresseLivraison) {
@@ -603,5 +603,10 @@ public class Controleur {
         livraison.setAdresseEnlevement(adresseEnlevement);
         livraison.setAdresseLivraison(adresseLivraison);
         demandeDeLivraions.getListeLivraisons().set(indexLivraison, livraison);
+    }
+
+    public void deplacerPointItineraire(int sourceId, int targetIndex) {
+        PointLivraison itemToMove = tspListe.remove(sourceId);
+        tspListe.add(targetIndex, itemToMove);
     }
 }

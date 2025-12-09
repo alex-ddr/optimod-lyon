@@ -138,7 +138,7 @@ public class CarteControleur {
         }
     }
 
-    private boolean isValidXML(File file) {
+    public boolean isValidXML(File file) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -162,9 +162,7 @@ public class CarteControleur {
                 Node node = nodeList.item(i);
                 Long idEnlevement = Long.valueOf(node.getAttributes().getNamedItem(enlevement).getTextContent());
                 Long idLivraison = Long.valueOf(node.getAttributes().getNamedItem(livraison).getTextContent());
-                System.out.println(carte.getListeNoeuds().getFirst());
                 if (carte.getListeNoeuds().stream().noneMatch(n -> n.getId().equals(idEnlevement) || n.getId().equals(idLivraison))) {
-                    System.out.println(idEnlevement + " " + idLivraison);
                     return false;
                 }
             }
