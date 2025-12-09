@@ -127,7 +127,7 @@ public class PointsControleur {
             }
 
             for (ItemPoint itemPoint : itemPointList) {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/ItemPoint.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/itemPoint.fxml"));
 
                 HBox itemHBox = fxmlLoader.load();
 
