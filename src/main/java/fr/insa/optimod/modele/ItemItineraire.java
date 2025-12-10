@@ -75,9 +75,9 @@ public class ItemItineraire {
     }
 
 
-    public static String convertirHeure(String heureEnSecondes) {
+    public static String convertirHeure(String heureEnSecondes, int heureDepart) {
         try {
-            double totalSecondes = Double.parseDouble(heureEnSecondes);
+            double totalSecondes = Double.parseDouble(heureEnSecondes) + (double) heureDepart;
 
             int h = (int) (totalSecondes / 3600);
             int m = (int) ((totalSecondes % 3600) / 60);

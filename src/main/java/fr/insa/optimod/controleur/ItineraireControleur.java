@@ -214,6 +214,7 @@ public class ItineraireControleur {
                 HBox itemHBox = fxmlLoader.load();
 
                 ItemItineraireControleur itemItineraireControleur = fxmlLoader.getController();
+                itemItineraireControleur.setHeureDepart(controleurMetier.getHeureDepart());
                 itemItineraireControleur.setItineraireControleur(this);
                 itemItineraireControleur.setData(itemItineraire);
 
