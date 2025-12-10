@@ -335,7 +335,7 @@ public class ItineraireControleur {
         List<Troncon> troncons = controleurMetier.getTronconsItineraire();
         if (troncons != null) {
             for (Troncon troncon : troncons) {
-                drawTroncon(troncon, Color.web("#D65C4F"), 4);
+                drawTroncon(troncon, Color.web("#029FFF"), 4);
             }
         }
     }
