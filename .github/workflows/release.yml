@@ -65,6 +65,31 @@ jobs:
           echo "JAVA_HOME: ${JAVA_HOME}"
           ls ${JAVA_HOME}/jmods
 
+      - name: Analyze dependencies with jdeps
+        shell: bash
+        run: |
+          JAR_FILE=$(ls target/*.jar | head -n 1)
+          echo "Analyzing JAR: $JAR_FILE"
+          
+          # Analyser les dépendances et générer la liste des modules
+          jdeps --print-module-deps \
+                --ignore-missing-deps \
+                --multi-release 21 \
+                --class-path 'target/lib/*' \
+                "$JAR_FILE" target/lib/*.jar > modules.txt
+          
+          # Afficher les modules détectés
+          echo "Detected modules:"
+          cat modules.txt
+          
+          # Ajouter les modules JavaFX manuellement (jdeps ne les détecte pas toujours)
+          DETECTED_MODULES=$(cat modules.txt)
+          JAVAFX_MODULES="javafx.controls,javafx.fxml,javafx.graphics,javafx.swing"
+          ALL_MODULES="${DETECTED_MODULES},${JAVAFX_MODULES}"
+          
+          echo "Final module list: $ALL_MODULES"
+          echo "MODULE_LIST=$ALL_MODULES" >> $GITHUB_ENV
+
       - name: Create Runtime Image (jlink)
         shell: bash
         run: |
@@ -74,7 +99,7 @@ jobs:
             SEP=":"
           fi
           jlink --module-path "javafx-jmods-21.0.9${SEP}${JAVA_HOME}/jmods" \
-                --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing \
+                --add-modules "$MODULE_LIST" \
                 --output target/runtime \
                 --strip-debug \
                 --no-header-files \
