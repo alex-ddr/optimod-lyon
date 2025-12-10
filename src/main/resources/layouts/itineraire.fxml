@@ -22,6 +22,11 @@
     <children>
         <StackPane prefHeight="150.0" prefWidth="200.0">
             <children>
+                <Canvas fx:id="canvasCarte" height="1080.0" width="1045.0">
+                    <cursor>
+                        <Cursor fx:constant="MOVE" />
+                    </cursor>
+                </Canvas>
                 <StackPane maxHeight="74.0" maxWidth="74.0" minHeight="74.0" minWidth="74.0" onMouseClicked="#retourAccueil" prefHeight="74.0" prefWidth="74.0" StackPane.alignment="TOP_LEFT">
                     <children>
                         <Circle fill="WHITE" radius="37.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0, 0, 4);" />
@@ -31,11 +36,6 @@
                         <Insets left="25.0" top="25.0" />
                     </StackPane.margin>
                 </StackPane>
-                <Canvas fx:id="canvasCarte" height="1080.0" width="1045.0">
-                    <cursor>
-                        <Cursor fx:constant="MOVE" />
-                    </cursor>
-                </Canvas>
             </children>
         </StackPane>
         <VBox prefHeight="200.0" prefWidth="878.0" spacing="15.0" style="-fx-background-color: #FFFFFF; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 20, 0, -11, 0);">

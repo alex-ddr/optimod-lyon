@@ -328,9 +328,14 @@ public class PointsControleur {
             double x = longToX(noeud.getLongitude());
             double y = latToY(noeud.getLatitude());
 
-            gc.setFill(couleur);
-            int rayon = 10;
-            gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+            gc.setFill(Color.WHITE);
+            gc.setStroke(couleur);
+            gc.setLineWidth(4);
+            int rayon = 8;
+
+            gc.fillRect(x - rayon, y - rayon, rayon * 2, rayon * 2);
+            gc.strokeRect(x - rayon, y - rayon, rayon * 2, rayon * 2);
+
             String clefEnlevement = "livraison_" + livraison.getId() + "_enlevement";
             zonesCliquables.put(clefEnlevement, new ZoneCliquable(livraison.getId(), true, x, y, rayon));
 
@@ -339,6 +344,8 @@ public class PointsControleur {
             y = latToY(noeud.getLatitude());
 
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+            gc.strokeOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+
             String clefLivraison = "livraison_" + livraison.getId() + "_livraison";
             zonesCliquables.put(clefLivraison, new ZoneCliquable(livraison.getId(), false, x, y, rayon));
         }
@@ -389,18 +396,19 @@ public class PointsControleur {
     private void dessinerPointsTemporaires() {
         DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();
         Color couleur = Couleur.getCouleur(demande.getCompteurId());
-        int rayon = 7;
+        int rayon = 8;
 
         if (nouveauPickup != null) {
             double x = longToX(nouveauPickup.getLongitude());
             double y = latToY(nouveauPickup.getLatitude());
-            gc.setFill(couleur);
-            gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
-        }
 
+            gc.setFill(couleur);
+            gc.fillRect(x - rayon, y - rayon, rayon * 2, rayon * 2);
+        }
         if (nouvelleLivraison != null) {
             double x = longToX(nouvelleLivraison.getLongitude());
             double y = latToY(nouvelleLivraison.getLatitude());
+
             gc.setFill(couleur);
             gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
         }
