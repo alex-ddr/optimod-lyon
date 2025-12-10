@@ -47,7 +47,8 @@ public class TSP {
 
 
 
-    public PointLivraison computeD(Integer i, long s, int n, double[][] cost, Carte carte, HashMap<Integer, Long> mapIndexAId) {
+    public PointLivraison computeD(Integer i, long s, int n,
+                                   double[][] cost, Carte carte, HashMap<Integer, Long> mapIndexAId) {
 
 
         PointLivraison memo = getMemo(i, s);

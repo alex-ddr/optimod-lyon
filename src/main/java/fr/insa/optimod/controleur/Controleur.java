@@ -62,6 +62,7 @@ public class Controleur {
     }
 
     public PointLivraison astar(Carte carte, Noeud adresseDebut, Noeud adresseFin) {
+
         PriorityQueue<PointLivraison> livrable = new PriorityQueue<>(Comparator.comparingDouble(PointLivraison::obtenirCout));
         HashMap<Long, Double> score = new HashMap<>();
         HashSet<Long> fait = new HashSet<>();
