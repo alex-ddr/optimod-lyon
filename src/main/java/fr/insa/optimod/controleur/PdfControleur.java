@@ -46,9 +46,11 @@ public class PdfControleur {
             class Instruction {
                 public String texte;
                 public String SVGPath;
-                Instruction(String texte, String SVGPath) {
+                public String viewBox;
+                Instruction(String texte, String SVGPath, String viewBox) {
                     this.texte = texte;
                     this.SVGPath = SVGPath;
+                    this.viewBox = viewBox;
                 }
 
                 public String getTexte() {
@@ -57,15 +59,20 @@ public class PdfControleur {
                 public String getSVGPath() {
                     return SVGPath;
                 }
+                public String getViewBox() {
+                    return viewBox;
+                }
             }
 
             List<Instruction> listeInstructions = new ArrayList<>();
 
             String text;
             String SVGPath;
+            String viewBox;
             SVGPath = "M8 17V11H12V17H17V9H20L10 0L0 9H3V17H8Z"; // SVG pour entrepot
+            viewBox = "-2 -3 24 22";
             text = "Partir de l'entrepot vers le " + donnerDirectionDepart(chemin.get(0).getNoeud(), chemin.get(1).getNoeud()) + " sur la rue " + troncons.getFirst().getNomRue();
-            listeInstructions.add(new Instruction(text, SVGPath));
+            listeInstructions.add(new Instruction(text, SVGPath, viewBox));
 
             if(chemin.size() < 3) {return;}  // ca va de l'entrepot à l'entrepot
 
@@ -80,20 +87,25 @@ public class PdfControleur {
                 int direction = donnerDirection(chemin.get(i).getNoeud(), chemin.get(i+1).getNoeud(), chemin.get(i+2).getNoeud());
                 if (direction == 1) {
                     SVGPath = "M0 11.5C0 7.36 3.36 4 7.5 4H10V0L17 6L10 12V8H7.5C5.57 8 4 9.57 4 11.5V19H0V11.5Z"; // SVG pour tourner à droite
+                    viewBox = "-4 -3 24 22";
                 } else if (direction == 0) {
                     SVGPath = "M17 19H13V11.5C13 9.57 11.43 8 9.5 8H7V12L0 6L7 0V4H9.5C13.64 4 17 7.36 17 11.5V19Z"; // SVG pour tourner à gauche
+                    viewBox = "-4 -3 24 22";
                 } else if (direction == -1) {
                     SVGPath = "M4 9.5L4 7L-3.0598e-07 7L6 -2.62268e-07L12 7L8 7L8 9.5L8 19L4 19L4 9.5Z"; // SVG pour aller tout droit
+                    viewBox = "-2 -3 16 23";
                 }
                 else if (direction == -2) {
                     SVGPath = "M19 7.5V15H15V7.5C15 5.57 13.43 4 11.5 4C9.57 4 8 5.57 8 7.5V10H12L6 17L0 10H4V7.5C4 3.36 7.36 0 11.5 0C15.64 0 19 3.36 19 7.5Z"; // SVG demi-tour
+                    viewBox = "-2 -3 24 21";
                 }
-                listeInstructions.add(new Instruction(text, SVGPath));
+                listeInstructions.add(new Instruction(text, SVGPath, viewBox));
             }
 
             text = "Retour à l'entrepot : " + ecriteText(chemin.get(chemin.size()-3).getNoeud(),chemin.get(chemin.size()-2).getNoeud(), chemin.getLast().getNoeud(),troncons.getLast().getNomRue());
             SVGPath = "M8 17V11H12V17H17V9H20L10 0L0 9H3V17H8Z"; // SVG pour entrepot
-            listeInstructions.add(new Instruction(text, SVGPath));
+            viewBox = "-2 -3 24 22";
+            listeInstructions.add(new Instruction(text, SVGPath, viewBox));
 
             ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
             templateResolver.setSuffix(".html");

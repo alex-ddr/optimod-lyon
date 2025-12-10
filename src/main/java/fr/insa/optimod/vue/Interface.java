@@ -5,10 +5,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class Interface extends Application {
@@ -28,6 +28,22 @@ public class Interface extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.fenetrePrincipale = primaryStage;
         this.controleurMetier = new Controleur();
+
+        //Set icon on the application bar
+        var appIcon = new Image(getClass().getResourceAsStream("/images/icon.png"));
+        fenetrePrincipale.getIcons().add(appIcon);
+
+        //Set icon on the taskbar/dock
+        if (Taskbar.isTaskbarSupported()) {
+            var taskbar = Taskbar.getTaskbar();
+
+            if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
+                final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
+                var dockIcon = defaultToolkit.getImage(getClass().getResource("/images/icon.png"));
+                taskbar.setIconImage(dockIcon);
+            }
+
+        }
 
         fenetrePrincipale.setTitle("Optimod'Lyon");
         fenetrePrincipale.setMaximized(true);
