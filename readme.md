@@ -1,5 +1,5 @@
 ## Nommage
-- Langue : Anglais
+- Langue : Français
 - Classes : PascalCase
 - Méthodes : camelCase
 - Variables : camelCase
