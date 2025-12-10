@@ -67,33 +67,36 @@ public class AstarTest {
         assertEquals("100 -> 200 -> 300", chemin,
                 "Le chemin A* n'est pas 100 -> 200 -> 300");
 
+    }
 
+    @Test
+    public void testAstar2() {
         System.out.println("Test 2: ");
 
-        xmlPath = getClass().getResource("/xml/testAstarComplexe.xml").getPath();
+        String xmlPath = getClass().getResource("/xml/testAstarComplexe.xml").getPath();
         assertNotNull(xmlPath, "Fichier introuvable");
 
         // 2) Créer le contrôleur et charger la carte
-
+        Controleur  controleur = new Controleur();
         controleur.initialiserCarte(xmlPath);
-        carte = controleur.getCarte();
+        Carte carte = controleur.getCarte();
         controleur.ajouterAdjacense(carte);
 
 
         // 3) Récupérer les noeuds 100 et 500
-        depart = carte.obtenirNoeud(100L);
-        arrivee = carte.obtenirNoeud(500L);
+        Noeud depart = carte.obtenirNoeud(100L);
+        Noeud arrivee = carte.obtenirNoeud(500L);
 
         assertNotNull(depart, "Noeud 100 introuvable dans la carte");
         assertNotNull(arrivee, "Noeud 500 introuvable dans la carte");
         //System.out.println("tron = " + carte.getListeTroncon().size());
 
         // 4) Appeler A*
-        resultat = controleur.astar(carte, depart, arrivee);
+        PointLivraison resultat = controleur.astar(carte, depart, arrivee);
 
         assertNotNull(resultat, "A* n'a retourné aucun chemin");
 
-        cout = resultat.getG();
+        double cout = resultat.getG();
         System.out.println("Coût A* = " + cout);
         System.out.println("Coût théorique = " + 200.0 / 4.1666666667);
 
@@ -102,8 +105,8 @@ public class AstarTest {
                 "A* devrait trouver le chemin 100->200->300->400->500 de coût 200.0");
 
         // 6) Vérifier que le chemin est bien 100 -> 200 -> 300
-        sb = new StringBuilder();
-        courant = resultat;
+        StringBuilder sb = new StringBuilder();
+        PointLivraison courant = resultat;
         while (courant != null) {
             // on insère au début pour avoir l'ordre départ -> arrivée
             if (sb.length() == 0) {
@@ -114,32 +117,35 @@ public class AstarTest {
             courant = courant.getParent();
         }
 
-        chemin = sb.toString();
+        String chemin = sb.toString();
         System.out.println("Chemin trouvé : " + chemin);
 
         assertEquals("100 -> 200 -> 300 -> 400 -> 500", chemin,
                 "Le chemin A* n'est pas celui attendu 100 -> 200 -> 300 -> 400 -> 500");
 
+    }
 
+    @Test
+    public void testAstar3() {
         System.out.println("Test 3 (Non relié): ");
 
-        xmlPath = getClass().getResource("/xml/testAstarPasRelie.xml").getPath();
+        String xmlPath = getClass().getResource("/xml/testAstarPasRelie.xml").getPath();
         assertNotNull(xmlPath, "Fichier introuvable");
 
-
+        Controleur controleur = new Controleur();
         controleur.initialiserCarte(xmlPath);
-        carte = controleur.getCarte();
+        Carte carte = controleur.getCarte();
         controleur.ajouterAdjacense(carte);
 
 
-        depart = carte.obtenirNoeud(100L);
-        arrivee = carte.obtenirNoeud(400L);
+        Noeud depart = carte.obtenirNoeud(100L);
+        Noeud arrivee = carte.obtenirNoeud(400L);
 
         assertNotNull(depart, "Noeud 100 introuvable dans la carte");
         assertNotNull(arrivee, "Noeud 400 introuvable dans la carte");
         //System.out.println("tron = " + carte.getListeTroncon().size());
 
-        resultat = controleur.astar(carte, depart, arrivee);
+        PointLivraison resultat = controleur.astar(carte, depart, arrivee);
 
         assertNull(resultat, "A* a retourné un chemin");
 
