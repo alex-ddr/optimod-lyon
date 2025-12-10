@@ -104,12 +104,11 @@ public class Controleur {
 
                 if (t.getDestination().equals(courant.getNoeud().getId())) {
                     voisin = t.getOrigine();
-                    t.setSens(1);
                 }
 
                 else {
                     voisin = t.getDestination();
-                    t.setSens(-1);
+
                 }
 
                 Noeud noeudVoisin = carte.obtenirNoeud(voisin);
@@ -174,6 +173,11 @@ public class Controleur {
                 chemin.add(astar);
                 if (astar.getAntecedent() != null)
                 {
+                    if (astar.getNoeud().getId().equals(astar.getAntecedent().getDestination()))
+                    {
+                        astar.getAntecedent().setSens(-1);
+                    }
+                    else astar.getAntecedent().setSens(1);
                     listeTampon.add(astar.getAntecedent());
                 }
                 else {
@@ -359,6 +363,7 @@ public class Controleur {
         PointLivraison prochain = courant.getParent();
 
         while (t != null) {
+           // System.out.println("TSP : " + t.getNoeud().getId());
             tspListe.add(t);
             t = t.getParent();
 
@@ -380,11 +385,16 @@ public class Controleur {
                 if (astar.getAntecedent() != null)
                 {
                     listeTampon.add(astar.getAntecedent());
-
-                    //System.out.println("ID - " + astar.getNoeud().getId());
-//                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
-//                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
-//                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
+                    if (astar.getNoeud().getId().equals(astar.getAntecedent().getDestination()))
+                    {
+                        astar.getAntecedent().setSens(-1);
+                    }
+                    else astar.getAntecedent().setSens(1);
+                    System.out.println("ID - " + astar.getNoeud().getId());
+                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
+                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
+                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
+                    System.out.println("sens " + astar.getAntecedent().getSens());
                 }
                 else {
                     chemin.remove(astar);

@@ -5,7 +5,7 @@ public class Troncon {
     protected Long origine;
     protected Double longueur;
     protected String nomRue;
-    protected int sens = 1;
+    protected int sens = 0;
 
 
     public Troncon(Long destination, Long origine, Double longueur, String nomRue) {

@@ -17,8 +17,8 @@ public class Main {
 
 
 
-//
-//
+
+
 //        Controleur controleur = new Controleur();
 //        File f = new File("src\\main\\resources\\xml\\grandPlan.xml");
 //        System.out.println(f.exists());
@@ -36,8 +36,8 @@ public class Main {
 //
 //
 //        controleur.preparerPlanTournee(controleur.getCarte(), controleur.getDemandeDeLivraions());
-//
-//
+
+
 
 
     }
