@@ -386,6 +386,31 @@ public class PointsControleur {
 
     }
 
+    private void dessinerPointsTemporaires() {
+        DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();
+        Color couleur = Couleur.getCouleur(demande.getCompteurId());
+        int rayon = 7;
+
+        if (nouveauPickup != null) {
+            double x = longToX(nouveauPickup.getLongitude());
+            double y = latToY(nouveauPickup.getLatitude());
+            gc.setFill(couleur);
+            gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+        }
+
+        if (nouvelleLivraison != null) {
+            double x = longToX(nouvelleLivraison.getLongitude());
+            double y = latToY(nouvelleLivraison.getLatitude());
+            gc.setFill(couleur);
+            gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+        }
+    }
+
+    private void rafraichirVueComplete() {
+        afficherCarte();
+        afficherPoints();
+        dessinerPointsTemporaires();
+    }
 
     @FXML
     private void clicCarte(MouseEvent event) {
@@ -399,8 +424,7 @@ public class PointsControleur {
                 double nodeY = latToY(noeud.getLatitude());
                 double distance = Math.sqrt(Math.pow(x - nodeX, 2) + Math.pow(y - nodeY, 2));
 
-                if (distance < 10) { // seuil de proximité
-                    DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();
+                if (distance < 10) {
                     double xNoeud = longToX(noeud.getLongitude());
                     double yNoeud = latToY(noeud.getLatitude());
 
@@ -431,38 +455,36 @@ public class PointsControleur {
 
                         return;
                     } else if (ajoutPickupOuLivraison == 1) {
-                        gc.setFill(Couleur.getCouleur(demandeDeLivraions.getCompteurId()));
-                        int rayon = 7;
-                        gc.fillOval(xNoeud - rayon, yNoeud - rayon, rayon * 2, rayon * 2);
+                    nouveauPickup = noeud;
 
-                        // Pour le point
-                        nouveauPickup = noeud;
-                        // Pour l'item affiché
-                        if (itemCourseAAjouterControleur != null) {
-                            itemCourseAAjouterControleur.setAdressePickup(nouveauPickup.getId());
-                        }
-                        // Pour le futur item à créer
-                        itemCourseAAjouter.setAdressePickup(nouveauPickup.getId());
-
-                        ajoutPickupOuLivraison = 0;
-                        return;
-                    } else if (ajoutPickupOuLivraison == 2) {
-                        gc.setFill(Couleur.getCouleur(demandeDeLivraions.getCompteurId()));
-                        int rayon = 7;
-                        gc.fillOval(xNoeud - rayon, yNoeud - rayon, rayon * 2, rayon * 2);
-                        nouvelleLivraison = noeud;
-                        if (itemCourseAAjouterControleur != null) {
-                            itemCourseAAjouterControleur.setAdresseLivraison(nouvelleLivraison.getId());
-                        }
-                        itemCourseAAjouter.setAdresseLivraison(nouvelleLivraison.getId());
-                        ajoutPickupOuLivraison = 0;
-                        return;
+                    if (itemCourseAAjouterControleur != null) {
+                        itemCourseAAjouterControleur.setAdressePickup(nouveauPickup.getId());
                     }
+                    itemCourseAAjouter.setAdressePickup(nouveauPickup.getId());
+
+                    rafraichirVueComplete();
+
+                    ajoutPickupOuLivraison = 0;
+                    return;
+
+                } else if (ajoutPickupOuLivraison == 2) {
+                    nouvelleLivraison = noeud;
+
+                    if (itemCourseAAjouterControleur != null) {
+                        itemCourseAAjouterControleur.setAdresseLivraison(nouvelleLivraison.getId());
+                    }
+                    itemCourseAAjouter.setAdresseLivraison(nouvelleLivraison.getId());
+
+                    rafraichirVueComplete();
+
+                    ajoutPickupOuLivraison = 0;
+                    return;
+                }
 
                     break;
                 }
             }
-        } else {
+        } else if (affichageBoutonAjouterCourse != 1){
             for (ZoneCliquable zone : zonesCliquables.values()) {
                 if (zone.contient(x, y)) {
                     int livraisonId = zone.getLivraisonId();

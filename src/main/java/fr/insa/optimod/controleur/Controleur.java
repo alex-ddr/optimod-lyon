@@ -20,6 +20,7 @@ public class Controleur {
     protected DemandeDeLivraions demandeDeLivraions = null;
     protected  HashMap<Long,Integer> mapIdAIndex;
     protected  double[][] cout;
+    private int heureDepart = 8*60*60; // 8h du matin en secondes
 
 
     public ArrayList<PointLivraison> getTspListe() {
@@ -625,5 +626,9 @@ public class Controleur {
             rue.setLength(rue.length() - 2); // derniere virgule
         }
         return rue.toString();
+    }
+
+    public int getHeureDepart() {
+        return this.heureDepart;
     }
 }

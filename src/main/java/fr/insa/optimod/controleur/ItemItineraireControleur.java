@@ -43,10 +43,20 @@ public class ItemItineraireControleur {
 
     protected ItineraireControleur itineraireControleur;
 
+    protected int heureDepart = 0;
+
     protected ItemItineraire itemItineraire;
 
     public void setItineraireControleur(ItineraireControleur itineraireControleur) {
         this.itineraireControleur = itineraireControleur;
+    }
+
+    public int getHeureDepart() {
+        return heureDepart;
+    }
+
+    public void setHeureDepart(int heureDepart) {
+        this.heureDepart = heureDepart;
     }
 
     @FXML
@@ -84,7 +94,7 @@ public class ItemItineraireControleur {
         adresse.setText(itemItineraire.getAdresse());
 
         if (itemItineraire.getHeure() != null) {
-            heure.setText("Arrivée prévue à : " + ItemItineraire.convertirHeure(itemItineraire.getHeure()));
+            heure.setText("Arrivée prévue à : " + ItemItineraire.convertirHeure(itemItineraire.getHeure(), this.heureDepart));
         } else {
             heure.setText("Arrivée prévue à : --:--");
         }

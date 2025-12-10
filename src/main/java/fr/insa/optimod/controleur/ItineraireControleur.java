@@ -147,7 +147,7 @@ public class ItineraireControleur {
                     boolean estEnlevement = livraison.getAdresseEnlevement().equals(point.getNoeud().getId());
                     int indexCouleur = livraison.getId();
 
-                    String titre = (estEnlevement ? "Pickup #" : "Livraison #") + indexCouleur;
+                    String titre = livraison.getTitre() != null ? livraison.getTitre() : (estEnlevement ? "Pickup #" : "Livraison #") + indexCouleur;
 
                     String adresse = (estEnlevement ? controleurMetier.getRueNoeud(livraison.getAdresseEnlevement()) : controleurMetier.getRueNoeud(livraison.getAdresseLivraison()));
 
@@ -214,6 +214,7 @@ public class ItineraireControleur {
                 HBox itemHBox = fxmlLoader.load();
 
                 ItemItineraireControleur itemItineraireControleur = fxmlLoader.getController();
+                itemItineraireControleur.setHeureDepart(controleurMetier.getHeureDepart());
                 itemItineraireControleur.setItineraireControleur(this);
                 itemItineraireControleur.setData(itemItineraire);
 
@@ -334,7 +335,7 @@ public class ItineraireControleur {
         List<Troncon> troncons = controleurMetier.getTronconsItineraire();
         if (troncons != null) {
             for (Troncon troncon : troncons) {
-                drawTroncon(troncon, Color.web("#D65C4F"), 4);
+                drawTroncon(troncon, Color.web("#029FFF"), 4);
             }
         }
     }
