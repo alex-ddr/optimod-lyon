@@ -15,7 +15,12 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,8 +33,12 @@ public class CarteControleur {
 
     private FileChooser explorateur = new FileChooser();
 
+
     @FXML
     private Canvas canvasCarte;
+
+    @FXML
+    private SVGPath svgWrong;
 
     private GraphicsContext gc;
 
@@ -45,11 +54,13 @@ public class CarteControleur {
     private void initialize() {
         System.out.println("initialize CarteControleur");
         gc = canvasCarte.getGraphicsContext2D();
+        svgWrong.setVisible(false);
     }
 
     @FXML
     private void retourAccueil() {
         try {
+            controleurMetier.reinitialiserCarte();
             interfaceUtilisateur.afficherAccueil();
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,16 +121,54 @@ public class CarteControleur {
     }
 
     private void traiterFichierPoints(File fichierPoints) {
-        System.out.println("Le fichier des points " + fichierPoints.getAbsolutePath());
-//        controleurMetier.initialiserPoints(fichierPoints.getAbsolutePath());
-        controleurMetier.initialiserDemandeDeLivraions(fichierPoints.getAbsolutePath());
-        DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();
-        controleurMetier.preparerPlanTournee(carte, demande);
+        if (isValidXML(fichierPoints)) {
+            System.out.println("Le fichier des points " + fichierPoints.getAbsolutePath());
+            //        controleurMetier.initialiserPoints(fichierPoints.getAbsolutePath());
+            controleurMetier.initialiserDemandeDeLivraions(fichierPoints.getAbsolutePath());
+            DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();
+            controleurMetier.preparerPlanTournee(carte, demande);
 
+            try {
+                interfaceUtilisateur.afficherPoints();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            svgWrong.setVisible(true);
+        }
+    }
+
+    public boolean isValidXML(File file) {
         try {
-            interfaceUtilisateur.afficherPoints();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(file); // Si parse OK = XML valide
+
+            if(document.getElementsByTagName("livraison").getLength() == 0 && document.getElementsByTagName("request").getLength() == 0) {return false;}
+            if(document.getElementsByTagName("entrepot").getLength() == 0 && document.getElementsByTagName("depot").getLength() == 0) {return false;}
+            if(document.getElementsByTagName("demandeDeLivraisons").getLength() == 0 && document.getElementsByTagName("planningRequest").getLength() == 0) {return false;}
+
+            String enlevement = "adresseEnlevement";
+            String livraison = "adresseLivraison";
+            NodeList nodeList = document.getElementsByTagName("livraison");
+            if (nodeList.getLength() == 0){
+                nodeList = document.getElementsByTagName("request");
+                livraison = "deliveryAddress";
+                enlevement = "pickupAddress";
+            }
+            Carte carte = controleurMetier.getCarte();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                Long idEnlevement = Long.valueOf(node.getAttributes().getNamedItem(enlevement).getTextContent());
+                Long idLivraison = Long.valueOf(node.getAttributes().getNamedItem(livraison).getTextContent());
+                if (carte.getListeNoeuds().stream().noneMatch(n -> n.getId().equals(idEnlevement) || n.getId().equals(idLivraison))) {
+                    return false;
+                }
+            }
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            return false; // Parse error = pas un XML valide
         }
     }
 

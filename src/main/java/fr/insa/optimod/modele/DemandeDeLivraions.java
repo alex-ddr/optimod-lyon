@@ -35,9 +35,10 @@ public class DemandeDeLivraions {
         return null;
     }
 
-    public void ajouterLivraison(Livraison livraison) {
+    public int ajouterLivraison(Livraison livraison) {
         livraison.setId(this.compteurId++);
         listeLivraisons.add(livraison);
+        return livraison.getId();
     }
 
     public Livraison getLivraisonParId(int id) {

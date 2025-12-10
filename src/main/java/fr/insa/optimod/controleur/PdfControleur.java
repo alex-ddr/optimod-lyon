@@ -85,7 +85,7 @@ public class PdfControleur {
                     SVGPath = "M4 9.5L4 7L-3.0598e-07 7L6 -2.62268e-07L12 7L8 7L8 9.5L8 19L4 19L4 9.5Z"; // SVG pour aller tout droit
                 }
                 else if (direction == -2) {
-                    SVGPath = ""; // SVG demi tour
+                    SVGPath = "M19 7.5V15H15V7.5C15 5.57 13.43 4 11.5 4C9.57 4 8 5.57 8 7.5V10H12L6 17L0 10H4V7.5C4 3.36 7.36 0 11.5 0C15.64 0 19 3.36 19 7.5Z"; // SVG demi-tour
                 }
                 listeInstructions.add(new Instruction(text, SVGPath));
             }
@@ -106,11 +106,17 @@ public class PdfControleur {
             context.setVariable("instructions", listeInstructions);
             context.setVariable("canvasBase64", canvasBase64);
 
-            byte[] logoBytes = Files.readAllBytes(new File("src/main/resources/img/logo.png").toPath());
+            byte[] logoBytes;
+            try (java.io.InputStream logoStream = PdfControleur.class.getResourceAsStream("/img/logo.png")) {
+                if (logoStream == null) {
+                    throw new IOException("Resource not found: /img/logo.png");
+                }
+                logoBytes = logoStream.readAllBytes();
+            }
             String logoBase64 = java.util.Base64.getEncoder().encodeToString(logoBytes);
             context.setVariable("logoBase64", logoBase64);
 
-            String htmlContent = templateEngine.process("/templates/template_pdf", context);
+            String htmlContent = templateEngine.process("templates/template_pdf", context);
 
             explorateur.setTitle("Sauvegarder le PDF");
             explorateur.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier PDF", "*.pdf"));
@@ -140,8 +146,8 @@ public class PdfControleur {
         return text;
     }
 
-    // Indique si le passage du segment [n1, n2] au [n2, n3] nécéssite de tourner à droite (1) ou à gauche (0)
-    private int donnerDirection(Noeud n1, Noeud n2, Noeud n3){
+    // Indique si le passage du segment [n1, n2] au [n2, n3] nécéssite de tourner à droite (1), à gauche (0), tout droit (-1) ou demi tour (-2)
+    public int donnerDirection(Noeud n1, Noeud n2, Noeud n3){
         double lat1 = n2.getLatitude()-n1.getLatitude();
         double lat2 = n3.getLatitude()-n2.getLatitude();
 
@@ -150,13 +156,6 @@ public class PdfControleur {
 
         double dir1 = lat2 * lon1 - lat1 * lon2;
 
-//        System.out.println("Lat 1:" + n1.getLatitude() + "Long 1:" + n1.getLongitude());
-//        System.out.println("Lat 2:" + n2.getLatitude() + "Long 2:" + n2.getLongitude());
-//        System.out.println("Lat 3:" + n3.getLatitude() + "Long 3:" + n3.getLongitude());
-//
-//        System.out.println("dir1: " + (dir1));
-        //double dir2 = lat1 * lon2 -  lat2 * lon1;
-        //System.out.println("dir2: " + (dir2));
         double sens   = lon1 * lon2 + lat1 * lat2;
 
         if (dir1 > 0.0000002)
@@ -182,7 +181,7 @@ public class PdfControleur {
 
     }
 
-    private String donnerDirectionDepart(Noeud n1, Noeud n2){
+    public String donnerDirectionDepart(Noeud n1, Noeud n2){
         double lat1 = n2.getLatitude()-n1.getLatitude();
         double lon1 = n2.getLongitude()-n1.getLongitude();
         String retour = "";
@@ -253,18 +252,6 @@ public class PdfControleur {
 
         return retour;
 
-    }
-
-
-    private static String getDownloadsFolder() {
-        String home = System.getProperty("user.home");
-        String os = System.getProperty("os.name").toLowerCase();
-
-        if (os.contains("win")) {
-            return home + "\\Downloads";
-        } else {
-            return home + "/Downloads";  // macOS + Linux
-        }
     }
 
 }

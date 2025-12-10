@@ -41,6 +41,22 @@ public class Controleur {
         return demandeDeLivraions;
     }
 
+    public void reinitialiserCarte() {
+        this.carte = null;
+    }
+
+    public void reinitialiserDemandeDeLivraison() {
+        this.demandeDeLivraions = null;
+    }
+
+    public void reinitialiserTournee() {
+        this.troncons = null;
+        this.chemin = null;
+        this.tspListe = null;
+        this.tournee = null;
+        this.mapIdAIndex = null;
+        this.cout = null;
+    }
 
     protected Double heuristique(Noeud na, Noeud nb, Carte carte) {
 
@@ -120,7 +136,7 @@ public class Controleur {
 
 
 
-    public void affichageTournee()
+    public void calculerTournee()
     {
         double total = 0;
         tspListe.get(0).setG(0.0);
@@ -562,9 +578,14 @@ public class Controleur {
         }
     }
 
-    public void ajouterLivraison(Long adresseEnlevement, Long adresseLivraison) {
+    public int ajouterLivraison(String titre, Long adresseEnlevement, Long adresseLivraison) {
+        Livraison livraison = new Livraison(titre, adresseEnlevement, adresseLivraison, 0L, 0L);
+        return demandeDeLivraions.ajouterLivraison(livraison);
+    }
+
+    public int ajouterLivraison(Long adresseEnlevement, Long adresseLivraison) {
         Livraison livraison = new Livraison(adresseEnlevement, adresseLivraison, 0L, 0L);
-        demandeDeLivraions.ajouterLivraison(livraison);
+        return demandeDeLivraions.ajouterLivraison(livraison);
     }
 
     public void supprimerLivraison(Livraison livraison) {
@@ -573,8 +594,36 @@ public class Controleur {
         }
     }
 
-
     public void echangerPointsItineraire(int id, int id1) {
         Collections.swap(tspListe, id, id1);
+        calculerTournee();
+    }
+
+    public void deplacerPointItineraire(int sourceId, int targetIndex) {
+        PointLivraison itemToMove = tspListe.remove(sourceId);
+        tspListe.add(targetIndex, itemToMove);
+    }
+
+    public String getRueNoeud(Long idNoeud) {
+        Set<String> rues = new HashSet<>();
+        StringBuilder rue = new StringBuilder();
+        Noeud noeud = carte.obtenirNoeud(idNoeud);
+        for (Troncon troncon : noeud.getAdjacense()) {
+            if (troncon.getOrigine().equals(idNoeud)) {
+                rues.add(troncon.getNomRue());
+            }
+            if (troncon.getDestination().equals(idNoeud)) {
+                rues.add(troncon.getNomRue());
+            }
+        }
+        for (String r : rues) {
+            if (r != null && !r.isEmpty()) {
+                rue.append(r).append(", ");
+            }
+        }
+        if (rue.length() >= 2) {
+            rue.setLength(rue.length() - 2); // derniere virgule
+        }
+        return rue.toString();
     }
 }

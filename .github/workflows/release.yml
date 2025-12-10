@@ -1,0 +1,174 @@
+name: Build Native Executables
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        include:
+          - os: macos-latest
+            artifact_name: optimod-lyon-macos
+            asset_extension: .dmg
+            javafx_url: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-x64_bin-jmods.zip
+            jpackage_type: dmg
+          - os: ubuntu-latest
+            artifact_name: optimod-lyon-linux
+            asset_extension: .deb
+            javafx_url: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_linux-x64_bin-jmods.zip
+            jpackage_type: deb
+          - os: windows-latest
+            artifact_name: optimod-lyon-windows
+            asset_extension: .msi
+            javafx_url: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_windows-x64_bin-jmods.zip
+            jpackage_type: msi
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Download JavaFX jmods
+        run: |
+          curl -L ${{ matrix.javafx_url }} -o javafx-jmods.zip
+
+      - name: Extract JavaFX jmods (Unix)
+        if: runner.os != 'Windows'
+        run: unzip -q javafx-jmods.zip
+
+      - name: Extract JavaFX jmods (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: Expand-Archive -Path javafx-jmods.zip -DestinationPath .
+
+      - name: Debug - Verify jmods
+        if: runner.os != 'Windows'
+        run: |
+          ls javafx-jmods-21.0.9
+          echo "JAVA_HOME: ${JAVA_HOME}"
+          ls ${JAVA_HOME}/jmods
+
+      - name: Analyze dependencies with jdeps
+        shell: bash
+        run: |
+          JAR_FILE=$(ls target/*.jar | head -n 1)
+          echo "Analyzing JAR: $JAR_FILE"
+          
+          # Analyser seulement le JAR (les dépendances sont déjà incluses dedans)
+          DETECTED_MODULES=$(jdeps --print-module-deps \
+          --ignore-missing-deps \
+          --multi-release 21 \
+          "$JAR_FILE" 2>/dev/null)
+          
+          # Ajouter les modules JavaFX manuellement
+          JAVAFX_MODULES="javafx.controls,javafx.fxml,javafx.graphics,javafx.swing"
+          ALL_MODULES="${DETECTED_MODULES},${JAVAFX_MODULES}"
+      
+          echo "Final module list: $ALL_MODULES"
+          echo "MODULE_LIST=$ALL_MODULES" >> $GITHUB_ENV
+
+      - name: Create Runtime Image (jlink)
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            SEP=";"
+          else
+            SEP=":"
+          fi
+          jlink --module-path "javafx-jmods-21.0.9${SEP}${JAVA_HOME}/jmods" \
+                --add-modules "$MODULE_LIST" \
+                --output target/runtime \
+                --strip-debug \
+                --no-header-files \
+                --no-man-pages \
+                --compress=2
+
+      - name: Create Native Package (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          JAR_FILE=$(ls target/*.jar | head -n 1 | xargs basename)
+          echo "JAR file: $JAR_FILE"
+          jpackage --type deb \
+                   --name OptimodLyon \
+                   --app-version 1.0.0 \
+                   --vendor H31 \
+                   --input target \
+                   --main-jar "$JAR_FILE" \
+                   --runtime-image target/runtime \
+                   --dest target/dist \
+                   --linux-deb-maintainer "H31" \
+                   --linux-shortcut
+
+      - name: Create Native Package (macOS/Windows)
+        if: runner.os != 'Linux'
+        shell: bash
+        run: |
+          JAR_FILE=$(ls target/*.jar | head -n 1 | xargs basename)
+          echo "JAR file: $JAR_FILE"
+              if [ "$RUNNER_OS" == "Windows" ]; then
+                jpackage --type msi \
+                --name OptimodLyon \
+                --app-version 1.0.0 \
+                --vendor H31 \
+                --input target \
+                --main-jar "$JAR_FILE" \
+                --runtime-image target/runtime \
+                --dest target/dist \
+                --win-dir-chooser \
+                --win-menu \
+                --win-shortcut \
+                --win-console
+              else
+                jpackage --type dmg \
+                --name OptimodLyon \
+                --app-version 1.0.0 \
+                --vendor H31 \
+                --input target \
+                --main-jar "$JAR_FILE" \
+                --runtime-image target/runtime \
+                --dest target/dist
+              fi
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: target/dist/*${{ matrix.asset_extension }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/**/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

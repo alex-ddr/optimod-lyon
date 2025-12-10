@@ -4,8 +4,8 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -80,7 +80,7 @@
                               </StackPane>
                               <HBox alignment="CENTER">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="1" translateY="-5.0">
+                                    <Text fx:id="heureTotale" strokeType="OUTSIDE" strokeWidth="0.0" text="1" translateY="-5.0">
                                        <font>
                                           <Font name="System Bold Italic" size="72.0" />
                                        </font>
@@ -93,7 +93,7 @@
                                           <Insets />
                                        </HBox.margin>
                                     </Text>
-                                    <Text fill="#e15a4d" strokeType="OUTSIDE" strokeWidth="0.0" text="37" translateX="-5.0" translateY="5.0">
+                                    <Text fx:id="minuteTotale" fill="#e15a4d" strokeType="OUTSIDE" strokeWidth="0.0" text="37" translateX="-5.0" translateY="5.0">
                                        <font>
                                           <Font name="System Bold Italic" size="48.0" />
                                        </font>
@@ -107,7 +107,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Rectangle arcHeight="3.0" arcWidth="5.0" fill="#f8f8f8" height="22.0" onMouseClicked="#actualisationAuto" stroke="#d0d0d0" strokeType="INSIDE" width="22.0" />
+                              <CheckBox fx:id="checkBox" ellipsisString="" mnemonicParsing="false" onMouseClicked="#checkboxClic" selected="true" textOverrun="CLIP" />
                               <Text fill="#757575" strokeType="OUTSIDE" strokeWidth="0.0" text="Actualisation automatique">
                                  <font>
                                     <Font name="Inter Regular" size="20.0" />
@@ -122,27 +122,29 @@
                   <Insets left="67.0" />
                </padding>
             </HBox>
-                <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: F8F8F8; -fx-background-radius: 30; -fx-border-width: 1; -fx-border-color: D0D0D0; -fx-border-radius: 30;" VBox.vgrow="ALWAYS">
+                <VBox maxHeight="781.0" prefHeight="200.0" prefWidth="100.0" styleClass="scrollContainer" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
                     <VBox.margin>
-                        <Insets bottom="15.0" left="117.0" right="117.0" />
+                        <Insets left="117.0" right="117.0" />
                     </VBox.margin>
                     <children>
-                  <TextArea fx:id="textePoints" prefHeight="200.0" prefWidth="200.0" />
-                  <ScrollPane styleClass="scrollPane" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
-                     <content>
-                        <GridPane fx:id="itemsGrid" prefHeight="137.0" prefWidth="111.0" styleClass="transparent" stylesheets="@../styles/style.css">
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                        </GridPane>
-                     </content>
-                  </ScrollPane>
+                        <ScrollPane maxHeight="742.0" styleClass="scrollPane" stylesheets="@../styles/style.css" VBox.vgrow="ALWAYS">
+                            <VBox.margin>
+                                <Insets left="30.0" right="20.0" top="10.0" />
+                            </VBox.margin>
+                            <content>
+                                <GridPane fx:id="itemsGrid" prefHeight="137.0" prefWidth="111.0" styleClass="transparent" stylesheets="@../styles/style.css">
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                </GridPane>
+                            </content>
+                        </ScrollPane>
                         <AnchorPane minHeight="27.0" style="-fx-background-color: E15A4D; -fx-background-radius: 0 0 30 30;" />
                     </children>
                 </VBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="70.0">
                     <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#afficherCarte" style="-fx-background-color: E15A4D; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 10, 0, 0, 4);" text="Itinéraire optimal" textAlignment="CENTER" textFill="WHITE">
+                  <Button fx:id="boutonOptimal" alignment="CENTER" mnemonicParsing="false" onAction="#calculerOptimal" style="-fx-background-color: E15A4D; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 10, 0, 0, 4);" text="Itinéraire optimal" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -153,7 +155,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Button>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#afficherCarte" style="-fx-background-color: E15A4D; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 10, 0, 0, 4);" text="Actualiser l'itinéraire" textAlignment="CENTER" textFill="WHITE">
+                  <Button fx:id="boutonActualiser"  alignment="CENTER" mnemonicParsing="false" onAction="#actualiserItineraire" style="-fx-background-color: E15A4D; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 10, 0, 0, 4);" text="Actualiser l'itinéraire" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -164,7 +166,7 @@
                         <Insets left="-20.0" right="-20.0" />
                      </HBox.margin>
                   </Button>
-                  <Button alignment="CENTER" layoutX="149.0" layoutY="17.0" mnemonicParsing="false" onAction="#genererPDF" style="-fx-background-color: E15A4D; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 10, 0, 0, 4);" text="Générer un PDF" textAlignment="CENTER" textFill="WHITE">
+                  <Button  fx:id="boutonPdf" alignment="CENTER" layoutX="149.0" layoutY="17.0" mnemonicParsing="false" onAction="#genererPDF" style="-fx-background-color: E15A4D; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 10, 0, 0, 4);" text="Générer un PDF" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font size="20.0" />
                      </font>

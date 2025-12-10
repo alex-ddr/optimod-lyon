@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
@@ -26,11 +27,10 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Text>
-                  <Text id="itemPoint-adresse" fx:id="adresse" fill="#757575" strokeType="OUTSIDE" strokeWidth="0.0" text="Adresse" translateX="8.0">
+                  <Label id="itemPoint-adresse" fx:id="adresse" onMouseClicked="#choisirNouvelleAdresse" text="Adresse" textFill="#757575" translateX="8.0">
                      <font>
                         <Font size="16.0" />
-                     </font>
-                  </Text>
+                     </font></Label>
                </children>
             </VBox>
             <SVGPath id="itemPoint-poubelle" fx:id="poubelle" content="M18.0833 1.29167H13.5625L12.2708 0H5.8125L4.52083 1.29167H0V3.875H18.0833M1.29167 20.6667C1.29167 21.3518 1.56384 22.0089 2.04831 22.4934C2.53278 22.9778 3.18986 23.25 3.875 23.25H14.2083C14.8935 23.25 15.5506 22.9778 16.035 22.4934C16.5195 22.0089 16.7917 21.3518 16.7917 20.6667V5.16667H1.29167V20.6667Z" fill="#e15a4d" onMouseClicked="#deleteItem" />

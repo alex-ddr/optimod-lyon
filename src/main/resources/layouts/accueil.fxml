@@ -57,7 +57,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button fx:id="buttonTourne" alignment="CENTER" mnemonicParsing="false" onAction="#afficherCarte" style="-fx-background-color: E15A4D; -fx-background-radius: 30;" text="Obtenir Tournée" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="buttonTourne" alignment="CENTER" mnemonicParsing="false" onAction="#afficherCarte" style="-fx-background-color: E15A4D; -fx-background-radius: 30;" text="Voir la carte" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Inter Bold" size="36.0" />
                </font>
