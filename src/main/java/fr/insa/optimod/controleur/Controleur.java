@@ -390,11 +390,11 @@ public class Controleur {
                         astar.getAntecedent().setSens(-1);
                     }
                     else astar.getAntecedent().setSens(1);
-                    System.out.println("ID - " + astar.getNoeud().getId());
-                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
-                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
-                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
-                    System.out.println("sens " + astar.getAntecedent().getSens());
+//                    System.out.println("ID - " + astar.getNoeud().getId());
+//                    System.out.println("NOM - " + astar.getAntecedent().getNomRue());
+//                    System.out.println("DEST - " + astar.getAntecedent().getDestination());
+//                    System.out.println("ORI - " + astar.getAntecedent().getOrigine());
+//                    System.out.println("sens " + astar.getAntecedent().getSens());
                 }
                 else {
                     chemin.remove(astar);
