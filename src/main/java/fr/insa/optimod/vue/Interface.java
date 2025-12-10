@@ -30,7 +30,7 @@ public class Interface extends Application {
         this.controleurMetier = new Controleur();
 
         //Set icon on the application bar
-        var appIcon = new Image(getClass().getResourceAsStream("/images/icon.png"));
+        var appIcon = new Image(getClass().getResourceAsStream("/img/icon.png"));
         fenetrePrincipale.getIcons().add(appIcon);
 
         //Set icon on the taskbar/dock
@@ -39,7 +39,7 @@ public class Interface extends Application {
 
             if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
                 final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
-                var dockIcon = defaultToolkit.getImage(getClass().getResource("/images/icon.png"));
+                var dockIcon = defaultToolkit.getImage(getClass().getResource("/img/icon.png"));
                 taskbar.setIconImage(dockIcon);
             }
 

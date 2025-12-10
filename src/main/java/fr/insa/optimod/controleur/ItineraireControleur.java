@@ -209,7 +209,7 @@ public class ItineraireControleur {
 
         try {
             for (ItemItineraire itemItineraire : itemItineraireList) {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/itemItineraire.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/item-itineraire.fxml"));
 
                 HBox itemHBox = fxmlLoader.load();
 

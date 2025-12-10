@@ -129,7 +129,7 @@ public class PdfControleur {
             String logoBase64 = java.util.Base64.getEncoder().encodeToString(logoBytes);
             context.setVariable("logoBase64", logoBase64);
 
-            String htmlContent = templateEngine.process("templates/template_pdf", context);
+            String htmlContent = templateEngine.process("templates/template-pdf", context);
 
             long endTime = System.nanoTime();
             long executionTime = (endTime - startTime) / 1000000;

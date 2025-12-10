@@ -127,7 +127,7 @@ public class PointsControleur {
             }
 
             for (ItemPoint itemPoint : itemPointList) {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/itemPoint.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/item-point.fxml"));
 
                 HBox itemHBox = fxmlLoader.load();
 
@@ -148,7 +148,7 @@ public class PointsControleur {
     }
 
     public void loadItemAjouterCourse(int column, int row) throws IOException {
-        FXMLLoader fxmlLoaderAjout = new FXMLLoader(getClass().getResource("/layouts/itemAjouterCourse.fxml"));
+        FXMLLoader fxmlLoaderAjout = new FXMLLoader(getClass().getResource("/layouts/item-ajouter-course.fxml"));
 
         HBox boutonAjoutHBox = fxmlLoaderAjout.load();
 
@@ -168,7 +168,7 @@ public class PointsControleur {
     }
 
     public void loadItemCourseAAjouter(int column, int row) throws IOException {
-        FXMLLoader fxmlLoaderAjout = new FXMLLoader(getClass().getResource("/layouts/itemCourseAAjouter.fxml"));
+        FXMLLoader fxmlLoaderAjout = new FXMLLoader(getClass().getResource("/layouts/item-course-a-ajouter.fxml"));
         HBox itemCourseAAjouterHBox = fxmlLoaderAjout.load();
 
         this.itemCourseAAjouterControleur = fxmlLoaderAjout.getController();
