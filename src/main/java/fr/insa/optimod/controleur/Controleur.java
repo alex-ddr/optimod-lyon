@@ -79,6 +79,7 @@ public class Controleur {
     }
 
     public PointLivraison astar(Carte carte, Noeud adresseDebut, Noeud adresseFin) {
+
         PriorityQueue<PointLivraison> livrable = new PriorityQueue<>(Comparator.comparingDouble(PointLivraison::obtenirCout));
         HashMap<Long, Double> score = new HashMap<>();
         HashSet<Long> fait = new HashSet<>();
@@ -103,10 +104,12 @@ public class Controleur {
 
                 if (t.getDestination().equals(courant.getNoeud().getId())) {
                     voisin = t.getOrigine();
+                    t.setSens(1);
                 }
 
                 else {
                     voisin = t.getDestination();
+                    t.setSens(-1);
                 }
 
                 Noeud noeudVoisin = carte.obtenirNoeud(voisin);

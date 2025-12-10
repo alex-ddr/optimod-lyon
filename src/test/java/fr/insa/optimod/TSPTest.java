@@ -1,7 +1,10 @@
 package fr.insa.optimod;
 
 import fr.insa.optimod.modele.*;
+
+
 import org.junit.jupiter.api.Test;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;

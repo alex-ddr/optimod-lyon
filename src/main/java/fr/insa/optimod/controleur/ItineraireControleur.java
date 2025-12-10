@@ -313,7 +313,7 @@ public class ItineraireControleur {
             gc.setFill(Color.web("#F4E6DF"));
             gc.fillRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());
             for (Troncon troncon : carte.getListeTroncon()) {
-                drawTroncon(troncon, Color.web("#6B3F3A"), 2);
+                drawTroncon(troncon, Color.web("#6B3F3A"), 2, false);
             }
         }
     }
@@ -335,13 +335,17 @@ public class ItineraireControleur {
 
         List<Troncon> troncons = controleurMetier.getTronconsItineraire();
         if (troncons != null) {
+            int index = 0;
+            boolean fleche = false;
             for (Troncon troncon : troncons) {
-                drawTroncon(troncon, Color.web("#029FFF"), 4);
+                fleche = (index % 5 == 0);
+                drawTroncon(troncon, Color.web("#029FFF"), 4, fleche);
+                index++;
             }
         }
     }
 
-    private void drawTroncon(Troncon troncon, Color color, int width) {
+    private void drawTroncon(Troncon troncon, Color color, int width, boolean fleche) {
         Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());
         double x1 = longToX(dep.getLongitude());
         double y1 = latToY(dep.getLatitude());
@@ -350,7 +354,32 @@ public class ItineraireControleur {
         double y2 = latToY(arr.getLatitude());
         gc.setStroke(color);
         gc.setLineWidth(width);
-        gc.strokeLine(x1, y1, x2, y2);
+        if (fleche) {
+            gc.strokeLine(x1, y1, x2, y2);
+        } else {
+            gc.strokeLine(x1, y1, x2, y2);
+        }
+
+        if (fleche) {
+            int sens = troncon.getSens();
+            if (sens == -1) {
+                double tempX = x1;
+                double tempY = y1;
+                x1 = x2;
+                y1 = y2;
+                x2 = tempX;
+                y2 = tempY;
+            }
+            double angle = Math.atan2(y2 - y1, x2 - x1);
+            double arrowLength = 15;
+            double arrowAngle = Math.toRadians(20);
+            double xArrow1 = x2 - arrowLength * Math.cos(angle - arrowAngle);
+            double yArrow1 = y2 - arrowLength * Math.sin(angle - arrowAngle);
+            double xArrow2 = x2 - arrowLength * Math.cos(angle + arrowAngle);
+            double yArrow2 = y2 - arrowLength * Math.sin(angle + arrowAngle);
+            gc.strokeLine(x2, y2, xArrow1, yArrow1);
+            gc.strokeLine(x2, y2, xArrow2, yArrow2);
+        }
     }
 
     private void drawPoint(Long noeudId, Color color, boolean isEnlevement) {
