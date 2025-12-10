@@ -42,6 +42,7 @@ public class PdfControleur {
 
     public void extrairePdf_2(ArrayList<Troncon> troncons, ArrayList<PointLivraison> chemin, String canvasBase64) throws IOException {
         try {
+            long startTime = System.nanoTime();
             class Instruction {
                 public String texte;
                 public String SVGPath;
@@ -118,17 +119,25 @@ public class PdfControleur {
 
             String htmlContent = templateEngine.process("templates/template_pdf", context);
 
+            long endTime = System.nanoTime();
+            long executionTime = (endTime - startTime) / 1000000;
+
             explorateur.setTitle("Sauvegarder le PDF");
             explorateur.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier PDF", "*.pdf"));
             explorateur.setInitialFileName(name);
             File fichier = explorateur.showSaveDialog(this.interfaceUtilisateur.getFenetrePrincipale());
 
+            startTime = System.nanoTime();
             if (fichier != null) {
                 try (OutputStream os = new FileOutputStream(fichier)) {
                     HtmlConverter.convertToPdf(htmlContent, new FileOutputStream(fichier));
                 }
                 System.out.println("PDF created!");
             }
+            endTime  = System.nanoTime();
+            executionTime += (endTime - startTime) / 1000000;
+            System.out.println("Loading PDF takes "+ executionTime + "ms");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
