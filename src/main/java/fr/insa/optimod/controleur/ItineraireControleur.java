@@ -147,7 +147,7 @@ public class ItineraireControleur {
                     boolean estEnlevement = livraison.getAdresseEnlevement().equals(point.getNoeud().getId());
                     int indexCouleur = livraison.getId();
 
-                    String titre = (estEnlevement ? "Pickup #" : "Livraison #") + indexCouleur;
+                    String titre = livraison.getTitre() != null ? livraison.getTitre() : (estEnlevement ? "Pickup #" : "Livraison #") + indexCouleur;
 
                     String adresse = (estEnlevement ? controleurMetier.getRueNoeud(livraison.getAdresseEnlevement()) : controleurMetier.getRueNoeud(livraison.getAdresseLivraison()));
 

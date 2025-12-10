@@ -51,15 +51,6 @@ public class ItemPointControleur {
         }
     }
 
-    @FXML
-    void choisirNouvelleAdresse(MouseEvent event) {
-        return;
-        // we do it directly on map
-//        if (pointsControleur != null && itemPoint != null) {
-//            pointsControleur.modifierAdressePoint(this.itemPoint);
-//        }
-    }
-
     public void setData(ItemPoint itemPoint) {
         this.itemPoint = itemPoint;
 

@@ -27,7 +27,7 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Text>
-                  <Label id="itemPoint-adresse" fx:id="adresse" onMouseClicked="#choisirNouvelleAdresse" text="Adresse" textFill="#757575" translateX="8.0">
+                  <Label id="itemPoint-adresse" fx:id="adresse" text="Adresse" textFill="#757575" translateX="8.0">
                      <font>
                         <Font size="16.0" />
                      </font></Label>
