@@ -71,22 +71,16 @@ jobs:
           JAR_FILE=$(ls target/*.jar | head -n 1)
           echo "Analyzing JAR: $JAR_FILE"
           
-          # Analyser les dépendances et générer la liste des modules
-          jdeps --print-module-deps \
-                --ignore-missing-deps \
-                --multi-release 21 \
-                --class-path 'target/lib/*' \
-                "$JAR_FILE" target/lib/*.jar > modules.txt
+          # Analyser seulement le JAR (les dépendances sont déjà incluses dedans)
+          DETECTED_MODULES=$(jdeps --print-module-deps \
+          --ignore-missing-deps \
+          --multi-release 21 \
+          "$JAR_FILE" 2>/dev/null)
           
-          # Afficher les modules détectés
-          echo "Detected modules:"
-          cat modules.txt
-          
-          # Ajouter les modules JavaFX manuellement (jdeps ne les détecte pas toujours)
-          DETECTED_MODULES=$(cat modules.txt)
+          # Ajouter les modules JavaFX manuellement
           JAVAFX_MODULES="javafx.controls,javafx.fxml,javafx.graphics,javafx.swing"
           ALL_MODULES="${DETECTED_MODULES},${JAVAFX_MODULES}"
-          
+      
           echo "Final module list: $ALL_MODULES"
           echo "MODULE_LIST=$ALL_MODULES" >> $GITHUB_ENV
 
