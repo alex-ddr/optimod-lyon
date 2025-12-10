@@ -20,7 +20,6 @@ public class Controleur {
     protected DemandeDeLivraions demandeDeLivraions = null;
     protected  HashMap<Long,Integer> mapIdAIndex;
     protected  double[][] cout;
-    private int heureDepart = 8*60*60; // 8h du matin en secondes
 
 
     public ArrayList<PointLivraison> getTspListe() {
@@ -641,6 +640,6 @@ public class Controleur {
     }
 
     public int getHeureDepart() {
-        return this.heureDepart;
+        return this.getDemandeDeLivraions().getEntrepot().getHeureDepart().toSecondOfDay();
     }
 }
