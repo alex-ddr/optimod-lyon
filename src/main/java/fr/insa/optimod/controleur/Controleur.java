@@ -104,10 +104,12 @@ public class Controleur {
 
                 if (t.getDestination().equals(courant.getNoeud().getId())) {
                     voisin = t.getOrigine();
+                    t.setSens(1);
                 }
 
                 else {
                     voisin = t.getDestination();
+                    t.setSens(-1);
                 }
 
                 Noeud noeudVoisin = carte.obtenirNoeud(voisin);
