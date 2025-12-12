@@ -1,0 +1,551 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PointsControleur</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">fr.insa.optimod.controleur</a>
+</div>
+
+<h1>Coverage Summary for Class: PointsControleur (fr.insa.optimod.controleur)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PointsControleur</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/26)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/76)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/210)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package fr.insa.optimod.controleur;
+&nbsp;
+&nbsp;import fr.insa.optimod.modele.*;
+&nbsp;import fr.insa.optimod.vue.Interface;
+&nbsp;import javafx.fxml.FXML;
+&nbsp;import javafx.fxml.FXMLLoader;
+&nbsp;import javafx.scene.canvas.Canvas;
+&nbsp;import javafx.scene.canvas.GraphicsContext;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.input.MouseEvent;
+&nbsp;import javafx.scene.layout.GridPane;
+&nbsp;import javafx.scene.layout.HBox;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="nc">&nbsp;public class PointsControleur {</b>
+&nbsp;
+<b class="nc">&nbsp;    Carte carte = null;</b>
+&nbsp;
+&nbsp;    private Interface interfaceUtilisateur;
+&nbsp;    private Controleur controleurMetier;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Canvas canvasCarte;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private GridPane itemsGrid;
+&nbsp;
+&nbsp;    private GraphicsContext gc;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Button boutonAjoutCourse;
+&nbsp;
+&nbsp;    private List&lt;ItemPoint&gt; itemPointList;
+&nbsp;
+<b class="nc">&nbsp;    private ItemCourseAAjouter itemCourseAAjouter = null;</b>
+<b class="nc">&nbsp;    private ItemCourseAAjouterControleur itemCourseAAjouterControleur = null;</b>
+&nbsp;
+<b class="nc">&nbsp;    private int affichageBoutonAjouterCourse = 0; // 0 = bouton ajouter, 1 = course à ajouter</b>
+<b class="nc">&nbsp;    private int ajoutPickupOuLivraison = 0; // 0 = non, 1 = pickup, 2 = livraison</b>
+<b class="nc">&nbsp;    private Noeud nouveauPickup = null;</b>
+<b class="nc">&nbsp;    private Noeud nouvelleLivraison = null;</b>
+&nbsp;
+<b class="nc">&nbsp;    private int modififactionAdresse = 0; // 0 pas en train de modifier, 1 = en train de modifier</b>
+<b class="nc">&nbsp;    private Noeud nouvelleAdresse = null;</b>
+<b class="nc">&nbsp;    private ItemPoint itemPointAModifier = null;</b>
+&nbsp;
+&nbsp;    public void setInterface(Interface interfaceUtilisateur) {
+<b class="nc">&nbsp;        this.interfaceUtilisateur = interfaceUtilisateur;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setControleurMetier(Controleur controleurMetier) {
+<b class="nc">&nbsp;        this.controleurMetier = controleurMetier;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void initialize() {
+<b class="nc">&nbsp;        System.out.println(&quot;initialize CarteControleur&quot;);</b>
+<b class="nc">&nbsp;        gc = canvasCarte.getGraphicsContext2D();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void initData() {
+<b class="nc">&nbsp;        this.itemPointList = data();</b>
+<b class="nc">&nbsp;        itemsGrid.getChildren().clear();</b>
+<b class="nc">&nbsp;        updateGrid();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;ItemPoint&gt; data() {
+<b class="nc">&nbsp;        List&lt;ItemPoint&gt; newItemPointList = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (Livraison l : demandeDeLivraions.getListeLivraisons()) {</b>
+<b class="nc">&nbsp;            String titrePickup = l.getTitre() != null ? l.getTitre() : &quot;Pickup #&quot; + l.getId();</b>
+<b class="nc">&nbsp;            ItemPoint pickup = new ItemPoint(l.getId(), true, titrePickup, l.getAdresseEnlevement().toString());</b>
+<b class="nc">&nbsp;            newItemPointList.add(pickup);</b>
+&nbsp;
+<b class="nc">&nbsp;            String titreLivraison = l.getTitre() != null ? l.getTitre() : &quot;Livraison #&quot; + l.getId();</b>
+<b class="nc">&nbsp;            ItemPoint livraison = new ItemPoint(l.getId(), false, titreLivraison, l.getAdresseLivraison().toString());</b>
+<b class="nc">&nbsp;            newItemPointList.add(livraison);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return newItemPointList;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void updateGrid() {
+<b class="nc">&nbsp;        itemsGrid.getChildren().clear();</b>
+&nbsp;
+<b class="nc">&nbsp;        int column = 0;</b>
+<b class="nc">&nbsp;        int row = 1;</b>
+&nbsp;
+&nbsp;        try {
+&nbsp;
+<b class="nc">&nbsp;            if (affichageBoutonAjouterCourse == 0) {</b>
+<b class="nc">&nbsp;                loadItemAjouterCourse(column, row);</b>
+<b class="nc">&nbsp;                column++;</b>
+<b class="nc">&nbsp;                if (column == 1) {</b>
+<b class="nc">&nbsp;                    column = 0;</b>
+<b class="nc">&nbsp;                    ++row;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            else {
+<b class="nc">&nbsp;                loadItemCourseAAjouter(column, row);</b>
+<b class="nc">&nbsp;                column++;</b>
+<b class="nc">&nbsp;                if (column == 1) {</b>
+<b class="nc">&nbsp;                    column = 0;</b>
+<b class="nc">&nbsp;                    ++row;</b>
+&nbsp;                }
+&nbsp;
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            for (ItemPoint itemPoint : itemPointList) {</b>
+<b class="nc">&nbsp;                FXMLLoader fxmlLoader = new FXMLLoader();</b>
+<b class="nc">&nbsp;                fxmlLoader.setLocation(getClass().getResource(&quot;/layouts/ItemPoint.fxml&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;                HBox itemHBox = fxmlLoader.load();</b>
+&nbsp;
+<b class="nc">&nbsp;                ItemPointControleur itemPointControleur = fxmlLoader.getController();</b>
+<b class="nc">&nbsp;                itemPointControleur.setData(itemPoint);</b>
+<b class="nc">&nbsp;                itemPointControleur.setPointsControleur(this);</b>
+&nbsp;
+<b class="nc">&nbsp;                if (column == 1) {</b>
+<b class="nc">&nbsp;                    column = 0;</b>
+<b class="nc">&nbsp;                    ++row;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                itemsGrid.add(itemHBox, column++, row);</b>
+<b class="nc">&nbsp;                GridPane.setMargin(itemHBox, new javafx.geometry.Insets(8));</b>
+&nbsp;            }
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void loadItemAjouterCourse(int column, int row) throws IOException {
+<b class="nc">&nbsp;        FXMLLoader fxmlLoaderAjout = new FXMLLoader();</b>
+<b class="nc">&nbsp;        fxmlLoaderAjout.setLocation(getClass().getResource(&quot;/layouts/itemAjouterCourse.fxml&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        HBox boutonAjoutHBox = fxmlLoaderAjout.load();</b>
+&nbsp;
+<b class="nc">&nbsp;        ItemAjouterCourseControleur controller = fxmlLoaderAjout.getController();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (controller != null) {</b>
+<b class="nc">&nbsp;            controller.setPointsControleur(this);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        itemsGrid.add(boutonAjoutHBox, column, row);</b>
+<b class="nc">&nbsp;        GridPane.setMargin(boutonAjoutHBox, new javafx.geometry.Insets(8));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void creerItemCourseAAjouter() {
+<b class="nc">&nbsp;        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();</b>
+<b class="nc">&nbsp;        this.itemCourseAAjouter = new ItemCourseAAjouter(demandeDeLivraions.getCompteurId());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void loadItemCourseAAjouter(int column, int row) throws IOException {
+<b class="nc">&nbsp;        FXMLLoader fxmlLoaderAjout = new FXMLLoader();</b>
+<b class="nc">&nbsp;        fxmlLoaderAjout.setLocation(getClass().getResource(&quot;/layouts/itemCourseAAjouter.fxml&quot;));</b>
+<b class="nc">&nbsp;        HBox itemCourseAAjouterHBox = fxmlLoaderAjout.load();</b>
+&nbsp;
+<b class="nc">&nbsp;        this.itemCourseAAjouterControleur = fxmlLoaderAjout.getController();</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        if (this.itemCourseAAjouterControleur != null) {</b>
+<b class="nc">&nbsp;            this.itemCourseAAjouterControleur.setPointsControleur(this);</b>
+<b class="nc">&nbsp;            DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();</b>
+<b class="nc">&nbsp;            this.itemCourseAAjouterControleur.initialize(demande.getCompteurId());</b>
+&nbsp;
+<b class="nc">&nbsp;            if(nouveauPickup != null) this.itemCourseAAjouterControleur.setAdressePickup(nouveauPickup.getId());</b>
+<b class="nc">&nbsp;            if(nouvelleLivraison != null) this.itemCourseAAjouterControleur.setAdresseLivraison(nouvelleLivraison.getId());</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        itemsGrid.add(itemCourseAAjouterHBox, column, row);</b>
+<b class="nc">&nbsp;        GridPane.setMargin(itemCourseAAjouterHBox, new javafx.geometry.Insets(8));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setModeSelectionPickup() {
+<b class="nc">&nbsp;        if (ajoutPickupOuLivraison == 0 &amp;&amp; modififactionAdresse == 0) {</b>
+<b class="nc">&nbsp;            ajoutPickupOuLivraison = 1;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setModeSelectionLivraison() {
+<b class="nc">&nbsp;        if (ajoutPickupOuLivraison == 0 &amp;&amp; modififactionAdresse == 0) {</b>
+<b class="nc">&nbsp;            ajoutPickupOuLivraison = 2;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void setModeModificationAdresse() {
+<b class="nc">&nbsp;        if (ajoutPickupOuLivraison == 0) {</b>
+<b class="nc">&nbsp;            modififactionAdresse = 1;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void modifierAdressePoint(ItemPoint item) {
+<b class="nc">&nbsp;        setModeModificationAdresse();</b>
+<b class="nc">&nbsp;        if (modififactionAdresse == 1) {</b>
+<b class="nc">&nbsp;            this.itemPointAModifier = item;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void annulerAjout() {
+<b class="nc">&nbsp;        itemCourseAAjouter = null;</b>
+<b class="nc">&nbsp;        affichageBoutonAjouterCourse = 0;</b>
+<b class="nc">&nbsp;        ajoutPickupOuLivraison = 0;</b>
+<b class="nc">&nbsp;        nouveauPickup = null;</b>
+<b class="nc">&nbsp;        nouvelleLivraison = null;</b>
+<b class="nc">&nbsp;        updateGrid();</b>
+<b class="nc">&nbsp;        afficherCarte();</b>
+<b class="nc">&nbsp;        afficherPoints();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void validerAjoutFinal() {
+<b class="nc">&nbsp;        if (nouveauPickup != null &amp;&amp; nouvelleLivraison != null) {</b>
+<b class="nc">&nbsp;            String titreSaisi = itemCourseAAjouterControleur.getTitre();</b>
+&nbsp;
+<b class="nc">&nbsp;            if (titreSaisi != null &amp;&amp; !titreSaisi.trim().isEmpty()) {</b>
+<b class="nc">&nbsp;                controleurMetier.ajouterLivraison(titreSaisi, nouveauPickup.getId(), nouvelleLivraison.getId());</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                controleurMetier.ajouterLivraison(nouveauPickup.getId(), nouvelleLivraison.getId());</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            itemCourseAAjouter = null;</b>
+<b class="nc">&nbsp;            nouveauPickup = null;</b>
+<b class="nc">&nbsp;            nouvelleLivraison = null;</b>
+<b class="nc">&nbsp;            itemCourseAAjouterControleur = null;</b>
+<b class="nc">&nbsp;            affichageBoutonAjouterCourse = 0;</b>
+<b class="nc">&nbsp;            ajoutPickupOuLivraison = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;            initData();</b>
+<b class="nc">&nbsp;            afficherCarte();</b>
+<b class="nc">&nbsp;            afficherPoints();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void supprimerLivraison(ItemPoint item) {
+<b class="nc">&nbsp;        int idLivraison = item.getId();</b>
+<b class="nc">&nbsp;        DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();</b>
+<b class="nc">&nbsp;        Livraison aSupprimer = demande.getLivraisonParId(idLivraison);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (aSupprimer != null) {</b>
+<b class="nc">&nbsp;            controleurMetier.supprimerLivraison(aSupprimer);</b>
+&nbsp;
+<b class="nc">&nbsp;            initData();</b>
+<b class="nc">&nbsp;            afficherCarte();</b>
+<b class="nc">&nbsp;            afficherPoints();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void retourAccueil() {
+&nbsp;        try {
+<b class="nc">&nbsp;            interfaceUtilisateur.afficherAccueil();</b>
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void retourCarte() {
+&nbsp;        try {
+<b class="nc">&nbsp;            interfaceUtilisateur.afficherCarte();</b>
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private double longToX(double longitude) {
+<b class="nc">&nbsp;        return (longitude - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private double latToY(double latitude) {
+<b class="nc">&nbsp;        return gc.getCanvas().getHeight() - ((latitude - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void afficherCarte() {
+<b class="nc">&nbsp;        carte = controleurMetier.getCarte();</b>
+<b class="nc">&nbsp;        if (carte != null) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Affichage de la carte&quot;);</b>
+<b class="nc">&nbsp;            gc.clearRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());</b>
+<b class="nc">&nbsp;            gc.setFill(Color.web(&quot;#F4E6DF&quot;));</b>
+<b class="nc">&nbsp;            gc.fillRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());</b>
+<b class="nc">&nbsp;            for (Troncon troncon : carte.getListeTroncon()) {</b>
+<b class="nc">&nbsp;                Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());</b>
+<b class="nc">&nbsp;                double x1 = longToX(dep.getLongitude());</b>
+<b class="nc">&nbsp;                double y1 = latToY(dep.getLatitude());</b>
+<b class="nc">&nbsp;                Noeud arr = carte.getMapNoeuds().get(troncon.getDestination());</b>
+<b class="nc">&nbsp;                double x2 = longToX(arr.getLongitude());</b>
+<b class="nc">&nbsp;                double y2 = latToY(arr.getLatitude());</b>
+&nbsp;
+<b class="nc">&nbsp;                gc.setStroke(Color.web(&quot;#6B3F3A&quot;)); // ou 6B3F3A  ou 8C5752 et couleur pour tracer la tournée --&gt; #D65C4F</b>
+<b class="nc">&nbsp;                gc.setLineWidth(2);</b>
+<b class="nc">&nbsp;                gc.strokeLine(x1, y1, x2, y2);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void afficherPoints() {
+<b class="nc">&nbsp;        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (Livraison livraison : demandeDeLivraions.getListeLivraisons()) {</b>
+<b class="nc">&nbsp;            Color couleur = Couleur.getCouleur(livraison.getId());</b>
+&nbsp;
+<b class="nc">&nbsp;            Noeud noeud = carte.obtenirNoeud(livraison.getAdresseEnlevement());</b>
+<b class="nc">&nbsp;            double x = longToX(noeud.getLongitude());</b>
+<b class="nc">&nbsp;            double y = latToY(noeud.getLatitude());</b>
+&nbsp;
+<b class="nc">&nbsp;            gc.setFill(couleur);</b>
+<b class="nc">&nbsp;            int rayon = 10;</b>
+<b class="nc">&nbsp;            gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);</b>
+&nbsp;
+<b class="nc">&nbsp;            noeud = carte.obtenirNoeud(livraison.getAdresseLivraison());</b>
+<b class="nc">&nbsp;            x = longToX(noeud.getLongitude());</b>
+<b class="nc">&nbsp;            y = latToY(noeud.getLatitude());</b>
+&nbsp;
+<b class="nc">&nbsp;            gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Noeud noeud = carte.obtenirNoeud(demandeDeLivraions.getEntrepot().getAdresss());</b>
+<b class="nc">&nbsp;        double x = longToX(noeud.getLongitude());</b>
+<b class="nc">&nbsp;        double y = latToY(noeud.getLatitude());</b>
+&nbsp;
+<b class="nc">&nbsp;        int rayon = 20;</b>
+&nbsp;
+<b class="nc">&nbsp;        double svgW = 576.0;</b>
+<b class="nc">&nbsp;        double svgH = 512.0;</b>
+<b class="nc">&nbsp;        double scale = 2.0 * rayon / svgW;</b>
+<b class="nc">&nbsp;        double tx = x - (svgW * scale) / 2.0;</b>
+<b class="nc">&nbsp;        double ty = y - (svgH * scale) / 2.0;</b>
+&nbsp;
+<b class="nc">&nbsp;        gc.save();</b>
+<b class="nc">&nbsp;        gc.translate(tx, ty);</b>
+<b class="nc">&nbsp;        gc.scale(scale, scale);</b>
+&nbsp;
+<b class="nc">&nbsp;        gc.setFill(Color.RED);</b>
+<b class="nc">&nbsp;        gc.beginPath();</b>
+<b class="nc">&nbsp;        gc.appendSVGPath(&quot;M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1v16.2c0 22.1-17.9 40-40 40h-16c-1.1 0-2.2 0-3.3-.1c-1.4.1-2.8.1-4.2.1L416 512h-24c-22.1 0-40-17.9-40-40v-88c0-17.7-14.3-32-32-32h-64c-17.7 0-32 14.3-32 32v88c0 22.1-17.9 40-40 40h-55.9c-1.5 0-3-.1-4.5-.2c-1.2.1-2.4.2-3.6.2h-16c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9.1-2.8v-69.7h-32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7l255.4 224.5c8 7 12 15 11 24&quot;);</b>
+<b class="nc">&nbsp;        gc.fill();</b>
+<b class="nc">&nbsp;        gc.closePath();</b>
+&nbsp;
+<b class="nc">&nbsp;        gc.restore();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void afficherItineraire() {
+<b class="nc">&nbsp;        controleurMetier.preparerPlanTournee(controleurMetier.getCarte(), controleurMetier.getDemandeDeLivraions());</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            interfaceUtilisateur.afficherItineraire();</b>
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void clicBoutonCourse() {
+<b class="nc">&nbsp;        affichageBoutonAjouterCourse = 1;</b>
+<b class="nc">&nbsp;        updateGrid();</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void clicCarte(MouseEvent event) {
+<b class="nc">&nbsp;        if (ajoutPickupOuLivraison == 0 &amp;&amp; modififactionAdresse == 0) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        double x = event.getX();</b>
+<b class="nc">&nbsp;        double y = event.getY();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (Noeud noeud : carte.getListeNoeuds()) {</b>
+<b class="nc">&nbsp;            double nodeX = longToX(noeud.getLongitude());</b>
+<b class="nc">&nbsp;            double nodeY = latToY(noeud.getLatitude());</b>
+<b class="nc">&nbsp;            double distance = Math.sqrt(Math.pow(x - nodeX, 2) + Math.pow(y - nodeY, 2));</b>
+&nbsp;
+<b class="nc">&nbsp;            if (distance &lt; 10) { // seuil de proximité</b>
+<b class="nc">&nbsp;                DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();</b>
+<b class="nc">&nbsp;                gc.setFill(Couleur.getCouleur(demandeDeLivraions.getCompteurId()));</b>
+<b class="nc">&nbsp;                int rayon = 7;</b>
+<b class="nc">&nbsp;                gc.fillOval(longToX(noeud.getLongitude()) - rayon, latToY(noeud.getLatitude()) - rayon, rayon * 2, rayon * 2);</b>
+&nbsp;
+<b class="nc">&nbsp;                if (modififactionAdresse == 1 &amp;&amp; itemPointAModifier != null) {</b>
+<b class="nc">&nbsp;                    DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();</b>
+<b class="nc">&nbsp;                    Livraison livraisonAModifier = demande.getLivraisonParId(itemPointAModifier.getId());</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (livraisonAModifier != null) {</b>
+<b class="nc">&nbsp;                        if (itemPointAModifier.getEstPickup()) {</b>
+<b class="nc">&nbsp;                            livraisonAModifier.setAdresseEnlevement(noeud.getId());</b>
+&nbsp;                        } else {
+<b class="nc">&nbsp;                            livraisonAModifier.setAdresseLivraison(noeud.getId());</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;
+<b class="nc">&nbsp;                    modififactionAdresse = 0;</b>
+<b class="nc">&nbsp;                    itemPointAModifier = null;</b>
+&nbsp;
+<b class="nc">&nbsp;                    initData();</b>
+<b class="nc">&nbsp;                    afficherCarte();</b>
+<b class="nc">&nbsp;                    afficherPoints();</b>
+&nbsp;
+&nbsp;                    return;
+&nbsp;                }
+<b class="nc">&nbsp;                else if (ajoutPickupOuLivraison == 1) {</b>
+&nbsp;                    // Pour le point
+<b class="nc">&nbsp;                    nouveauPickup = noeud;</b>
+&nbsp;                    // Pour l&#39;item affiché
+<b class="nc">&nbsp;                    if (itemCourseAAjouterControleur != null) {</b>
+<b class="nc">&nbsp;                        itemCourseAAjouterControleur.setAdressePickup(nouveauPickup.getId());</b>
+&nbsp;                    }
+&nbsp;                    // Pour le futur item à créer
+<b class="nc">&nbsp;                    itemCourseAAjouter.setAdressePickup(nouveauPickup.getId());</b>
+&nbsp;
+<b class="nc">&nbsp;                    ajoutPickupOuLivraison = 0;</b>
+&nbsp;                    return;
+<b class="nc">&nbsp;                } else if (ajoutPickupOuLivraison == 2) {</b>
+<b class="nc">&nbsp;                    nouvelleLivraison = noeud;</b>
+<b class="nc">&nbsp;                    if (itemCourseAAjouterControleur != null) {</b>
+<b class="nc">&nbsp;                        itemCourseAAjouterControleur.setAdresseLivraison(nouvelleLivraison.getId());</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    itemCourseAAjouter.setAdresseLivraison(nouvelleLivraison.getId());</b>
+<b class="nc">&nbsp;                    ajoutPickupOuLivraison = 0;</b>
+&nbsp;                    return;
+&nbsp;                }
+&nbsp;
+&nbsp;                break;
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-12-10 08:13</div>
+</div>
+</body>
+</html>

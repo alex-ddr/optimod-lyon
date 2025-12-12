@@ -1,0 +1,197 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ItemItineraire</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">fr.insa.optimod.modele</a>
+</div>
+
+<h1>Coverage Summary for Class: ItemItineraire (fr.insa.optimod.modele)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ItemItineraire</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package fr.insa.optimod.modele;
+&nbsp;
+&nbsp;public class ItemItineraire {
+&nbsp;    private int id;
+&nbsp;    private Boolean estPickup;
+&nbsp;    private String titre;
+&nbsp;    private String adresse;
+&nbsp;    private String heure;
+&nbsp;    private int index;
+&nbsp;
+<b class="nc">&nbsp;    private boolean peutMonter = true;</b>
+<b class="nc">&nbsp;    private boolean peutDescendre = true;</b>
+&nbsp;
+<b class="nc">&nbsp;    public boolean isPeutMonter() { return peutMonter; }</b>
+<b class="nc">&nbsp;    public void setPeutMonter(boolean peutMonter) { this.peutMonter = peutMonter; }</b>
+&nbsp;
+<b class="nc">&nbsp;    public boolean isPeutDescendre() { return peutDescendre; }</b>
+<b class="nc">&nbsp;    public void setPeutDescendre(boolean peutDescendre) { this.peutDescendre = peutDescendre; }</b>
+&nbsp;
+<b class="nc">&nbsp;    public ItemItineraire(int id, Boolean estPickup, String titre, String adresse, String heure, int index) {</b>
+<b class="nc">&nbsp;        this.id = id;</b>
+<b class="nc">&nbsp;        this.estPickup = estPickup;</b>
+<b class="nc">&nbsp;        this.titre = titre;</b>
+<b class="nc">&nbsp;        this.adresse = adresse;</b>
+<b class="nc">&nbsp;        this.heure = heure;</b>
+<b class="nc">&nbsp;        this.index = index;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getId() {
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setId(int id) {
+<b class="nc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEstPickup(Boolean estPickup) {
+<b class="nc">&nbsp;        this.estPickup = estPickup;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Boolean getEstPickup() {
+<b class="nc">&nbsp;        return estPickup;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getTitre() {
+<b class="nc">&nbsp;        return titre;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTitre(String titre) {
+<b class="nc">&nbsp;        this.titre = titre;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getAdresse() {
+<b class="nc">&nbsp;        return adresse;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setAdresse(String adresse) {
+<b class="nc">&nbsp;        this.adresse = adresse;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getHeure() {
+<b class="nc">&nbsp;        return heure;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setHeure(String heure) {
+<b class="nc">&nbsp;        this.heure = heure;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getIndex() {
+<b class="nc">&nbsp;        return index;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setIndex(int index) {
+<b class="nc">&nbsp;        this.index = index;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public static String convertirHeure(String heureEnSecondes) {
+&nbsp;        try {
+<b class="nc">&nbsp;            double totalSecondes = Double.parseDouble(heureEnSecondes);</b>
+&nbsp;
+<b class="nc">&nbsp;            int h = (int) (totalSecondes / 3600);</b>
+<b class="nc">&nbsp;            int m = (int) ((totalSecondes % 3600) / 60);</b>
+&nbsp;
+<b class="nc">&nbsp;            h = h % 24;</b>
+&nbsp;
+<b class="nc">&nbsp;            return String.format(&quot;%02dh%02d&quot;, h, m);</b>
+&nbsp;        } catch (NumberFormatException e) {
+<b class="nc">&nbsp;            return &quot;--:--&quot;;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-12-10 08:13</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,539 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ItineraireControleur</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">fr.insa.optimod.controleur</a>
+</div>
+
+<h1>Coverage Summary for Class: ItineraireControleur (fr.insa.optimod.controleur)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ItineraireControleur</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/72)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/194)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package fr.insa.optimod.controleur;
+&nbsp;
+&nbsp;import fr.insa.optimod.modele.*;
+&nbsp;import fr.insa.optimod.vue.Interface;
+&nbsp;import javafx.fxml.FXML;
+&nbsp;import javafx.fxml.FXMLLoader;
+&nbsp;import javafx.scene.canvas.Canvas;
+&nbsp;import javafx.scene.canvas.GraphicsContext;
+&nbsp;import javafx.scene.control.Alert;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.CheckBox;
+&nbsp;import javafx.scene.image.WritableImage;
+&nbsp;import javafx.scene.layout.GridPane;
+&nbsp;import javafx.scene.layout.HBox;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.embed.swing.SwingFXUtils;
+&nbsp;import javafx.scene.text.Text;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.ByteArrayOutputStream;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Base64;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="nc">&nbsp;public class ItineraireControleur {</b>
+&nbsp;
+<b class="nc">&nbsp;    Carte carte = null;</b>
+&nbsp;
+&nbsp;    private Interface interfaceUtilisateur;
+&nbsp;    private Controleur controleurMetier;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Canvas canvasCarte;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private GridPane itemsGrid;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private CheckBox checkBox;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Button boutonOptimal;
+<b class="nc">&nbsp;    private boolean itineraireOptimal = true;</b>
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Button boutonActualiser;
+<b class="nc">&nbsp;    private boolean itineraireActualise = true;</b>
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Button boutonPdf;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Text heureTotale;
+&nbsp;    @FXML
+&nbsp;    private Text minuteTotale;
+&nbsp;
+&nbsp;    private GraphicsContext gc;
+&nbsp;
+&nbsp;    private List&lt;ItemItineraire&gt; itemItineraireList;
+&nbsp;
+&nbsp;
+&nbsp;    public void setInterface(Interface interfaceUtilisateur) {
+<b class="nc">&nbsp;        this.interfaceUtilisateur = interfaceUtilisateur;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setControleurMetier(Controleur controleurMetier) {
+<b class="nc">&nbsp;        this.controleurMetier = controleurMetier;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void initialize() {
+<b class="nc">&nbsp;        System.out.println(&quot;initialize ItineraireControleur&quot;);</b>
+<b class="nc">&nbsp;        gc = canvasCarte.getGraphicsContext2D();</b>
+<b class="nc">&nbsp;        refreshStyles();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    public void initData() {
+<b class="nc">&nbsp;        this.itemItineraireList = data();</b>
+<b class="nc">&nbsp;        itemsGrid.getChildren().clear();</b>
+<b class="nc">&nbsp;        updateGrid();</b>
+&nbsp;
+<b class="nc">&nbsp;        afficherCarte();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (checkBox.isSelected()) {</b>
+<b class="nc">&nbsp;            controleurMetier.calculerTournee();</b>
+<b class="nc">&nbsp;            afficherItineraire();</b>
+<b class="nc">&nbsp;            itineraireActualise = true;</b>
+<b class="nc">&nbsp;            miseAJourHeureTotale();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (itineraireActualise) {</b>
+<b class="nc">&nbsp;            controleurMetier.calculerTournee();</b>
+<b class="nc">&nbsp;            afficherItineraire();</b>
+<b class="nc">&nbsp;            miseAJourHeureTotale();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        afficherPoints();</b>
+<b class="nc">&nbsp;        refreshStyles();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void refreshStyles() {
+<b class="nc">&nbsp;        if (checkBox.isSelected() || itineraireActualise) {</b>
+<b class="nc">&nbsp;            boutonActualiser.setOpacity(0.25);</b>
+<b class="nc">&nbsp;            boutonActualiser.setDisable(true);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            boutonActualiser.setOpacity(1);</b>
+<b class="nc">&nbsp;            boutonActualiser.setDisable(false);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (itineraireOptimal) {</b>
+<b class="nc">&nbsp;            boutonOptimal.setOpacity(0.25);</b>
+<b class="nc">&nbsp;            boutonOptimal.setDisable(true);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            boutonOptimal.setOpacity(1);</b>
+<b class="nc">&nbsp;            boutonOptimal.setDisable(false);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (itineraireActualise) {</b>
+<b class="nc">&nbsp;            boutonPdf.setOpacity(1);</b>
+<b class="nc">&nbsp;            boutonPdf.setDisable(false);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            boutonPdf.setOpacity(0.25);</b>
+<b class="nc">&nbsp;            boutonPdf.setDisable(true);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;ItemItineraire&gt; data() {
+<b class="nc">&nbsp;        List&lt;ItemItineraire&gt; newItemItineraireList = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        ArrayList&lt;PointLivraison&gt; pointsItineraire = controleurMetier.getPointsItineraire();</b>
+<b class="nc">&nbsp;        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();</b>
+&nbsp;
+<b class="nc">&nbsp;        int uniqueIdForItem = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;        if (pointsItineraire != null) {</b>
+<b class="nc">&nbsp;            for (PointLivraison point : pointsItineraire) {</b>
+<b class="nc">&nbsp;                Livraison livraison = demandeDeLivraions.getLivraison(point.getNoeud().getId());</b>
+<b class="nc">&nbsp;                boolean estEntrepot = demandeDeLivraions.estEntrepot(point.getNoeud().getId());</b>
+&nbsp;
+<b class="nc">&nbsp;                if (!estEntrepot &amp;&amp; livraison != null) {</b>
+<b class="nc">&nbsp;                    boolean estEnlevement = livraison.getAdresseEnlevement().equals(point.getNoeud().getId());</b>
+<b class="nc">&nbsp;                    int indexCouleur = demandeDeLivraions.getListeLivraisons().indexOf(livraison) + 1;</b>
+&nbsp;
+<b class="nc">&nbsp;                    String titre = (estEnlevement ? &quot;Pickup #&quot; : &quot;Livraison #&quot;) + indexCouleur;</b>
+&nbsp;
+<b class="nc">&nbsp;                    ItemItineraire item = new ItemItineraire(</b>
+&nbsp;                            uniqueIdForItem,
+<b class="nc">&nbsp;                            estEnlevement,</b>
+&nbsp;                            titre,
+<b class="nc">&nbsp;                            point.getNoeud().getId().toString(),</b>
+<b class="nc">&nbsp;                            point.getG().toString(),</b>
+&nbsp;                            indexCouleur
+&nbsp;                    );
+<b class="nc">&nbsp;                    newItemItineraireList.add(item);</b>
+<b class="nc">&nbsp;                    uniqueIdForItem++;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; newItemItineraireList.size(); i++) {</b>
+<b class="nc">&nbsp;            ItemItineraire current = newItemItineraireList.get(i);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (i == 0) {</b>
+<b class="nc">&nbsp;                current.setPeutMonter(false);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            if (i == newItemItineraireList.size() - 1) {</b>
+<b class="nc">&nbsp;                current.setPeutDescendre(false);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            if (current.getEstPickup() &amp;&amp; i &lt; newItemItineraireList.size() - 1) {</b>
+<b class="nc">&nbsp;                ItemItineraire next = newItemItineraireList.get(i + 1);</b>
+<b class="nc">&nbsp;                if (!next.getEstPickup() &amp;&amp; next.getIndex() == current.getIndex()) {</b>
+<b class="nc">&nbsp;                    current.setPeutDescendre(false);</b>
+<b class="nc">&nbsp;                    next.setPeutMonter(false);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return newItemItineraireList;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void calculerOptimal() {
+<b class="nc">&nbsp;        controleurMetier.preparerPlanTournee(controleurMetier.getCarte(), controleurMetier.getDemandeDeLivraions());</b>
+<b class="nc">&nbsp;        initData();</b>
+<b class="nc">&nbsp;        itineraireOptimal = true;</b>
+<b class="nc">&nbsp;        refreshStyles();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void actualiserItineraire() {
+<b class="nc">&nbsp;        itineraireActualise = true;</b>
+<b class="nc">&nbsp;        initData();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void updateGrid() {
+<b class="nc">&nbsp;        itemsGrid.getChildren().clear();</b>
+&nbsp;
+<b class="nc">&nbsp;        int column = 0;</b>
+<b class="nc">&nbsp;        int row = 1;</b>
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            for (ItemItineraire itemItineraire : itemItineraireList) {</b>
+<b class="nc">&nbsp;                FXMLLoader fxmlLoader = new FXMLLoader();</b>
+<b class="nc">&nbsp;                fxmlLoader.setLocation(getClass().getResource(&quot;/layouts/itemItineraire.fxml&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;                HBox itemHBox = fxmlLoader.load();</b>
+&nbsp;
+<b class="nc">&nbsp;                ItemItineraireControleur itemItineraireControleur = fxmlLoader.getController();</b>
+<b class="nc">&nbsp;                itemItineraireControleur.setItineraireControleur(this);</b>
+<b class="nc">&nbsp;                itemItineraireControleur.setData(itemItineraire);</b>
+&nbsp;
+<b class="nc">&nbsp;                if (column == 1) {</b>
+<b class="nc">&nbsp;                    column = 0;</b>
+<b class="nc">&nbsp;                    ++row;</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                itemsGrid.add(itemHBox, column++, row);</b>
+<b class="nc">&nbsp;                GridPane.setMargin(itemHBox, new javafx.geometry.Insets(8));</b>
+&nbsp;            }
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    public void checkboxClic() {
+<b class="nc">&nbsp;        refreshStyles();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void descendrePoint(int itemItineraireId) {
+<b class="nc">&nbsp;        itineraireOptimal = false;</b>
+<b class="nc">&nbsp;        itineraireActualise = false;</b>
+&nbsp;
+<b class="nc">&nbsp;        int index = -1;</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; itemItineraireList.size(); i++) {</b>
+<b class="nc">&nbsp;            if (itemItineraireList.get(i).getId() == itemItineraireId) {</b>
+<b class="nc">&nbsp;                index = i;</b>
+&nbsp;                break;
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (index == -1 || index &gt;= itemItineraireList.size() - 1) return;</b>
+&nbsp;
+<b class="nc">&nbsp;        ItemItineraire itemToMove = itemItineraireList.get(index);</b>
+<b class="nc">&nbsp;        ItemItineraire itemNext = itemItineraireList.get(index + 1);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (itemToMove.getIndex() == itemNext.getIndex()) {</b>
+<b class="nc">&nbsp;            Alert alert = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc">&nbsp;            alert.setTitle(&quot;Action impossible&quot;);</b>
+<b class="nc">&nbsp;            alert.setHeaderText(&quot;Impossible de descendre ce point&quot;);</b>
+<b class="nc">&nbsp;            alert.setContentText(&quot;Vous ne pouvez pas placer le pickup après sa livraison.&quot;);</b>
+<b class="nc">&nbsp;            alert.showAndWait();</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        controleurMetier.echangerPointsItineraire(index + 1, index + 2);</b>
+&nbsp;
+<b class="nc">&nbsp;        initData();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void monterPoint(int itemItineraireId) {
+<b class="nc">&nbsp;        itineraireOptimal = false;</b>
+<b class="nc">&nbsp;        itineraireActualise = false;</b>
+&nbsp;
+<b class="nc">&nbsp;        int index = -1;</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; itemItineraireList.size(); i++) {</b>
+<b class="nc">&nbsp;            if (itemItineraireList.get(i).getId() == itemItineraireId) {</b>
+<b class="nc">&nbsp;                index = i;</b>
+&nbsp;                break;
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (index &lt;= 0) return;</b>
+&nbsp;
+<b class="nc">&nbsp;        ItemItineraire itemToMove = itemItineraireList.get(index);</b>
+<b class="nc">&nbsp;        ItemItineraire itemPrev = itemItineraireList.get(index - 1);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (itemToMove.getIndex() == itemPrev.getIndex()) {</b>
+<b class="nc">&nbsp;            Alert alert = new Alert(Alert.AlertType.WARNING);</b>
+<b class="nc">&nbsp;            alert.setTitle(&quot;Action impossible&quot;);</b>
+<b class="nc">&nbsp;            alert.setHeaderText(&quot;Impossible de monter ce point&quot;);</b>
+<b class="nc">&nbsp;            alert.setContentText(&quot;Vous ne pouvez pas placer la livraison avant son pickup.&quot;);</b>
+<b class="nc">&nbsp;            alert.showAndWait();</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        controleurMetier.echangerPointsItineraire(index + 1, index);</b>
+&nbsp;
+<b class="nc">&nbsp;        initData();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- Reste des méthodes d&#39;affichage (Carte, PDF...) inchangées ---
+&nbsp;
+&nbsp;    public void afficherCarte() {
+<b class="nc">&nbsp;        carte = controleurMetier.getCarte();</b>
+<b class="nc">&nbsp;        if (carte != null) {</b>
+<b class="nc">&nbsp;            gc.clearRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());</b>
+<b class="nc">&nbsp;            gc.setFill(Color.web(&quot;#F4E6DF&quot;));</b>
+<b class="nc">&nbsp;            gc.fillRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());</b>
+<b class="nc">&nbsp;            for (Troncon troncon : carte.getListeTroncon()) {</b>
+<b class="nc">&nbsp;                drawTroncon(troncon, Color.web(&quot;#6B3F3A&quot;), 2);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void afficherPoints() {
+<b class="nc">&nbsp;        DemandeDeLivraions demandeDeLivraions = controleurMetier.getDemandeDeLivraions();</b>
+<b class="nc">&nbsp;        int index = 1;</b>
+<b class="nc">&nbsp;        for (Livraison livraison : demandeDeLivraions.getListeLivraisons()) {</b>
+<b class="nc">&nbsp;            Color couleur = Couleur.getCouleur(livraison.getId());</b>
+<b class="nc">&nbsp;            drawPoint(livraison.getAdresseEnlevement(), couleur, 10);</b>
+<b class="nc">&nbsp;            drawPoint(livraison.getAdresseLivraison(), couleur, 10);</b>
+<b class="nc">&nbsp;            index++;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        drawEntrepot(demandeDeLivraions.getEntrepot().getAdresss());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void afficherItineraire() {
+&nbsp;
+<b class="nc">&nbsp;        List&lt;Troncon&gt; troncons = controleurMetier.getTronconsItineraire();</b>
+<b class="nc">&nbsp;        if (troncons != null) {</b>
+<b class="nc">&nbsp;            for (Troncon troncon : troncons) {</b>
+<b class="nc">&nbsp;                drawTroncon(troncon, Color.web(&quot;#D65C4F&quot;), 4);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void drawTroncon(Troncon troncon, Color color, int width) {
+<b class="nc">&nbsp;        Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());</b>
+<b class="nc">&nbsp;        double x1 = longToX(dep.getLongitude());</b>
+<b class="nc">&nbsp;        double y1 = latToY(dep.getLatitude());</b>
+<b class="nc">&nbsp;        Noeud arr = carte.getMapNoeuds().get(troncon.getDestination());</b>
+<b class="nc">&nbsp;        double x2 = longToX(arr.getLongitude());</b>
+<b class="nc">&nbsp;        double y2 = latToY(arr.getLatitude());</b>
+<b class="nc">&nbsp;        gc.setStroke(color);</b>
+<b class="nc">&nbsp;        gc.setLineWidth(width);</b>
+<b class="nc">&nbsp;        gc.strokeLine(x1, y1, x2, y2);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void drawPoint(Long noeudId, Color color, int rayon) {
+<b class="nc">&nbsp;        Noeud noeud = carte.obtenirNoeud(noeudId);</b>
+<b class="nc">&nbsp;        double x = longToX(noeud.getLongitude());</b>
+<b class="nc">&nbsp;        double y = latToY(noeud.getLatitude());</b>
+<b class="nc">&nbsp;        gc.setFill(color);</b>
+<b class="nc">&nbsp;        gc.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void drawEntrepot(Long noeudId) {
+<b class="nc">&nbsp;        Noeud noeud = carte.obtenirNoeud(noeudId);</b>
+<b class="nc">&nbsp;        double x = longToX(noeud.getLongitude());</b>
+<b class="nc">&nbsp;        double y = latToY(noeud.getLatitude());</b>
+<b class="nc">&nbsp;        int rayon = 20;</b>
+<b class="nc">&nbsp;        double svgW = 576.0; double svgH = 512.0; double scale = 2.0 * rayon / svgW;</b>
+<b class="nc">&nbsp;        double tx = x - (svgW * scale) / 2.0; double ty = y - (svgH * scale) / 2.0;</b>
+<b class="nc">&nbsp;        gc.save(); gc.translate(tx, ty); gc.scale(scale, scale);</b>
+<b class="nc">&nbsp;        gc.setFill(Color.RED); gc.beginPath();</b>
+<b class="nc">&nbsp;        gc.appendSVGPath(&quot;M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1v16.2c0 22.1-17.9 40-40 40h-16c-1.1 0-2.2 0-3.3-.1c-1.4.1-2.8.1-4.2.1L416 512h-24c-22.1 0-40-17.9-40-40v-88c0-17.7-14.3-32-32-32h-64c-17.7 0-32 14.3-32 32v88c0 22.1-17.9 40-40 40h-55.9c-1.5 0-3-.1-4.5-.2c-1.2.1-2.4.2-3.6.2h-16c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9.1-2.8v-69.7h-32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7l255.4 224.5c8 7 12 15 11 24&quot;);</b>
+<b class="nc">&nbsp;        gc.fill(); gc.closePath(); gc.restore();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private double longToX(double longitude) {
+<b class="nc">&nbsp;        return (longitude - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private double latToY(double latitude) {
+<b class="nc">&nbsp;        return gc.getCanvas().getHeight() - ((latitude - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat()- carte.getMinLat()));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void retourAccueil() {
+<b class="nc">&nbsp;        try { interfaceUtilisateur.afficherAccueil(); } catch (Exception e) { e.printStackTrace(); }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void retourPoints() {
+<b class="nc">&nbsp;        try { interfaceUtilisateur.afficherPoints(); } catch (Exception e) { e.printStackTrace(); }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+<b class="nc">&nbsp;    private void actualisationAuto() { System.out.println(&quot;actualisationAuto&quot;); }</b>
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    public void genererPDF() throws IOException {
+<b class="nc">&nbsp;        String canvasBase64 = exporterCanvasEnBase64();</b>
+<b class="nc">&nbsp;        PdfControleur pdfControleur = new PdfControleur();</b>
+<b class="nc">&nbsp;        pdfControleur.setInterface(this.interfaceUtilisateur);</b>
+<b class="nc">&nbsp;        pdfControleur.extrairePdf_2(controleurMetier.getTronconsItineraire(), controleurMetier.getChemin(), canvasBase64);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String exporterCanvasEnBase64() throws IOException {
+<b class="nc">&nbsp;        WritableImage writableImage = new WritableImage((int) canvasCarte.getWidth(), (int) canvasCarte.getHeight());</b>
+<b class="nc">&nbsp;        canvasCarte.snapshot(null, writableImage);</b>
+<b class="nc">&nbsp;        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);</b>
+<b class="nc">&nbsp;        ByteArrayOutputStream baos = new ByteArrayOutputStream();</b>
+<b class="nc">&nbsp;        ImageIO.write(bufferedImage, &quot;png&quot;, baos);</b>
+<b class="nc">&nbsp;        return Base64.getEncoder().encodeToString(baos.toByteArray());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void miseAJourHeureTotale() {
+<b class="nc">&nbsp;        ArrayList&lt;PointLivraison&gt; points = controleurMetier.getPointsItineraire();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (points != null &amp;&amp; !points.isEmpty()) {</b>
+<b class="nc">&nbsp;            PointLivraison dernierPoint = points.get(points.size() - 1);</b>
+&nbsp;
+<b class="nc">&nbsp;            double secondesTotales = dernierPoint.getG();</b>
+&nbsp;
+<b class="nc">&nbsp;            int heures = (int) (secondesTotales / 3600);</b>
+<b class="nc">&nbsp;            int minutes = (int) ((secondesTotales % 3600) / 60);</b>
+&nbsp;
+<b class="nc">&nbsp;            heureTotale.setText(String.valueOf(heures));</b>
+<b class="nc">&nbsp;            minuteTotale.setText(String.format(&quot;%02d&quot;, minutes));</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            heureTotale.setText(&quot;0&quot;);</b>
+<b class="nc">&nbsp;            minuteTotale.setText(&quot;00&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-12-10 08:13</div>
+</div>
+</body>
+</html>

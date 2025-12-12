@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Carte</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">fr.insa.optimod.modele</a>
+</div>
+
+<h1>Coverage Summary for Class: Carte (fr.insa.optimod.modele)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Carte</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    44,4%
+  </span>
+  <span class="absValue">
+    (4/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70,6%
+  </span>
+  <span class="absValue">
+    (12/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package fr.insa.optimod.modele;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;import java.util.HashMap;
+&nbsp;
+&nbsp;public class Carte {
+&nbsp;    protected ArrayList&lt;Noeud&gt; listeNoeuds;
+&nbsp;    protected ArrayList&lt;Troncon&gt; listeTroncon;
+&nbsp;    protected HashMap&lt;Long, Noeud&gt; mapNoeuds;
+&nbsp;
+&nbsp;    protected Double minLat;
+&nbsp;    protected Double minLong;
+&nbsp;    protected Double maxLat;
+&nbsp;    protected Double maxLong;
+&nbsp;
+<b class="fc">&nbsp;    public Carte(ArrayList&lt;Noeud&gt; listeNoeuds, ArrayList&lt;Troncon&gt; listeTroncon, HashMap&lt;Long, Noeud&gt; mapNoeuds, Double minLat, Double minLong, Double maxLat, Double maxLong) {</b>
+<b class="fc">&nbsp;        this.listeNoeuds = listeNoeuds;</b>
+<b class="fc">&nbsp;        this.listeTroncon = listeTroncon;</b>
+<b class="fc">&nbsp;        this.mapNoeuds = mapNoeuds;</b>
+<b class="fc">&nbsp;        this.minLat = minLat;</b>
+<b class="fc">&nbsp;        this.minLong = minLong;</b>
+<b class="fc">&nbsp;        this.maxLat = maxLat;</b>
+<b class="fc">&nbsp;        this.maxLong = maxLong;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Noeud obtenirNoeud(Long id) {
+&nbsp;
+<b class="fc">&nbsp;        Noeud noeud = mapNoeuds.get(id);</b>
+<b class="fc">&nbsp;        return noeud;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Noeud&gt; getListeNoeuds() {
+<b class="fc">&nbsp;        return listeNoeuds;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Troncon&gt; getListeTroncon() {
+<b class="fc">&nbsp;        return listeTroncon;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public HashMap&lt;Long, Noeud&gt; getMapNoeuds() {
+<b class="nc">&nbsp;        return mapNoeuds;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Double getMinLat() {
+<b class="nc">&nbsp;        return minLat;</b>
+&nbsp;    }
+&nbsp;    public Double getMinLong() {
+<b class="nc">&nbsp;        return minLong;</b>
+&nbsp;    }
+&nbsp;    public Double getMaxLat() {
+<b class="nc">&nbsp;        return maxLat;</b>
+&nbsp;    }
+&nbsp;    public Double getMaxLong() {
+<b class="nc">&nbsp;        return maxLong;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-12-10 08:13</div>
+</div>
+</body>
+</html>

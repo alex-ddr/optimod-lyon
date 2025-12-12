@@ -1,0 +1,290 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CarteControleur</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">fr.insa.optimod.controleur</a>
+</div>
+
+<h1>Coverage Summary for Class: CarteControleur (fr.insa.optimod.controleur)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CarteControleur</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    27,3%
+  </span>
+  <span class="absValue">
+    (3/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53,1%
+  </span>
+  <span class="absValue">
+    (17/32)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    37,7%
+  </span>
+  <span class="absValue">
+    (26/69)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package fr.insa.optimod.controleur;
+&nbsp;
+&nbsp;import fr.insa.optimod.modele.Carte;
+&nbsp;import fr.insa.optimod.modele.DemandeDeLivraions;
+&nbsp;import fr.insa.optimod.modele.Noeud;
+&nbsp;import fr.insa.optimod.modele.Troncon;
+&nbsp;import fr.insa.optimod.vue.Interface;
+&nbsp;import javafx.fxml.FXML;
+&nbsp;import javafx.scene.canvas.Canvas;
+&nbsp;import javafx.scene.canvas.GraphicsContext;
+&nbsp;import javafx.scene.input.DragEvent;
+&nbsp;import javafx.scene.input.Dragboard;
+&nbsp;import javafx.scene.input.MouseEvent;
+&nbsp;import javafx.scene.input.TransferMode;
+&nbsp;import javafx.scene.paint.Color;
+&nbsp;import javafx.scene.shape.SVGPath;
+&nbsp;import javafx.stage.FileChooser;
+&nbsp;import org.w3c.dom.Document;
+&nbsp;import org.w3c.dom.Node;
+&nbsp;import org.w3c.dom.NodeList;
+&nbsp;
+&nbsp;import javax.xml.parsers.DocumentBuilder;
+&nbsp;import javax.xml.parsers.DocumentBuilderFactory;
+&nbsp;import java.io.File;
+&nbsp;import java.io.IOException;
+&nbsp;
+<b class="fc">&nbsp;public class CarteControleur {</b>
+&nbsp;
+<b class="fc">&nbsp;    Carte carte = null;</b>
+&nbsp;
+&nbsp;    private Interface interfaceUtilisateur;
+&nbsp;    private Controleur controleurMetier;
+&nbsp;
+<b class="fc">&nbsp;    private FileChooser explorateur = new FileChooser();</b>
+&nbsp;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private Canvas canvasCarte;
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private SVGPath svgWrong;
+&nbsp;
+&nbsp;    private GraphicsContext gc;
+&nbsp;
+&nbsp;    public void setInterface(Interface interfaceUtilisateur) {
+<b class="nc">&nbsp;        this.interfaceUtilisateur = interfaceUtilisateur;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setControleurMetier(Controleur controleurMetier) {
+<b class="fc">&nbsp;        this.controleurMetier = controleurMetier;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void initialize() {
+<b class="nc">&nbsp;        System.out.println(&quot;initialize CarteControleur&quot;);</b>
+<b class="nc">&nbsp;        gc = canvasCarte.getGraphicsContext2D();</b>
+<b class="nc">&nbsp;        svgWrong.setVisible(false);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void retourAccueil() {
+&nbsp;        try {
+<b class="nc">&nbsp;            interfaceUtilisateur.afficherAccueil();</b>
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void afficherCarte() {
+<b class="nc">&nbsp;        carte = controleurMetier.getCarte();</b>
+<b class="nc">&nbsp;        if (carte != null) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Affichage de la carte&quot;);</b>
+<b class="nc">&nbsp;            gc.clearRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());</b>
+<b class="nc">&nbsp;            gc.setFill(Color.web(&quot;#F4E6DF&quot;));</b>
+<b class="nc">&nbsp;            gc.fillRect(0, 0, canvasCarte.getWidth(), canvasCarte.getHeight());</b>
+<b class="nc">&nbsp;            for (Troncon troncon : carte.getListeTroncon()) {</b>
+<b class="nc">&nbsp;                Noeud dep = carte.getMapNoeuds().get(troncon.getOrigine());</b>
+<b class="nc">&nbsp;                double x1 = (dep.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());</b>
+<b class="nc">&nbsp;                double y1 = gc.getCanvas().getHeight() - ((dep.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat() - carte.getMinLat()));</b>
+<b class="nc">&nbsp;                Noeud arr = carte.getMapNoeuds().get(troncon.getDestination());</b>
+<b class="nc">&nbsp;                double x2 = (arr.getLongitude() - carte.getMinLong()) * gc.getCanvas().getWidth() / (carte.getMaxLong()- carte.getMinLong());</b>
+<b class="nc">&nbsp;                double y2 = gc.getCanvas().getHeight() - ((arr.getLatitude() - carte.getMinLat()) * gc.getCanvas().getHeight() / (carte.getMaxLat() - carte.getMinLat()));</b>
+&nbsp;
+<b class="nc">&nbsp;                gc.setStroke(Color.web(&quot;#6B3F3A&quot;)); // ou 6B3F3A  ou 8C5752 et couleur pour tracer la tournée --&gt; #D65C4F</b>
+<b class="nc">&nbsp;                gc.setLineWidth(2);</b>
+<b class="nc">&nbsp;                gc.strokeLine(x1, y1, x2, y2);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    private void clicZonePoints(MouseEvent event) {
+<b class="nc">&nbsp;        System.out.println(&quot;Le fichier des points va être choisi&quot;);</b>
+<b class="nc">&nbsp;        File fichierPoints = explorateur.showOpenDialog(this.interfaceUtilisateur.getFenetrePrincipale());</b>
+<b class="nc">&nbsp;        traiterFichierPoints(fichierPoints);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    void fichierAuDessusPoints(DragEvent event)
+&nbsp;    {
+<b class="nc">&nbsp;        Dragboard db = event.getDragboard();</b>
+<b class="nc">&nbsp;        if (db.hasFiles() &amp;&amp; db.getFiles().size() == 1)</b>
+&nbsp;        {
+<b class="nc">&nbsp;            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            event.acceptTransferModes(TransferMode.NONE);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        event.consume();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FXML
+&nbsp;    void ficherLachePoints(DragEvent event)
+&nbsp;    {
+<b class="nc">&nbsp;        Dragboard db = event.getDragboard();</b>
+<b class="nc">&nbsp;        if (db.hasFiles())</b>
+&nbsp;        {
+<b class="nc">&nbsp;            traiterFichierPoints(db.getFiles().getFirst());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        event.consume();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void traiterFichierPoints(File fichierPoints) {
+<b class="nc">&nbsp;        if (isValidXML(fichierPoints)) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Le fichier des points &quot; + fichierPoints.getAbsolutePath());</b>
+&nbsp;            //        controleurMetier.initialiserPoints(fichierPoints.getAbsolutePath());
+<b class="nc">&nbsp;            controleurMetier.initialiserDemandeDeLivraions(fichierPoints.getAbsolutePath());</b>
+<b class="nc">&nbsp;            DemandeDeLivraions demande = controleurMetier.getDemandeDeLivraions();</b>
+<b class="nc">&nbsp;            controleurMetier.preparerPlanTournee(carte, demande);</b>
+&nbsp;
+&nbsp;            try {
+<b class="nc">&nbsp;                interfaceUtilisateur.afficherPoints();</b>
+&nbsp;            } catch (Exception e) {
+<b class="nc">&nbsp;                e.printStackTrace();</b>
+&nbsp;            }
+&nbsp;        } else {
+<b class="nc">&nbsp;            svgWrong.setVisible(true);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isValidXML(File file) {
+&nbsp;        try {
+<b class="fc">&nbsp;            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();</b>
+<b class="fc">&nbsp;            factory.setNamespaceAware(true);</b>
+<b class="fc">&nbsp;            DocumentBuilder builder = factory.newDocumentBuilder();</b>
+<b class="fc">&nbsp;            Document document = builder.parse(file); // Si parse OK = XML valide</b>
+&nbsp;
+<b class="pc">&nbsp;            if(document.getElementsByTagName(&quot;livraison&quot;).getLength() == 0 &amp;&amp; document.getElementsByTagName(&quot;request&quot;).getLength() == 0) {return false;}</b>
+<b class="pc">&nbsp;            if(document.getElementsByTagName(&quot;entrepot&quot;).getLength() == 0 &amp;&amp; document.getElementsByTagName(&quot;depot&quot;).getLength() == 0) {return false;}</b>
+<b class="pc">&nbsp;            if(document.getElementsByTagName(&quot;demandeDeLivraisons&quot;).getLength() == 0 &amp;&amp; document.getElementsByTagName(&quot;planningRequest&quot;).getLength() == 0) {return false;}</b>
+&nbsp;
+<b class="fc">&nbsp;            String enlevement = &quot;adresseEnlevement&quot;;</b>
+<b class="fc">&nbsp;            String livraison = &quot;adresseLivraison&quot;;</b>
+<b class="fc">&nbsp;            NodeList nodeList = document.getElementsByTagName(&quot;livraison&quot;);</b>
+<b class="fc">&nbsp;            if (nodeList.getLength() == 0){</b>
+<b class="fc">&nbsp;                nodeList = document.getElementsByTagName(&quot;request&quot;);</b>
+<b class="fc">&nbsp;                livraison = &quot;deliveryAddress&quot;;</b>
+<b class="fc">&nbsp;                enlevement = &quot;pickupAddress&quot;;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            Carte carte = controleurMetier.getCarte();</b>
+<b class="fc">&nbsp;            for (int i = 0; i &lt; nodeList.getLength(); i++) {</b>
+<b class="fc">&nbsp;                Node node = nodeList.item(i);</b>
+<b class="fc">&nbsp;                Long idEnlevement = Long.valueOf(node.getAttributes().getNamedItem(enlevement).getTextContent());</b>
+<b class="fc">&nbsp;                Long idLivraison = Long.valueOf(node.getAttributes().getNamedItem(livraison).getTextContent());</b>
+<b class="fc">&nbsp;                if (carte.getListeNoeuds().stream().noneMatch(n -&gt; n.getId().equals(idEnlevement) || n.getId().equals(idLivraison))) {</b>
+<b class="fc">&nbsp;                    return false;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            return false; // Parse error = pas un XML valide</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-12-10 08:13</div>
+</div>
+</body>
+</html>

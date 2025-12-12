@@ -1,0 +1,215 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Interface</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">fr.insa.optimod.vue</a>
+</div>
+
+<h1>Coverage Summary for Class: Interface (fr.insa.optimod.vue)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Interface</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package fr.insa.optimod.vue;
+&nbsp;
+&nbsp;import fr.insa.optimod.controleur.*;
+&nbsp;import javafx.application.Application;
+&nbsp;import javafx.fxml.FXMLLoader;
+&nbsp;import javafx.scene.Parent;
+&nbsp;import javafx.scene.Scene;
+&nbsp;import javafx.scene.control.Button;
+&nbsp;import javafx.scene.control.Label;
+&nbsp;import javafx.stage.Stage;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;
+<b class="nc">&nbsp;public class Interface extends Application {</b>
+&nbsp;
+&nbsp;    private Stage fenetrePrincipale;
+&nbsp;    private Controleur controleurMetier;
+&nbsp;
+&nbsp;    public static void main(String[] args) {
+<b class="nc">&nbsp;        launch(args);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Stage getFenetrePrincipale() {
+<b class="nc">&nbsp;        return fenetrePrincipale;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void start(Stage primaryStage) throws Exception {
+<b class="nc">&nbsp;        this.fenetrePrincipale = primaryStage;</b>
+<b class="nc">&nbsp;        this.controleurMetier = new Controleur();</b>
+&nbsp;
+<b class="nc">&nbsp;        fenetrePrincipale.setTitle(&quot;Optimod&#39;Lyon&quot;);</b>
+<b class="nc">&nbsp;        fenetrePrincipale.setMaximized(true);</b>
+&nbsp;
+<b class="nc">&nbsp;        afficherAccueil();</b>
+&nbsp;        //afficherPoints();
+&nbsp;
+<b class="nc">&nbsp;        fenetrePrincipale.show();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void afficherAccueil() throws IOException {
+<b class="nc">&nbsp;        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/layouts/accueil.fxml&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        Parent accueil = loader.load();</b>
+&nbsp;
+<b class="nc">&nbsp;        AccueilControleur accueilControleur = loader.getController();</b>
+&nbsp;
+<b class="nc">&nbsp;        accueilControleur.setInterface(this);</b>
+<b class="nc">&nbsp;        accueilControleur.setControleurMetier(this.controleurMetier);</b>
+&nbsp;
+<b class="nc">&nbsp;        Scene scene = new Scene(accueil, 1920, 1080);</b>
+&nbsp;
+<b class="nc">&nbsp;        fenetrePrincipale.setScene(scene);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void afficherCarte() throws IOException {
+<b class="nc">&nbsp;        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/layouts/carte.fxml&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        Parent carte = loader.load();</b>
+&nbsp;
+<b class="nc">&nbsp;        CarteControleur carteControleur = loader.getController();</b>
+&nbsp;
+<b class="nc">&nbsp;        carteControleur.setInterface(this);</b>
+<b class="nc">&nbsp;        carteControleur.setControleurMetier(this.controleurMetier);</b>
+&nbsp;
+<b class="nc">&nbsp;        carteControleur.afficherCarte();</b>
+&nbsp;
+<b class="nc">&nbsp;        Scene scene = new Scene(carte, 1920, 1080);</b>
+&nbsp;
+<b class="nc">&nbsp;        fenetrePrincipale.setScene(scene);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void afficherPoints() throws IOException {
+<b class="nc">&nbsp;        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/layouts/points.fxml&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        Parent points = loader.load();</b>
+&nbsp;
+<b class="nc">&nbsp;        PointsControleur pointsController = loader.getController();</b>
+&nbsp;
+<b class="nc">&nbsp;        pointsController.setInterface(this);</b>
+<b class="nc">&nbsp;        pointsController.setControleurMetier(this.controleurMetier);</b>
+<b class="nc">&nbsp;        pointsController.initData();</b>
+<b class="nc">&nbsp;        pointsController.afficherCarte();</b>
+<b class="nc">&nbsp;        pointsController.afficherPoints();</b>
+&nbsp;
+<b class="nc">&nbsp;        Scene scene = new Scene(points, 1920, 1080);</b>
+&nbsp;
+<b class="nc">&nbsp;        fenetrePrincipale.setScene(scene);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void afficherItineraire() throws IOException {
+<b class="nc">&nbsp;        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/layouts/itineraire.fxml&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        Parent points = loader.load();</b>
+&nbsp;
+<b class="nc">&nbsp;        ItineraireControleur itineraireControleur = loader.getController();</b>
+&nbsp;
+<b class="nc">&nbsp;        itineraireControleur.setInterface(this);</b>
+<b class="nc">&nbsp;        itineraireControleur.setControleurMetier(this.controleurMetier);</b>
+&nbsp;
+<b class="nc">&nbsp;        itineraireControleur.initData();</b>
+<b class="nc">&nbsp;        itineraireControleur.afficherCarte();</b>
+<b class="nc">&nbsp;        itineraireControleur.afficherItineraire();</b>
+<b class="nc">&nbsp;        itineraireControleur.afficherPoints();</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        Scene scene = new Scene(points, 1920, 1080);</b>
+&nbsp;
+<b class="nc">&nbsp;        fenetrePrincipale.setScene(scene);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-12-10 08:13</div>
+</div>
+</body>
+</html>

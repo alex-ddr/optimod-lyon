@@ -1,0 +1,705 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Controleur</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">fr.insa.optimod.controleur</a>
+</div>
+
+<h1>Coverage Summary for Class: Controleur (fr.insa.optimod.controleur)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Controleur</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    38,9%
+  </span>
+  <span class="absValue">
+    (7/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    37,1%
+  </span>
+  <span class="absValue">
+    (52/140)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    27,9%
+  </span>
+  <span class="absValue">
+    (105/376)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package fr.insa.optimod.controleur;
+&nbsp;import fr.insa.optimod.modele.*;
+&nbsp;
+&nbsp;import org.w3c.dom.*;
+&nbsp;import javax.xml.parsers.DocumentBuilder;
+&nbsp;import javax.xml.parsers.DocumentBuilderFactory;
+&nbsp;import java.io.File;
+&nbsp;import java.time.LocalTime;
+&nbsp;import java.time.format.DateTimeFormatter;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;public class Controleur {</b>
+&nbsp;
+<b class="fc">&nbsp;    protected Carte carte = null;</b>
+<b class="fc">&nbsp;    protected ArrayList&lt;Troncon&gt; troncons = null;</b>
+<b class="fc">&nbsp;    protected ArrayList&lt;PointLivraison&gt; chemin = null;</b>
+<b class="fc">&nbsp;    protected ArrayList&lt;PointLivraison&gt; tspListe = null;</b>
+<b class="fc">&nbsp;    protected HashMap&lt;Long, HashMap&lt;Long,PointLivraison&gt; &gt; tournee = null;</b>
+<b class="fc">&nbsp;    protected DemandeDeLivraions demandeDeLivraions = null;</b>
+&nbsp;    protected  HashMap&lt;Long,Integer&gt; mapIdAIndex;
+&nbsp;    protected  double[][] cout;
+<b class="nc">&nbsp;</b>
+&nbsp;
+&nbsp;    public ArrayList&lt;PointLivraison&gt; getTspListe() {
+<b class="nc">&nbsp;        return tspListe;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public ArrayList&lt;Troncon&gt; getTronconsItineraire() {
+<b class="nc">&nbsp;        return troncons;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;PointLivraison&gt; getPointsItineraire() {
+<b class="nc">&nbsp;        return tspListe;</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public ArrayList&lt;PointLivraison&gt; getChemin() {return chemin;}</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;    public DemandeDeLivraions getDemandeDeLivraions() {</b>
+<b class="fc">&nbsp;        return demandeDeLivraions;</b>
+&nbsp;    }
+<b class="fc">&nbsp;</b>
+&nbsp;
+&nbsp;    protected Double heuristique(Noeud na, Noeud nb, Carte carte) {
+&nbsp;
+<b class="nc">&nbsp;        double dx = na.getLongitude() - nb.getLongitude();</b>
+<b class="fc">&nbsp;        double dy = na.getLatitude() - nb.getLatitude();</b>
+&nbsp;
+<b class="fc">&nbsp;        return Math.sqrt(dx*dx + dy*dy);</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void ajouterAdjacense(Carte carte)
+&nbsp;    {
+<b class="nc">&nbsp;        for(Troncon troncon: carte.getListeTroncon())</b>
+&nbsp;        {
+<b class="nc">&nbsp;            carte.obtenirNoeud(troncon.getOrigine()).ajouterTroncon(troncon);</b>
+<b class="fc">&nbsp;            carte.obtenirNoeud(troncon.getDestination()).ajouterTroncon(troncon);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return;</b>
+<b class="fc">&nbsp;</b>
+&nbsp;    }
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    public PointLivraison astar(Carte carte, Noeud adresseDebut, Noeud adresseFin) {</b>
+<b class="nc">&nbsp;        PriorityQueue&lt;PointLivraison&gt; livrable = new PriorityQueue&lt;&gt;(Comparator.comparingDouble(PointLivraison::obtenirCout));</b>
+<b class="fc">&nbsp;        HashMap&lt;Long, Double&gt; score = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        HashSet&lt;Long&gt; fait = new HashSet&lt;&gt;();</b>
+<b class="nc">&nbsp;        PointLivraison debut = new PointLivraison(adresseDebut, 0.0, heuristique(adresseDebut, adresseFin, carte), null);</b>
+&nbsp;
+<b class="nc">&nbsp;        livrable.add(debut);</b>
+<b class="fc">&nbsp;        score.put(adresseDebut.getId(), 0.0);</b>
+<b class="fc">&nbsp;</b>
+<b class="nc">&nbsp;        while (!livrable.isEmpty()) {</b>
+<b class="nc">&nbsp;            PointLivraison courant = livrable.poll();</b>
+<b class="fc">&nbsp;</b>
+&nbsp;            //adjacense.put(courant.getNoeud(), courant.getNoeud().getAdjacense());
+<b class="fc">&nbsp;</b>
+<b class="nc">&nbsp;            if (courant.getNoeud().getId().equals(adresseFin.getId()))</b>
+<b class="nc">&nbsp;                return courant; //demande</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;</b>
+<b class="nc">&nbsp;            fait.add(courant.getNoeud().getId());</b>
+&nbsp;
+<b class="nc">&nbsp;            for (Troncon t : courant.getNoeud().getAdjacense()) {</b>
+<b class="fc">&nbsp;                Long voisin;</b>
+&nbsp;
+<b class="nc">&nbsp;                if (t.getDestination().equals(courant.getNoeud().getId())) {</b>
+<b class="fc">&nbsp;                    voisin = t.getOrigine();</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;
+<b class="fc">&nbsp;                else {</b>
+<b class="nc">&nbsp;                    voisin = t.getDestination();</b>
+&nbsp;                }
+<b class="fc">&nbsp;</b>
+<b class="nc">&nbsp;                Noeud noeudVoisin = carte.obtenirNoeud(voisin);</b>
+<b class="fc">&nbsp;                Double tentative = courant.getG() + t.getLongueur()/4.1666666667;</b>
+&nbsp;
+<b class="pc">&nbsp;                if (fait.contains(voisin))</b>
+<b class="fc">&nbsp;                    continue;</b>
+<b class="fc">&nbsp;</b>
+<b class="pc">&nbsp;                if (!score.containsKey(voisin) || tentative &lt; score.get(voisin)) {</b>
+&nbsp;
+<b class="nc">&nbsp;                    Double h = heuristique(noeudVoisin, adresseFin, carte);</b>
+&nbsp;
+<b class="nc">&nbsp;                    PointLivraison suivant = new PointLivraison(noeudVoisin, tentative, h, courant);</b>
+<b class="nc">&nbsp;                    suivant.setAntecedent(t);</b>
+<b class="nc">&nbsp;                    score.put(voisin, tentative);</b>
+<b class="nc">&nbsp;                    livrable.add(suivant);</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;
+&nbsp;            }
+&nbsp;
+&nbsp;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return null;</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;</b>
+&nbsp;    public void calculerTournee()
+&nbsp;    {
+<b class="nc">&nbsp;        double total = 0;</b>
+<b class="nc">&nbsp;        tspListe.get(0).setG(0.0);</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        for (int k = 0; k &lt; tspListe.size() - 1; k++) {</b>
+<b class="nc">&nbsp;            Noeud a = tspListe.get(k).getNoeud();</b>
+<b class="nc">&nbsp;            Noeud b = tspListe.get(k+1).getNoeud();</b>
+<b class="nc">&nbsp;            Integer Ia = mapIdAIndex.get(a.getId());</b>
+<b class="nc">&nbsp;            Integer Ib = mapIdAIndex.get(b.getId());</b>
+<b class="nc">&nbsp;            double d = cout[Ia][Ib]; // ou via carte.astar(a,b)</b>
+<b class="nc">&nbsp;            tspListe.get(k+1).setG(total + d);</b>
+<b class="nc">&nbsp;            total += d;</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        ArrayList&lt;Troncon&gt; troncons = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        ArrayList&lt;PointLivraison&gt; chemin = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        PointLivraison courant = tspListe.get(0);</b>
+<b class="nc">&nbsp;        PointLivraison prochain = tspListe.get(1);</b>
+&nbsp;
+&nbsp;        PointLivraison astar;
+&nbsp;
+<b class="nc">&nbsp;        for( int i = 0; i &lt; tspListe.size()-1; i++ ) {</b>
+<b class="nc">&nbsp;            courant = tspListe.get(i);</b>
+<b class="nc">&nbsp;            prochain = tspListe.get(i+1);</b>
+<b class="nc">&nbsp;            astar = tournee.get(prochain.getNoeud().getId()).get(courant.getNoeud().getId());</b>
+<b class="nc">&nbsp;            ArrayList&lt;Troncon&gt; listeTampon = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;            while (astar != null)</b>
+&nbsp;            {
+&nbsp;
+<b class="nc">&nbsp;                chemin.add(astar);</b>
+<b class="nc">&nbsp;                if (astar.getAntecedent() != null)</b>
+<b class="nc">&nbsp;                {</b>
+<b class="nc">&nbsp;                    listeTampon.add(astar.getAntecedent());</b>
+&nbsp;                }
+&nbsp;                else {
+<b class="nc">&nbsp;                    chemin.remove(astar);</b>
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;                astar = astar.getParent();</b>
+&nbsp;
+&nbsp;
+&nbsp;            }
+&nbsp;            //Collections.reverse(listeTampon);
+<b class="nc">&nbsp;            troncons.addAll(listeTampon);</b>
+&nbsp;
+&nbsp;
+&nbsp;            //System.out.println(courant.getNoeud().getId());
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        chemin.add(courant);</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        //System.out.println((chemin.size()));</b>
+<b class="nc">&nbsp;        //System.out.println((troncons.size()));</b>
+&nbsp;
+<b class="nc">&nbsp;        this.troncons = troncons;</b>
+<b class="nc">&nbsp;        this.chemin = chemin;</b>
+&nbsp;
+<b class="nc">&nbsp;        return;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;</b>
+&nbsp;
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    public HashMap&lt;Long, HashMap&lt;Long, PointLivraison&gt; &gt; preparerPlanTournee(Carte carte, DemandeDeLivraions demande)</b>
+<b class="nc">&nbsp;    {</b>
+<b class="nc">&nbsp;        this.ajouterAdjacense(carte);</b>
+<b class="nc">&nbsp;        List&lt;Long&gt; listeIds = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        //ArrayList&lt;Livraison&gt; listeLivraions = demande.getListeLivraisons();</b>
+<b class="nc">&nbsp;        listeIds.add(demande.getEntrepot().getAdresss());</b>
+<b class="nc">&nbsp;        for(Livraison livraison : demande.getListeLivraisons()){</b>
+<b class="nc">&nbsp;            listeIds.add(livraison.getAdresseEnlevement());</b>
+<b class="nc">&nbsp;            listeIds.add(livraison.getAdresseLivraison());</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        //System.out.println(&quot;listeIds : &quot; + listeIds.size());</b>
+&nbsp;
+<b class="nc">&nbsp;        HashMap&lt;Long,Integer&gt; mapIdAIndex = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        HashMap&lt;Integer,Long&gt; mapIndexAId = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        for (int k = 0; k &lt; listeIds.size(); k++) {</b>
+<b class="nc">&nbsp;            mapIdAIndex.put(listeIds.get(k), k);</b>
+<b class="nc">&nbsp;            mapIndexAId.put(k, listeIds.get(k));</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        this.mapIdAIndex = mapIdAIndex;</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        long s = (1L &lt;&lt; (listeIds.size() - 1)) - 1L;</b>
+<b class="nc">&nbsp;        double[][] cout = new double[listeIds.size()][listeIds.size()];</b>
+<b class="nc">&nbsp;        HashMap&lt;Long, HashMap&lt;Long,PointLivraison&gt; &gt; tournee = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;</b>
+&nbsp;
+<b class="nc">&nbsp;        HashMap&lt;Long, PointLivraison&gt; courtCheminEntrepot = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        PointLivraison astarEntrepotL, astarEntrepotE;</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        Noeud entrepot = carte.obtenirNoeud(demande.getEntrepot().getAdresss());</b>
+<b class="nc">&nbsp;        Integer ent = mapIdAIndex.get(entrepot.getId());</b>
+<b class="nc">&nbsp;        for (Livraison livraison2 : demande.getListeLivraisons()) {</b>
+&nbsp;
+<b class="nc">&nbsp;</b>
+&nbsp;
+<b class="nc">&nbsp;                Integer liv = mapIdAIndex.get(livraison2.getAdresseLivraison());</b>
+<b class="nc">&nbsp;                Integer enl = mapIdAIndex.get(livraison2.getAdresseEnlevement());</b>
+&nbsp;
+<b class="nc">&nbsp;                astarEntrepotL = astar(carte, entrepot, carte.obtenirNoeud(livraison2.getAdresseLivraison()));</b>
+<b class="nc">&nbsp;                astarEntrepotE = astar(carte, entrepot, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;                cout[ent][liv] = astarEntrepotL.getG() + livraison2.getDureeLivraison();</b>
+<b class="nc">&nbsp;                cout[ent][enl] = astarEntrepotE.getG() + livraison2.getDureeEnlevement();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;                astarEntrepotE.setG(cout[ent][enl]);</b>
+<b class="nc">&nbsp;                astarEntrepotL.setG(cout[ent][liv]);</b>
+&nbsp;
+<b class="nc">&nbsp;                courtCheminEntrepot.put(livraison2.getAdresseLivraison(), astarEntrepotL);</b>
+<b class="nc">&nbsp;                courtCheminEntrepot.put(livraison2.getAdresseEnlevement(), astarEntrepotE);</b>
+&nbsp;
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;</b>
+&nbsp;
+&nbsp;        }
+<b class="nc">&nbsp;        tournee.put(entrepot.getId(), courtCheminEntrepot);</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        for (Livraison livraison : demande.getListeLivraisons()) {</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            HashMap&lt;Long, PointLivraison&gt; courtCheminL = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;            HashMap&lt;Long, PointLivraison&gt; courtCheminE = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            Noeud L = carte.obtenirNoeud(livraison.getAdresseLivraison());</b>
+<b class="nc">&nbsp;            Noeud E= carte.obtenirNoeud(livraison.getAdresseEnlevement());</b>
+<b class="nc">&nbsp;            Integer idL = mapIdAIndex.get(L.getId());</b>
+<b class="nc">&nbsp;            Integer idE = mapIdAIndex.get(E.getId());</b>
+<b class="nc">&nbsp;            PointLivraison astarL, astarE =  astar(carte, L, E), astarLEnlevement, astarLLivraison, astarEEnlevement, astarELivraison;</b>
+<b class="nc">&nbsp;            astarL = astarE;</b>
+<b class="nc">&nbsp;            cout[idL][idE] = astarE.getG() +  livraison.getDureeEnlevement();</b>
+<b class="nc">&nbsp;            cout[idE][idL] = astarL.getG() + livraison.getDureeLivraison();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            astarE.setG(cout[idL][idE]);</b>
+<b class="nc">&nbsp;            astarL.setG(cout[idE][idL]);</b>
+<b class="nc">&nbsp;            //courtCheminE.put(livraison.getAdresseLivraison(), new ArrayList&lt;&gt;());</b>
+<b class="nc">&nbsp;            courtCheminL.put(E.getId(), astarE);</b>
+<b class="nc">&nbsp;            courtCheminE.put(L.getId(), astarL);</b>
+&nbsp;
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            for (Livraison livraison2 : demande.getListeLivraisons()) {</b>
+<b class="nc">&nbsp;                if (livraison!=livraison2) {</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;                Integer liv = mapIdAIndex.get(livraison2.getAdresseLivraison());</b>
+<b class="nc">&nbsp;                Integer enl = mapIdAIndex.get(livraison2.getAdresseEnlevement());</b>
+&nbsp;
+<b class="nc">&nbsp;                astarLEnlevement = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));</b>
+<b class="nc">&nbsp;                astarLLivraison = astar(carte, L, carte.obtenirNoeud(livraison2.getAdresseLivraison()));</b>
+&nbsp;
+<b class="nc">&nbsp;                astarEEnlevement = astar(carte, E, carte.obtenirNoeud(livraison2.getAdresseEnlevement()));</b>
+<b class="nc">&nbsp;                astarELivraison = astar(carte, E, carte.obtenirNoeud(livraison2.getAdresseLivraison()));</b>
+&nbsp;
+<b class="nc">&nbsp;                cout[idL][liv] = astarLLivraison.getG() + livraison2.getDureeLivraison();</b>
+<b class="nc">&nbsp;                cout[idE][liv] = astarELivraison.getG() +  livraison2.getDureeLivraison();</b>
+<b class="nc">&nbsp;                cout[idL][enl] = astarLEnlevement.getG() + livraison2.getDureeEnlevement();</b>
+<b class="nc">&nbsp;                cout[idE][enl] = astarEEnlevement.getG() +  livraison2.getDureeEnlevement();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;                astarLLivraison.setG(cout[idL][liv]);</b>
+<b class="nc">&nbsp;                astarELivraison.setG(cout[idE][liv]);</b>
+<b class="nc">&nbsp;                astarLEnlevement.setG(cout[idL][enl]);</b>
+<b class="nc">&nbsp;                astarLLivraison.setG(cout[idE][enl]);</b>
+&nbsp;
+<b class="nc">&nbsp;                courtCheminL.put(livraison2.getAdresseEnlevement(),  astarLEnlevement);</b>
+<b class="nc">&nbsp;                courtCheminL.put(livraison2.getAdresseLivraison(), astarLLivraison);</b>
+&nbsp;
+<b class="nc">&nbsp;                courtCheminE.put(livraison2.getAdresseEnlevement(), astarEEnlevement);</b>
+<b class="nc">&nbsp;                courtCheminE.put(livraison2.getAdresseLivraison(), astarELivraison);</b>
+<b class="nc">&nbsp;</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;</b>
+&nbsp;
+&nbsp;            }
+<b class="nc">&nbsp;</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;            astarLEnlevement = astar(carte, L, carte.obtenirNoeud(entrepot.getId()));</b>
+<b class="nc">&nbsp;            astarEEnlevement = astar(carte, E, carte.obtenirNoeud(entrepot.getId()));</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            cout[idL][ent] = astarLEnlevement.getG();</b>
+<b class="nc">&nbsp;            cout[idE][ent] = astarEEnlevement.getG();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            astarLEnlevement.setG(cout[idL][ent]);</b>
+<b class="nc">&nbsp;            astarEEnlevement.setG(cout[idE][ent]);</b>
+&nbsp;
+<b class="nc">&nbsp;            courtCheminL.put(entrepot.getId(),  astarLEnlevement);</b>
+<b class="nc">&nbsp;            courtCheminE.put(entrepot.getId(), astarEEnlevement);</b>
+<b class="nc">&nbsp;</b>
+&nbsp;
+<b class="nc">&nbsp;            tournee.put(L.getId(), courtCheminL);</b>
+<b class="nc">&nbsp;            tournee.put(E.getId(), courtCheminE);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;        TSP tsp = new TSP();</b>
+&nbsp;
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        PointLivraison l = tsp.computeD(0, s, listeIds.size(), cout, carte, mapIndexAId);</b>
+&nbsp;        //System.out.println(l.getG());
+<b class="nc">&nbsp;        //System.out.println(l.getParent().getNoeud().getId());</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        ArrayList&lt;Troncon&gt; troncons = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        ArrayList&lt;PointLivraison&gt; chemin = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        ArrayList&lt;PointLivraison&gt; tspListe = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        PointLivraison courant = l;</b>
+<b class="nc">&nbsp;        PointLivraison t = l;</b>
+<b class="nc">&nbsp;        PointLivraison prochain = courant.getParent();</b>
+&nbsp;
+<b class="nc">&nbsp;        while (t != null) {</b>
+<b class="nc">&nbsp;            tspListe.add(t);</b>
+<b class="nc">&nbsp;            t = t.getParent();</b>
+&nbsp;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;</b>
+&nbsp;        PointLivraison astar;
+&nbsp;
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        while (courant != null &amp;&amp; prochain != null) {</b>
+&nbsp;            //System.out.println(&quot; ----- &quot; + courant.getNoeud().getId());
+&nbsp;            //System.out.println(&quot; ----- &quot; + prochain.getNoeud().getId());
+<b class="nc">&nbsp;            astar = tournee.get(prochain.getNoeud().getId()).get(courant.getNoeud().getId());</b>
+<b class="nc">&nbsp;            ArrayList&lt;Troncon&gt; listeTampon = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;            while (astar != null)</b>
+&nbsp;            {
+&nbsp;
+<b class="nc">&nbsp;                chemin.add(astar);</b>
+<b class="nc">&nbsp;                if (astar.getAntecedent() != null)</b>
+&nbsp;                {
+<b class="nc">&nbsp;                    listeTampon.add(astar.getAntecedent());</b>
+&nbsp;
+&nbsp;                    //System.out.println(&quot;ID - &quot; + astar.getNoeud().getId());
+<b class="nc">&nbsp;//                    System.out.println(&quot;NOM - &quot; + astar.getAntecedent().getNomRue());</b>
+&nbsp;//                    System.out.println(&quot;DEST - &quot; + astar.getAntecedent().getDestination());
+&nbsp;//                    System.out.println(&quot;ORI - &quot; + astar.getAntecedent().getOrigine());
+&nbsp;                }
+&nbsp;                else {
+<b class="nc">&nbsp;                    chemin.remove(astar);</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                astar = astar.getParent();</b>
+&nbsp;
+&nbsp;
+&nbsp;            }
+&nbsp;            //Collections.reverse(listeTampon);
+<b class="nc">&nbsp;            troncons.addAll(listeTampon);</b>
+&nbsp;
+&nbsp;
+&nbsp;            //System.out.println(courant.getNoeud().getId());
+<b class="nc">&nbsp;            courant = courant.getParent();</b>
+<b class="nc">&nbsp;            prochain = courant.getParent();</b>
+&nbsp;
+&nbsp;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        chemin.add(courant);</b>
+&nbsp;
+&nbsp;        //System.out.println((chemin.size()));
+&nbsp;        //System.out.println((troncons.size()));
+&nbsp;
+<b class="nc">&nbsp;        /*</b>
+<b class="nc">&nbsp;        for (Troncon troncon : troncons)</b>
+<b class="nc">&nbsp;        {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;NOM - &quot; + troncon.getNomRue());</b>
+&nbsp;            System.out.println(&quot;DEST - &quot; + troncon.getDestination());
+<b class="nc">&nbsp;            System.out.println(&quot;ORI - &quot; + troncon.getOrigine());</b>
+&nbsp;        }
+&nbsp;        */
+&nbsp;
+<b class="fc">&nbsp;       /* System.out.println(&quot;Chemin TSP :&quot;);</b>
+&nbsp;
+&nbsp;        for (PointLivraison p : chemin) {
+&nbsp;            if (p != null) {
+&nbsp;                System.out.println(&quot; - &quot; + p.getNoeud().getId());
+<b class="fc">&nbsp;                System.out.println(&quot; - &quot; + p.getSuivant().getNomRue());</b>
+<b class="fc">&nbsp;                System.out.println(&quot; - &quot; + p.getSuivant().getDestination());</b>
+<b class="fc">&nbsp;                System.out.println(&quot; - &quot; + p.getSuivant().getOrigine());</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        System.out.println((l.getParent()));</b>
+<b class="fc">&nbsp;        */</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        double total = 0;</b>
+<b class="fc">&nbsp;        tspListe.get(0).setG(0.0);</b>
+<b class="pc">&nbsp;        for (int k = 0; k &lt; tspListe.size() - 1; k++) {</b>
+<b class="nc">&nbsp;            Noeud a = tspListe.get(k).getNoeud();</b>
+<b class="fc">&nbsp;            Noeud b = tspListe.get(k+1).getNoeud();</b>
+<b class="nc">&nbsp;            Integer Ia = mapIdAIndex.get(a.getId());</b>
+<b class="fc">&nbsp;            Integer Ib = mapIdAIndex.get(b.getId());</b>
+<b class="fc">&nbsp;            double d = cout[Ia][Ib]; // ou via carte.astar(a,b)</b>
+<b class="nc">&nbsp;            tspListe.get(k+1).setG(total + d);</b>
+<b class="fc">&nbsp;            total += d;</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;</b>
+<b class="nc">&nbsp;        this.cout = cout;</b>
+<b class="fc">&nbsp;        this.tournee = tournee;</b>
+<b class="fc">&nbsp;        this.troncons = troncons;</b>
+<b class="nc">&nbsp;        this.chemin = chemin;</b>
+<b class="pc">&nbsp;        this.tspListe = tspListe;</b>
+<b class="fc">&nbsp;</b>
+<b class="nc">&nbsp;        return null;</b>
+<b class="pc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+&nbsp;    public Carte getCarte() {
+<b class="pc">&nbsp;        return carte;</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="pc">&nbsp;    public void initialiserCarte(String fichierPlan) {</b>
+<b class="fc">&nbsp;        try {</b>
+<b class="fc">&nbsp;            File xmlFile = new File(fichierPlan);</b>
+<b class="fc">&nbsp;            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();</b>
+<b class="fc">&nbsp;            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();</b>
+<b class="fc">&nbsp;            Document doc = dBuilder.parse(xmlFile);</b>
+<b class="fc">&nbsp;            doc.getDocumentElement().normalize();</b>
+&nbsp;
+<b class="fc">&nbsp;            ArrayList&lt;Noeud&gt; listeNoeuds = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            HashMap&lt;Long, Noeud&gt; mapNoeuds = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;            ArrayList&lt;Troncon&gt; listeTroncons = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            Double minLat = null;</b>
+<b class="fc">&nbsp;            Double minLong = null;</b>
+<b class="fc">&nbsp;            Double maxLat = null;</b>
+<b class="fc">&nbsp;            Double maxLong = null;</b>
+&nbsp;
+<b class="fc">&nbsp;            NodeList Noeuds = doc.getElementsByTagName(&quot;noeud&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;            for (int i = 0; i &lt; Noeuds.getLength(); i++) {</b>
+<b class="fc">&nbsp;                Element e = (Element) Noeuds.item(i);</b>
+&nbsp;
+<b class="fc">&nbsp;                Long id = Long.parseLong(e.getAttribute(&quot;id&quot;));</b>
+<b class="fc">&nbsp;                Double lat = Double.parseDouble(e.getAttribute(&quot;latitude&quot;));</b>
+<b class="fc">&nbsp;                Double lon = Double.parseDouble(e.getAttribute(&quot;longitude&quot;));</b>
+&nbsp;
+<b class="fc">&nbsp;                listeNoeuds.add(new Noeud(id, lon, lat));</b>
+<b class="fc">&nbsp;                mapNoeuds.put(id, new Noeud(id, lon, lat));</b>
+<b class="fc">&nbsp;                //System.out.println(id + &quot; &quot; + lon + &quot; &quot; + lat);</b>
+<b class="fc">&nbsp;                if (minLat == null || lat &lt; minLat) {</b>
+<b class="fc">&nbsp;                    minLat = lat.doubleValue();</b>
+&nbsp;                }
+<b class="fc">&nbsp;                if (maxLat == null || lat &gt; maxLat) {</b>
+<b class="fc">&nbsp;                    maxLat = lat.doubleValue();</b>
+&nbsp;                }
+<b class="fc">&nbsp;                if (minLong == null || lon &lt; minLong) {</b>
+<b class="fc">&nbsp;                    minLong = lon.doubleValue();</b>
+&nbsp;                }
+<b class="fc">&nbsp;                if (maxLong == null || lon &gt; maxLong) {</b>
+<b class="fc">&nbsp;                    maxLong = lon.doubleValue();</b>
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;</b>
+<b class="fc">&nbsp;            NodeList Troncons = doc.getElementsByTagName(&quot;troncon&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;            for (int i = 0; i &lt; Troncons.getLength(); i++) {</b>
+<b class="fc">&nbsp;                Element e = (Element) Troncons.item(i);</b>
+&nbsp;
+<b class="fc">&nbsp;                Long origine = Long.parseLong(e.getAttribute(&quot;origine&quot;));</b>
+<b class="fc">&nbsp;                Long destination = Long.parseLong(e.getAttribute(&quot;destination&quot;));</b>
+<b class="fc">&nbsp;                Double longueur = Double.parseDouble(e.getAttribute(&quot;longueur&quot;));</b>
+<b class="fc">&nbsp;                String nomRue = e.getAttribute(&quot;nomRue&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;                listeTroncons.add(new Troncon(destination, origine, longueur, nomRue));</b>
+&nbsp;            }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;</b>
+&nbsp;            /*
+&nbsp;            System.out.println(&quot;Noeuds lus : &quot; + listeNoeuds.size());
+&nbsp;            System.out.println(&quot;Tronçons lus : &quot; + listeTroncons.size());
+&nbsp;            System.out.println(&quot;MinLat : &quot; + minLat + &quot; MaxLat : &quot; + maxLat);
+<b class="nc">&nbsp;            System.out.println(&quot;MinLong : &quot; + minLong + &quot; MaxLong : &quot; + maxLong);</b>
+&nbsp;            */
+<b class="nc">&nbsp;</b>
+<b class="fc">&nbsp;        carte = new Carte(listeNoeuds, listeTroncons, mapNoeuds, minLat, minLong, maxLat, maxLong);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;</b>
+&nbsp;
+<b class="nc">&nbsp;    public void initialiserDemandeDeLivraions(String fichierDemande) {</b>
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            File xmlFile = new File(fichierDemande);</b>
+<b class="nc">&nbsp;            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();</b>
+<b class="nc">&nbsp;            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();</b>
+<b class="nc">&nbsp;            Document doc = dBuilder.parse(xmlFile);</b>
+<b class="nc">&nbsp;            doc.getDocumentElement().normalize();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            Entrepot entrepot = null;</b>
+<b class="nc">&nbsp;            ArrayList&lt;Livraison&gt; listeLivraison = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;            NodeList entrepot1 = doc.getElementsByTagName(&quot;entrepot&quot;);</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            Element e = (Element) entrepot1.item(0);</b>
+<b class="nc">&nbsp;            Long adresse = Long.parseLong(e.getAttribute(&quot;adresse&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;            String depart = e.getAttribute(&quot;heureDepart&quot;);</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            DateTimeFormatter f = DateTimeFormatter.ofPattern(&quot;H:m:s&quot;);</b>
+<b class="nc">&nbsp;            LocalTime heureDepart = LocalTime.parse(depart, f);</b>
+&nbsp;
+&nbsp;            //System.out.println(&quot;Heure départ = &quot; + heureDepart);
+<b class="nc">&nbsp;</b>
+&nbsp;
+<b class="nc">&nbsp;            entrepot = new Entrepot(heureDepart, adresse);</b>
+&nbsp;
+<b class="nc">&nbsp;            NodeList Livraisons = doc.getElementsByTagName(&quot;livraison&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            for (int i = 0; i &lt; Livraisons.getLength(); i++) {</b>
+<b class="nc">&nbsp;                e = (Element) Livraisons.item(i);</b>
+&nbsp;
+<b class="nc">&nbsp;                Long adresseEnlevement = Long.parseLong(e.getAttribute(&quot;adresseEnlevement&quot;));</b>
+<b class="nc">&nbsp;                Long adresseLivraison = Long.parseLong(e.getAttribute(&quot;adresseLivraison&quot;));</b>
+<b class="nc">&nbsp;                Long dureeEnlevement = Long.parseLong(e.getAttribute(&quot;dureeEnlevement&quot;));</b>
+<b class="nc">&nbsp;                Long dureeLivraison = Long.parseLong(e.getAttribute(&quot;dureeLivraison&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;                listeLivraison.add(new Livraison(adresseEnlevement, adresseLivraison, dureeLivraison, dureeEnlevement));</b>
+&nbsp;            }
+&nbsp;
+&nbsp;
+&nbsp;            //System.out.println(&quot;Livraisons lus : &quot; + listeLivraison.size());
+&nbsp;
+<b class="nc">&nbsp;            demandeDeLivraions = new DemandeDeLivraions(entrepot, listeLivraison);</b>
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public void ajouterLivraison(String titre, Long adresseEnlevement, Long adresseLivraison) {
+<b class="nc">&nbsp;        Livraison livraison = new Livraison(titre, adresseEnlevement, adresseLivraison, 0L, 0L);</b>
+<b class="nc">&nbsp;        demandeDeLivraions.ajouterLivraison(livraison);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void ajouterLivraison(Long adresseEnlevement, Long adresseLivraison) {
+<b class="nc">&nbsp;        Livraison livraison = new Livraison(adresseEnlevement, adresseLivraison, 0L, 0L);</b>
+<b class="nc">&nbsp;        demandeDeLivraions.ajouterLivraison(livraison);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void supprimerLivraison(Livraison livraison) {
+&nbsp;        if (demandeDeLivraions != null) {
+&nbsp;            demandeDeLivraions.supprimerLivraison(livraison);
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void echangerPointsItineraire(int id, int id1) {
+&nbsp;        Collections.swap(tspListe, id, id1);
+&nbsp;    }
+&nbsp;
+&nbsp;    public void deplacerPointItineraire(int sourceId, int targetIndex) {
+&nbsp;        PointLivraison itemToMove = tspListe.remove(sourceId);
+&nbsp;        tspListe.add(targetIndex, itemToMove);
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-12-10 08:13</div>
+</div>
+</body>
+</html>
