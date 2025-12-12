@@ -69,12 +69,12 @@ L'algorithme calcule automatiquement les heures de passage pour prévenir les cl
 Le calcul d'une tournée s'effectue en deux étapes :
 
 ### Étape 1 : Calcul du Graphe des Plus Courts Chemins
-- **Entrée** : Ensemble de n points Pickup et Delivery + plan de la ville
-- **Sortie** :  Graphe complet orienté avec 1 sommet par point
+- **Entrée** : Ensemble de n points (Pickup,Delivery et Entrepot) + plan de la ville
+- **Sortie** :  Graphe complet avec 1 sommet par point
 - **Algorithme** : A* (avec heuristique euclidienne)
 
 ### Étape 2 :  Résolution du TSP (Traveling Salesman Problem)
-- **Entrée** :  Graphe complet orienté
+- **Entrée** :  Graphe complet
 - **Sortie** :  Ordre de visite optimal respectant les contraintes de précédence
 - **Approche** : Programmation dynamique (algorithme de Held-Karp)
     - Utilisation de bitmasks pour représenter les ensembles de sommets
